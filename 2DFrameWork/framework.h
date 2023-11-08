@@ -62,6 +62,10 @@ using namespace SimpleMath;
 //TinyXML2
 #include "Xml.h"
 
+//PerlinNoise
+#include "PerlinNoise.hpp"
+
+
 //Macro(Pascal)
 #define Check(hr)			{ assert(SUCCEEDED(hr)); }
 #define SafeRelease(p)		{ if(p){ (p)->Release(); (p) = nullptr; } }

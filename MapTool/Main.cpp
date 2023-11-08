@@ -41,6 +41,9 @@ void Main::Init()
 	cam1->viewport.height = App.GetHeight();
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
+
+	Wall = Actor::Create();
+	//Wall->LoadFile("");
 }
 
 void Main::Release()
@@ -81,6 +84,7 @@ void Main::Update()
 
 	ImGui::Begin("Hierarchy");
 	map->RenderHierarchy();
+	Wall->RenderHierarchy();
 	ImGui::End();
 
 	cam1->ControlMainCam();
@@ -89,7 +93,7 @@ void Main::Update()
 	map->Update();
 
 	cam1->Update();
-
+	Wall->Update();
 	
 
 
@@ -181,6 +185,8 @@ void Main::LateUpdate()
 					{
 						float dd = vertices[i].position.y > Hit.y ? -1 : 1;
 						vertices[i].position.y += w * dd * buildSpeed * DELTA;
+
+						vertices[i].position.y = Hit.y;
 					}
 				}
 
@@ -212,10 +218,6 @@ void Main::LateUpdate()
 }
 void Main::PreRender()
 {
-}
-
-void Main::Render()
-{
 	_brush.shape = (int)brushShape;
 	_brush.type = (int)brushType;
 
@@ -228,6 +230,25 @@ void Main::Render()
 	cam1->Set();
 	//grid->Render();
 	map->Render();
+	Wall->Render();
+
+}
+
+void Main::Render()
+{
+	_brush.shape = (int)brushShape;
+
+	_brush.type = (int)brushType;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	D3D->GetDC()->Map(brushBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	memcpy_s(mappedResource.pData, sizeof(Brush), &_brush, sizeof(Brush));
+	D3D->GetDC()->Unmap(brushBuffer, 0);
+
+	LIGHT->Set();
+	cam1->Set();
+	//grid->Render();
+	map->Render();
+	Wall->Render();
 }
 
 void Main::ResizeScreen()

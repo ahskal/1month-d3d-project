@@ -217,7 +217,7 @@ void GameObject::Render(shared_ptr<Shader> pShader)
 			it->second->Render(shader);
 	}
 
-	if (collider and not pShader)
+	if (collider and pShader != nullptr)
 		collider->Render();
 }
 

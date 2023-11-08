@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Player.h"
 #include "Main.h"
 
 Main::Main()
@@ -26,6 +27,13 @@ void Main::Init()
 	cam1->viewport.height = App.GetHeight();
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
+
+	player = Player::Create();
+
+	map = Terrain::Create();
+	map->LoadFile("T1.xml");
+	map->CreateStructuredBuffer();
+
 }
 
 void Main::Release()
@@ -34,17 +42,21 @@ void Main::Release()
 
 void Main::Update()
 {
-
+	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
 	ImGui::Begin("Hierarchy");
 	grid->RenderHierarchy();
 	cam1->RenderHierarchy();
+	player->RenderHierarchy();
+	map->RenderHierarchy();
 	ImGui::End();
-
+	
 	cam1->ControlMainCam();
 
-	grid->Update();
 
+	grid->Update();
+	player->Update();
 	cam1->Update();
+	map->Update();
 }
 
 void Main::LateUpdate()
@@ -53,6 +65,11 @@ void Main::LateUpdate()
 }
 void Main::PreRender()
 {
+	LIGHT->Set();
+	cam1->Set();
+	grid->Render();
+	player->Render();
+	map->Render();
 }
 
 void Main::Render()
@@ -60,6 +77,8 @@ void Main::Render()
 	LIGHT->Set();
 	cam1->Set();
 	grid->Render();
+	player->Render();
+	map->Render();
 }
 
 void Main::ResizeScreen()

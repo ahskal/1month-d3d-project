@@ -52,6 +52,7 @@ private:
 	Camera* cam1;
 	Grid* grid;
 
+	Actor* Wall;
 
 public:
 	Main();

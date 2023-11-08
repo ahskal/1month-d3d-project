@@ -185,7 +185,7 @@ void Scene1::PreRender()
     shadowMap->position = sphere->GetWorldPos();;
     shadowMap->SetTarget();
     //map->Render(RESOURCE->shaders.Load("5.Cube_Shadow.hlsl"));
-    player->Render(RESOURCE->shaders.Load("4.Instance_Shadow.hlsl"));
+   // player->Render(RESOURCE->shaders.Load("4.Instance_Shadow.hlsl"));
     mutant->Render(RESOURCE->shaders.Load("4.Instance_Shadow.hlsl"));
 
 } 

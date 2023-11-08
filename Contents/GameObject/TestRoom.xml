@@ -1,0 +1,28 @@
+<Root Name="Terrain" Visible="true" ObType="3">
+    <Mesh File="TestRoom.mesh"/>
+    <Shader File="5.Cube.hlsl"/>
+    <Material File="TestRoom.mtl"/>
+    <Transform>
+        <Position X="0" Y="0" Z="0"/>
+        <Scale X="1" Y="1" Z="1"/>
+        <Rotation X="0" Y="0" Z="0"/>
+    </Transform>
+    <Terrain garo="257" size="66049" uvScale="1"/>
+    <Children Size="1"/>
+    <Child0 Name="None1" Visible="true" ObType="0">
+        <Mesh File="2.Cube.mesh"/>
+        <Instance File=""/>
+        <Shader File="2.Instance.hlsl"/>
+        <Collider ColliderType="2" Visible="true">
+            <Position X="0" Y="0" Z="0"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Collider>
+        <Transform>
+            <Position X="0" Y="0" Z="0"/>
+            <Scale X="3" Y="3" Z="3"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Transform>
+        <Children Size="0"/>
+    </Child0>
+</Root>

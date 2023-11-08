@@ -5,6 +5,12 @@ class Main : public Scene
 private:
 	Camera* cam1;
 	Grid* grid;
+	
+	Player* player;
+	Terrain* map;
+	
+
+
 
 public:
 	Main();

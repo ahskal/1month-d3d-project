@@ -43,7 +43,7 @@ void Main::Update()
 
     ImGui::Begin("AssetImporter");
     if (GUI->FileImGui("BonelessChicken", "BonelessChicken",
-        ".fbx,.obj,.x,.dae", "../Assets"))
+        ".fbx,.obj,.x,.dae,.FBX", "../Assets"))
     {
         Modelfile = ImGuiFileDialog::Instance()->GetCurrentFileName();
         string path = "../Assets/" + Modelfile;
@@ -77,7 +77,7 @@ void Main::Update()
     }
 
     if (GUI->FileImGui("BoneChicken", "BoneChicken",
-        ".fbx,.obj,.x,.dae", "../Assets"))
+        ".fbx,.obj,.x,.dae,.FBX", "../Assets"))
     {
         Modelfile = ImGuiFileDialog::Instance()->GetCurrentFileName();
         string path = "../Assets/" + Modelfile;
@@ -134,7 +134,7 @@ void Main::Update()
     }
 
     if (GUI->FileImGui("AnimationImporter", "AnimationImporter",
-        ".fbx,.obj,.x", "../Assets"))
+        ".FBX,.fbx,.obj,.x", "../Assets"))
     {
         Animfile = ImGuiFileDialog::Instance()->GetCurrentFileName();
         string path = "../Assets/" + Animfile;
