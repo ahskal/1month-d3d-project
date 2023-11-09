@@ -23,7 +23,7 @@ Player* Player::Create(Player* src)
 
 Player::Player()
 {
-	MoveSpeed = 1;
+	MoveSpeed = 5;
 }
 
 Player::~Player()
@@ -178,7 +178,7 @@ void Player::PreRender()
 
 void Player::Render(shared_ptr<Shader> pShader)
 {
-	Actor::Render();
+	Actor::Render(pShader);
 	slash->Render();
 }
 
@@ -190,7 +190,7 @@ void Player::Hierarchy()
 
 void Player::Control()
 {
-	if (!INPUT->KeyPress(VK_LCONTROL)) {
+	if (!INPUT->KeyPress(VK_LSHIFT)) {
 		return;
 	}
 	MoveDir = Vector2(0,0);

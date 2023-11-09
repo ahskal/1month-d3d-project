@@ -11,7 +11,7 @@ Terrain* Terrain::Create(string name)
 	map->CreateMesh(map->garo);
 	map->shader = RESOURCE->shaders.Load("5.Cube.hlsl");
 	map->material = new Material();
-    return map;
+	return map;
 }
 ID3D11ComputeShader* Terrain::computeShader = nullptr;
 void Terrain::CreateStaticMember()
@@ -149,7 +149,7 @@ void Terrain::DeleteStructuredBuffer()
 	SafeRelease(uav);
 	SafeRelease(result);
 	SafeRelease(rayBuffer);
-	SafeDeleteArray( inputArray);
+	SafeDeleteArray(inputArray);
 	SafeDeleteArray(outputArray);
 }
 
@@ -352,12 +352,12 @@ void Terrain::RenderDetail()
 				".xml", "../Contents/GameObject"))
 			{
 				string path = ImGuiFileDialog::Instance()->GetCurrentPath();
-			
+
 				string file = ImGuiFileDialog::Instance()->GetCurrentFileName();
 				//terrain.xml;
 				size_t tok = file.find('.');
 				file = file.substr(0, tok);
-				
+
 
 
 				Utility::Replace(&path, "\\", "/");
@@ -371,7 +371,7 @@ void Terrain::RenderDetail()
 				{
 					path = ImGuiFileDialog::Instance()->GetCurrentFileName();
 				}
-			
+
 
 				UpdateNormal();
 				mesh->SaveFile(file + ".mesh");
@@ -381,7 +381,6 @@ void Terrain::RenderDetail()
 
 				SaveFile(path);
 			}
-
 
 			if (ImGui::Button("UpdateStructuredBuffer"))
 			{
@@ -424,7 +423,15 @@ void Terrain::RenderDetail()
 				mesh->UpdateBuffer();
 			}
 
-
+			if (ImGui::Button("ground"))
+			{
+				SetPerlinNoise();
+			}ImGui::SameLine();
+			if (ImGui::Button("Water"))
+			{
+				AddPerlinNoise();
+			}ImGui::SameLine();
+		
 
 
 
@@ -472,7 +479,7 @@ void Terrain::RenderDetail()
 				}
 				int Min = min(last, garo);
 
-			
+
 				for (int i = 0; i < Min; i++)
 				{
 					for (int j = 0; j < Min; j++)
@@ -495,6 +502,74 @@ void Terrain::RenderDetail()
 		ImGui::EndTabBar();
 	}
 }
+
+void Terrain::SetPerlinNoise()
+{
+	SafeReset(mesh);
+	size = garo * garo;
+	CreateMesh(garo);
+	siv::PerlinNoise pn(RANDOM->Int(0, 10));
+	double baseFrequency = 3;                   // 기본 주파수
+	double frequencyScale = 1.0 / garo * 2;    // 맵 크기에 따른 주파수 스케일 조정
+	double centerX = garo / 2.0;
+	double centerY = garo / 2.0;
+	double defHeight = 5;
+
+	double desiredHeight = 30;
+
+	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
+	for (int i = 0; i < garo; i++)
+	{
+		for (int j = 0; j < garo; j++)
+		{
+			double x = (double)i * frequencyScale;
+			double y = (double)j * frequencyScale;
+			double z = 0.5;
+
+			double distanceToCenter = sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
+			double centerWeight = 1.0 - (distanceToCenter / (garo / 2.0)); // 중앙으로 갈수록 중앙 가중치 증가
+			double noiseValue = pn.noise3D(x - defHeight * baseFrequency, y - defHeight * baseFrequency, z);
+
+			vertices[i * garo + j].position.y = noiseValue + centerWeight;
+			double centralHeight = noiseValue + centerWeight;
+
+			vertices[i * garo + j].position.y = centralHeight;
+			vertices[i * garo + j].position.y *= desiredHeight;
+		}
+	}
+
+	mesh->UpdateBuffer();
+	UpdateNormal();
+}
+
+void Terrain::AddPerlinNoise()
+{
+	SafeReset(mesh);
+	size = garo * garo;
+	CreateMesh(garo);
+	siv::PerlinNoise pn;
+	double baseFrequency = 5.0;                   // 기본 주파수
+	double frequencyScale = 1.0 / garo * 2;    // 맵 크기에 따른 주파수 스케일 조정
+	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
+
+	for (int i = 0; i < garo; i++)
+	{
+		for (int j = 0; j < garo; j++)
+		{
+			double x = (double)i / 2;
+			double y = (double)j / 2;
+			double z = 0.5;
+			double noiseValue = pn.noise3D(x, y, z);
+
+			vertices[i * garo + j].position.y = noiseValue;
+		}
+	}
+
+	mesh->UpdateBuffer();
+	UpdateNormal();
+}
+
+
 
 bool Terrain::ComPutePicking(Ray WRay, OUT Vector3& HitPoint)
 {

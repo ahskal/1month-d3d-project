@@ -48,11 +48,13 @@ private:
 	Vector4 paint = Vector4(1,-1,-1,-1);
 
 	Terrain* map;
+	Terrain* watermap;
 
 	Camera* cam1;
+	Camera* cam2;
 	Grid* grid;
 
-	Actor* Wall;
+	Actor* Tree;
 
 public:
 	Main();
@@ -65,5 +67,6 @@ public:
 	virtual void PreRender() override;
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
+	void CreateTree();
 	void NormalizeWeight(Vector4& in);
 };

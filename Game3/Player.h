@@ -90,5 +90,11 @@ public:
 	void Hierarchy();
 
 	void Control();
+	void WolrdUpdate()
+	{
+		GameObject::Update();
+	}
+
+
 };
 

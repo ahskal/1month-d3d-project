@@ -30,9 +30,15 @@ void Main::Init()
 	cam1 = Camera::Create();
 	cam1->LoadFile("Cam.xml");
 
-	map = Terrain::Create();
+	map = Terrain::Create("ground");
+	map->LoadFile("ground.xml");
 	map->shader = RESOURCE->shaders.Load("5.MapEditor.hlsl");
 	map->CreateStructuredBuffer();
+
+	watermap = Terrain::Create("water");
+	watermap->LoadFile("water.xml");
+	watermap->shader = RESOURCE->shaders.Load("5.MapEditor.hlsl");
+	watermap->CreateStructuredBuffer();
 
 	Camera::main = cam1;
 	cam1->viewport.x = 0.0f;
@@ -42,7 +48,10 @@ void Main::Init()
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
 
-	Wall = Actor::Create();
+	cam2 = Camera::Create();
+	cam2->LoadFile("Cam.xml");
+
+	Tree = Actor::Create();
 	//Wall->LoadFile("");
 }
 
@@ -51,17 +60,18 @@ void Main::Release()
 }
 
 void Main::Update()
-
 {
+	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
+
 	LIGHT->RenderDetail();
 
 	ImGui::Combo("brushShape", (int*)&brushShape, "Circle\0Rect\0");
 	ImGui::Combo("brushType", (int*)&brushType, "Linear\0Smooth\0Add\0Flat\0");
 
-	
+
 
 	ImGui::SliderFloat("BrushRange", &_brush.range, 1, 100);
-	ImGui::SliderFloat("buildSpeed", &buildSpeed,-100, 100);
+	ImGui::SliderFloat("buildSpeed", &buildSpeed, -100, 100);
 
 	if (ImGui::Button("paint0"))
 	{
@@ -79,30 +89,33 @@ void Main::Update()
 	{
 		paint = Vector4(-1, -1, -1, 1);
 	}
-	ImGui::SliderFloat("paintSpeed", &paintSpeed,0.001f, 3.0f);
+	ImGui::SliderFloat("paintSpeed", &paintSpeed, 0.001f, 3.0f);
 
 
 	ImGui::Begin("Hierarchy");
+	cam1->RenderHierarchy();
+	cam2->RenderHierarchy();
 	map->RenderHierarchy();
-	Wall->RenderHierarchy();
+	watermap->RenderHierarchy();
+	Tree->RenderHierarchy();
 	ImGui::End();
 
 	cam1->ControlMainCam();
 
 	grid->Update();
 	map->Update();
+	watermap->Update();
 
 	cam1->Update();
-	Wall->Update();
-	
+	cam2->Update();
 
-
+	Tree->Update();
 }
 
 void Main::LateUpdate()
 {
 	Vector3 Hit;
-	if(map->ComPutePicking(Utility::MouseToRay(), Hit))
+	if (map->ComPutePicking(Utility::MouseToRay(), Hit))
 	{
 		_brush.point = Hit;
 
@@ -151,7 +164,7 @@ void Main::LateUpdate()
 					w = Utility::Saturate(w);
 					w = (1.0f - w);
 				}
-				
+
 
 
 
@@ -192,7 +205,7 @@ void Main::LateUpdate()
 
 				if (w)
 				{
-					vertices[i].weights += paint *w * paintSpeed * DELTA;
+					vertices[i].weights += paint * w * paintSpeed * DELTA;
 					NormalizeWeight(vertices[i].weights);
 
 				}
@@ -210,9 +223,50 @@ void Main::LateUpdate()
 		}
 
 	}
+	if (ImGui::Button("CreateTree"))
+	{
+		CreateTree();
+	}
 
+	for (auto it = Tree->obList.begin(); it != Tree->obList.end(); it++)
+	{
+		for (auto it2 = it->second->children.begin(); it2 != it->second->children.end(); it2++)
+		{
+			for (auto it3 = it2->second->children.begin(); it3 != it2->second->children.end(); it3++)
+			{
 
+				float Length = Vector3::Distance(cam1->GetWorldPos(), it3->second->GetWorldPos());
 
+				if (Length >= 150) {
+					if (it3->second->name == "Lod3")
+					{
+						it3->second->visible = true;
+					}
+					else {
+						it3->second->visible = false;
+					}
+				}
+				else if (Length >= 50) {
+					if (it3->second->name == "Lod1")
+					{
+						it3->second->visible = true;
+					}
+					else {
+						it3->second->visible = false;
+					}
+				}
+				else if (Length >= 10) {
+					if (it3->second->name == "Lod0")
+					{
+						it3->second->visible = true;
+					}
+					else {
+						it3->second->visible = false;
+					}
+				}
+			}
+		}
+	}
 
 
 }
@@ -227,11 +281,23 @@ void Main::PreRender()
 	D3D->GetDC()->Unmap(brushBuffer, 0);
 
 	LIGHT->Set();
-	cam1->Set();
-	//grid->Render();
-	map->Render();
-	Wall->Render();
+	Camera::main->Set();
 
+	//grid->Render();
+	watermap->Render();
+	map->Render();
+
+	/*for (auto it = Tree->obList.begin(); it != Tree->obList.end(); it++)
+	{
+		if (cam2->Intersect(it->second->GetWorldPos())) {
+
+			it->second->visible = true;
+		}
+		else {
+			it->second->visible = false;
+		}
+	}
+	Tree->Render();*/
 }
 
 void Main::Render()
@@ -245,10 +311,24 @@ void Main::Render()
 	D3D->GetDC()->Unmap(brushBuffer, 0);
 
 	LIGHT->Set();
-	cam1->Set();
+	Camera::main->Set();
+
+
 	//grid->Render();
+	watermap->Render();
 	map->Render();
-	Wall->Render();
+	for (auto it = Tree->obList.begin(); it != Tree->obList.end(); it++)
+	{
+		if (cam1->Intersect(it->second->GetWorldPos())) {
+
+			it->second->visible = true;
+		}
+		else {
+			it->second->visible = false;
+		}
+	}
+	Tree->Render();
+
 }
 
 void Main::ResizeScreen()
@@ -274,6 +354,56 @@ void Main::NormalizeWeight(Vector4& in)
 	{
 		weight[i] /= sum;
 	}
+}
+
+void Main::CreateTree()
+{
+	siv::PerlinNoise pn;
+	VertexTerrain* vertices = (VertexTerrain*)map->mesh->vertices;
+	int Count = 0;
+
+	int maxTree = 1000;
+	double halfsize = map->garo / 2;
+
+	for (int i = 0; i < map->garo; i++)
+	{
+		for (int j = 0; j < map->garo; j++)
+		{
+			if (Count != maxTree) {
+
+				Vector3 Pos = Vector3(RANDOM->Int(-halfsize, halfsize), 0, RANDOM->Int(-halfsize, halfsize));
+
+				Ray heightChecker;
+				heightChecker.position = Pos;
+				heightChecker.direction = Vector3(0, -1, 0);
+
+				Vector3 hit;
+
+				Actor* Tree = Actor::Create();
+
+				if (Utility::RayIntersectMap(heightChecker, map, hit)) {
+					if (hit.y >= -20.0f) {
+						int rand = RANDOM->Int();
+						Tree->LoadFile("Beech.xml");
+
+						Tree->name = "Tree" + to_string(Count);
+						Tree->SetWorldPosX(Pos.x);
+						Tree->SetWorldPosY(hit.y);
+						Tree->SetWorldPosZ(Pos.z);
+
+					}
+				}
+
+				this->Tree->AddChild(Tree);
+				Count++;
+			}
+			else {
+				break;
+			}
+
+		}
+	}
+
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)

@@ -13,7 +13,7 @@ Material* GameObject::defalutMaterial = nullptr;
 void GameObject::CreateStaticMember()
 {
 	axis = new GameObject();
-	axis->mesh = RESOURCE->meshes. Load("1.Transform.mesh");
+	axis->mesh = RESOURCE->meshes.Load("1.Transform.mesh");
 	axis->shader = RESOURCE->shaders.Load("1.Cube.hlsl");
 	defalutMaterial = new Material();
 }
@@ -21,7 +21,7 @@ void GameObject::CreateStaticMember()
 void GameObject::DeleteStaticMember()
 {
 	GameObject A;
-	
+
 	GameObject* p = new GameObject(A);
 
 	SafeDelete(axis);
@@ -46,7 +46,7 @@ void GameObject::RenderAxis()
 GameObject::GameObject()
 {
 	root = nullptr;
-	
+
 	visible = true;
 	name = " ";
 
@@ -161,8 +161,8 @@ void GameObject::Update()
 			{
 				Transform::UpdateAnim(skelRoot->anim->GetFrameBone(boneIndex));
 			}
-			
-				
+
+
 		}
 		else
 		{
@@ -212,9 +212,9 @@ void GameObject::Render(shared_ptr<Shader> pShader)
 
 			mesh->DrawCall();
 		}
-
+		
 		for (auto it = children.begin(); it != children.end(); it++)
-			it->second->Render(shader);
+			it->second->Render();
 	}
 
 	if (collider and pShader != nullptr)

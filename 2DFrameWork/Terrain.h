@@ -55,7 +55,12 @@ public:
 	void			UpdateStructuredBuffer();
 	void			UpdateNormal();
 	void	        RenderDetail();
+    void            SetPerlinNoise(); // ground
+    void            AddPerlinNoise(); // water
+    void            CreateTree();     // tree
 
     bool            ComPutePicking(Ray WRay, OUT Vector3& HitPoint);
+    
+
 };
 

@@ -25,7 +25,7 @@ Scene1::Scene1()
 
     loadObejct = L"Terrain"; 
     map = Terrain::Create();
-    map->LoadFile("Terrain.xml");
+    map->LoadFile("T1.xml");
     map->CreateStructuredBuffer();
     loadCount++;
 

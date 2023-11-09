@@ -6,9 +6,10 @@ private:
 	Camera* cam1;
 	Grid* grid;
 	
-	Player* player;
 	Terrain* map;
-	
+	Player* player;
+	Sky* skybox;
+	Sky* skybox2;
 
 
 

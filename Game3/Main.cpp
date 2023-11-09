@@ -15,7 +15,7 @@ Main::~Main()
 
 void Main::Init()
 {
-	grid = Grid::Create();
+	/*grid = Grid::Create();
 
 	cam1 = Camera::Create();
 	cam1->LoadFile("Cam.xml");
@@ -34,6 +34,13 @@ void Main::Init()
 	map->LoadFile("T1.xml");
 	map->CreateStructuredBuffer();
 
+
+
+	skybox = Sky::Create();
+	skybox->LoadFile("Sky1.xml");
+	skybox2 = Sky::Create();
+	skybox2->LoadFile("Sky2.xml");*/
+
 }
 
 void Main::Release()
@@ -43,13 +50,13 @@ void Main::Release()
 void Main::Update()
 {
 	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
-	ImGui::Begin("Hierarchy");
+	/*ImGui::Begin("Hierarchy");
 	grid->RenderHierarchy();
 	cam1->RenderHierarchy();
 	player->RenderHierarchy();
 	map->RenderHierarchy();
 	ImGui::End();
-	
+
 	cam1->ControlMainCam();
 
 
@@ -57,28 +64,46 @@ void Main::Update()
 	player->Update();
 	cam1->Update();
 	map->Update();
+	skybox->Update();
+	skybox2->Update();*/
 }
 
 void Main::LateUpdate()
 {
-	
+	/*Ray top;
+	top.position = player->GetWorldPos() + Vector3(0, 100, 0);
+	top.direction = Vector3(0, -1, 0);
+	Vector3 hit;
+	if (Utility::RayIntersectMap(top, map, hit))
+	{
+		player->SetWorldPosY(hit.y);
+	}
+	player->WolrdUpdate();*/
 }
 void Main::PreRender()
 {
-	LIGHT->Set();
+	/*LIGHT->Set();
+
+	skybox->Render();
+	skybox2->Render();
+
 	cam1->Set();
 	grid->Render();
 	player->Render();
-	map->Render();
+	map->Render();*/
 }
 
 void Main::Render()
 {
-	LIGHT->Set();
+	/*LIGHT->Set();
+
+	skybox->Render();
+	skybox2->Render();
+
 	cam1->Set();
 	grid->Render();
-	player->Render();
 	map->Render();
+	player->Render();*/
 }
 
 void Main::ResizeScreen()
