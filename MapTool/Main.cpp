@@ -48,11 +48,10 @@ void Main::Init()
 	cam1->width = App.GetWidth();
 	cam1->height = App.GetHeight();
 
-	cam2 = Camera::Create();
-	cam2->LoadFile("Cam.xml");
-
 	Tree = Actor::Create();
 	//Wall->LoadFile("");
+
+	TreeNum = 100;
 }
 
 void Main::Release()
@@ -61,14 +60,20 @@ void Main::Release()
 
 void Main::Update()
 {
+	// ============================ GUI ==================
 	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
+
+	ImGui::SliderInt("Tree Max Num", &TreeNum, 1, 1000);
+
+	if (ImGui::Button("CreateTree"))
+	{
+		CreateTree();
+	}
 
 	LIGHT->RenderDetail();
 
 	ImGui::Combo("brushShape", (int*)&brushShape, "Circle\0Rect\0");
 	ImGui::Combo("brushType", (int*)&brushType, "Linear\0Smooth\0Add\0Flat\0");
-
-
 
 	ImGui::SliderFloat("BrushRange", &_brush.range, 1, 100);
 	ImGui::SliderFloat("buildSpeed", &buildSpeed, -100, 100);
@@ -91,10 +96,10 @@ void Main::Update()
 	}
 	ImGui::SliderFloat("paintSpeed", &paintSpeed, 0.001f, 3.0f);
 
+	// ===================================================
 
 	ImGui::Begin("Hierarchy");
 	cam1->RenderHierarchy();
-	cam2->RenderHierarchy();
 	map->RenderHierarchy();
 	watermap->RenderHierarchy();
 	Tree->RenderHierarchy();
@@ -107,127 +112,122 @@ void Main::Update()
 	watermap->Update();
 
 	cam1->Update();
-	cam2->Update();
 
 	Tree->Update();
 }
 
 void Main::LateUpdate()
 {
-	Vector3 Hit;
-	if (map->ComPutePicking(Utility::MouseToRay(), Hit))
+
+	//Brush
 	{
-		_brush.point = Hit;
-
-		if (INPUT->KeyPress(VK_MBUTTON))
+		Vector3 Hit;
+		if (map->ComPutePicking(Utility::MouseToRay(), Hit))
 		{
-			VertexTerrain* vertices = (VertexTerrain*)map->mesh->vertices;
-			Matrix Inverse = map->W.Invert();
-			Hit = Vector3::Transform(Hit, Inverse);
-			for (UINT i = 0; i < map->mesh->vertexCount; i++)
+			_brush.point = Hit;
+
+			if (INPUT->KeyPress(VK_MBUTTON))
 			{
-				Vector3 v1 = Vector3(Hit.x, 0.0f, Hit.z);
-				Vector3 v2 = Vector3(vertices[i].position.x,
-					0.0f, vertices[i].position.z);
-				Vector3 temp = v2 - v1;
-				float Dis = temp.Length();
-				float w;
-
-				if (brushShape == BrushShape::Rect)
+				VertexTerrain* vertices = (VertexTerrain*)map->mesh->vertices;
+				Matrix Inverse = map->W.Invert();
+				Hit = Vector3::Transform(Hit, Inverse);
+				for (UINT i = 0; i < map->mesh->vertexCount; i++)
 				{
-					float DisX = fabs(v1.x - v2.x);
-					float DisZ = fabs(v1.z - v2.z);
+					Vector3 v1 = Vector3(Hit.x, 0.0f, Hit.z);
+					Vector3 v2 = Vector3(vertices[i].position.x,
+						0.0f, vertices[i].position.z);
+					Vector3 temp = v2 - v1;
+					float Dis = temp.Length();
+					float w;
 
-					if (DisX < _brush.range and
-						DisZ < _brush.range)
+					if (brushShape == BrushShape::Rect)
 					{
-						//nomalize
-						//w = Dis / (_brush.range * 1.414f);
-						// 
-						w = ((DisX > DisZ) ? DisX : DisZ) / _brush.range;
+						float DisX = fabs(v1.x - v2.x);
+						float DisZ = fabs(v1.z - v2.z);
 
+						if (DisX < _brush.range and
+							DisZ < _brush.range)
+						{
+							//nomalize
+							//w = Dis / (_brush.range * 1.414f);
+							// 
+							w = ((DisX > DisZ) ? DisX : DisZ) / _brush.range;
 
-
-						// 0 ~ 1
+							// 0 ~ 1
+							w = Utility::Saturate(w);
+							w = (1.0f - w);
+						}
+						else
+						{
+							w = 0.0f;
+						}
+					}
+					if (brushShape == BrushShape::Circle)
+					{
+						w = Dis / _brush.range;
 						w = Utility::Saturate(w);
-
 						w = (1.0f - w);
 					}
-					else
+
+					if (brushType == BrushType::Linear)
 					{
-						w = 0.0f;
+						if (w)
+						{
+							vertices[i].position.y += w * buildSpeed * DELTA;
+						}
 					}
-				}
-				if (brushShape == BrushShape::Circle)
-				{
-					w = Dis / _brush.range;
-					w = Utility::Saturate(w);
-					w = (1.0f - w);
-				}
+					if (brushType == BrushType::Smooth)
+					{
+						if (w)
+						{
+							vertices[i].position.y += sin(w * PI * 0.5f) * buildSpeed * DELTA;
+						}
+					}
+					if (brushType == BrushType::Add)
+					{
+						if (w)
+						{
+							vertices[i].position.y += buildSpeed * DELTA;
+						}
+					}
+					if (brushType == BrushType::Flat)
+					{
+						if (w)
+						{
+							float dd = vertices[i].position.y > Hit.y ? -1 : 1;
+							vertices[i].position.y += w * dd * buildSpeed * DELTA;
 
-
-
-
-
-
-
-				if (brushType == BrushType::Linear)
-				{
+							vertices[i].position.y = Hit.y;
+						}
+					}
 					if (w)
 					{
-						vertices[i].position.y += w * buildSpeed * DELTA;
+						vertices[i].weights += paint * w * paintSpeed * DELTA;
+						float* weight = (float*)&(vertices[i].weights);
+						float	sum = 0;
+						for (int i = 0; i < 4; i++)
+						{
+							weight[i] = Utility::Saturate(weight[i]);
+							sum += weight[i];
+						}
+						for (int i = 0; i < 4; i++)
+						{
+							weight[i] /= sum;
+						};
 					}
 				}
-				if (brushType == BrushType::Smooth)
-				{
-					if (w)
-					{
-						vertices[i].position.y += sin(w * PI * 0.5f) * buildSpeed * DELTA;
-					}
-				}
-				if (brushType == BrushType::Add)
-				{
-					if (w)
-					{
-						vertices[i].position.y += buildSpeed * DELTA;
-					}
-				}
-				if (brushType == BrushType::Flat)
-				{
-					if (w)
-					{
-						float dd = vertices[i].position.y > Hit.y ? -1 : 1;
-						vertices[i].position.y += w * dd * buildSpeed * DELTA;
-
-						vertices[i].position.y = Hit.y;
-					}
-				}
-
-				if (w)
-				{
-					vertices[i].weights += paint * w * paintSpeed * DELTA;
-					NormalizeWeight(vertices[i].weights);
-
-				}
-
-
+				map->mesh->UpdateBuffer();
+				map->UpdateNormal();
 			}
-
-			map->mesh->UpdateBuffer();
-			map->UpdateNormal();
+			if (INPUT->KeyUp(VK_MBUTTON))
+			{
+				map->UpdateNormal();
+				map->UpdateStructuredBuffer();
+			}
 		}
-		if (INPUT->KeyUp(VK_MBUTTON))
-		{
-			map->UpdateNormal();
-			map->UpdateStructuredBuffer();
-		}
-
-	}
-	if (ImGui::Button("CreateTree"))
-	{
-		CreateTree();
 	}
 
+	//LOD 적용 식
 	for (auto it = Tree->obList.begin(); it != Tree->obList.end(); it++)
 	{
 		for (auto it2 = it->second->children.begin(); it2 != it->second->children.end(); it2++)
@@ -237,7 +237,7 @@ void Main::LateUpdate()
 
 				float Length = Vector3::Distance(cam1->GetWorldPos(), it3->second->GetWorldPos());
 
-				if (Length >= 150) {
+				if (Length >= 250) {
 					if (it3->second->name == "Lod3")
 					{
 						it3->second->visible = true;
@@ -246,7 +246,7 @@ void Main::LateUpdate()
 						it3->second->visible = false;
 					}
 				}
-				else if (Length >= 50) {
+				else if (Length >= 150) {
 					if (it3->second->name == "Lod1")
 					{
 						it3->second->visible = true;
@@ -341,28 +341,20 @@ void Main::ResizeScreen()
 	cam1->height = App.GetHeight();
 }
 
-void Main::NormalizeWeight(Vector4& in)
-{
-	float* weight = (float*)&in;
-	float	sum = 0;
-	for (int i = 0; i < 4; i++)
-	{
-		weight[i] = Utility::Saturate(weight[i]);
-		sum += weight[i];
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		weight[i] /= sum;
-	}
-}
-
 void Main::CreateTree()
 {
+	// empty가 아니라면
+	if (not Tree->obList.empty()) {
+		// 즉 기존에 한번 사용한적이 있는 대상이기 때문에
+		// 나무객체의 하위 자식들을 제거후 다시 생성
+		Tree->ReleaseMember();
+	}
+	
 	siv::PerlinNoise pn;
 	VertexTerrain* vertices = (VertexTerrain*)map->mesh->vertices;
 	int Count = 0;
 
-	int maxTree = 1000;
+	int maxTree = TreeNum;
 	double halfsize = map->garo / 2;
 
 	for (int i = 0; i < map->garo; i++)
@@ -390,7 +382,6 @@ void Main::CreateTree()
 						Tree->SetWorldPosX(Pos.x);
 						Tree->SetWorldPosY(hit.y);
 						Tree->SetWorldPosZ(Pos.z);
-
 					}
 				}
 

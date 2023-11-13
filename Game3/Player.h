@@ -73,7 +73,7 @@ private:
 
 	Vector3 last;
 
-
+	Ray attackRay;
 
 public:
 

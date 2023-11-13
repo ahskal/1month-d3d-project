@@ -23,16 +23,13 @@ enum class BrushType
 	Flat
 };
 
-
-
-
 class Main : public Scene
 {
 
 private:
 	struct Brush
 	{
-		Vector3 point = Vector3(0,0,0);
+		Vector3 point = Vector3(0, 0, 0);
 		float	range = 10.0f;
 
 		float	shape = 0;
@@ -45,16 +42,19 @@ private:
 
 	BrushShape brushShape = BrushShape::Circle;
 	BrushType brushType = BrushType::Linear;
-	Vector4 paint = Vector4(1,-1,-1,-1);
+	Vector4 paint = Vector4(1, -1, -1, -1);
+
+	Camera* cam1;
+	Grid* grid;
 
 	Terrain* map;
 	Terrain* watermap;
 
-	Camera* cam1;
-	Camera* cam2;
-	Grid* grid;
+	float WaterHeight;
 
 	Actor* Tree;
+	int TreeNum;
+
 
 public:
 	Main();
@@ -68,5 +68,4 @@ public:
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
 	void CreateTree();
-	void NormalizeWeight(Vector4& in);
 };

@@ -46,6 +46,7 @@ void Player::Init()
 	slash->material->diffuse.z = 1.0f;
 
 
+
 	dir[0] = Ani_Move_Left;
 	dir[1] = Ani_Move_Back_Right;
 	dir[2] = Ani_Move_Back;

@@ -1,6 +1,19 @@
 <Root Name="Root" Visible="true" ObType="1" BoneIndex="0">
     <Skeleton File="BlueIsland_Man/BlueIsland_Man.skel" BoneIndexCount="64"/>
-    <Animations AnimSize="13" File0="/Walk_Uneqip_Front0.anim" File1="/Walk_Uneqip_Back0.anim" File2="/Walk_Uneqip_Left0.anim" File3="/Walk_Uneqip_Right0.anim" File4="/Walk_Uneqip_Front_Right0.anim" File5="/Walk_Uneqip_Front_Left0.anim" File6="/Walk_Uneqip_Back_Left0.anim" File7="/Walk_Uneqip_Back_Right0.anim" File8="/Eqip_To_Uneqip0.anim" File9="/Attack_020.anim" File10="/Attack_030.anim" File11="/Idle_Eqip_010.anim" File12="/Idle_Uneqip0.anim"/>
+    <Animations AnimSize="13" 
+				File0="/Walk_Uneqip_Front0.anim" 
+				File1="/Walk_Uneqip_Back0.anim" 
+				File2="/Walk_Uneqip_Left0.anim" 
+				File3="/Walk_Uneqip_Right0.anim" 
+				File4="/Walk_Uneqip_Front_Right0.anim" 
+				File5="/Walk_Uneqip_Front_Left0.anim" 
+				File6="/Walk_Uneqip_Back_Left0.anim" 
+				File7="/Walk_Uneqip_Back_Right0.anim" 
+				File8="/Eqip_To_Uneqip0.anim" 
+				File9="/Attack_020.anim" 
+				File10="/Attack_030.anim" 
+				File11="/Idle_Eqip_010.anim" 
+				File12="/Idle_Uneqip0.anim"/>
     <Transform>
         <Position X="0" Y="0" Z="0"/>
         <Scale X="0.1" Y="0.1" Z="0.1"/>

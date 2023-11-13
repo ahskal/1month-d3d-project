@@ -15,6 +15,8 @@
 #include <iostream>
 #include <unordered_map>
 #include <queue>
+#include <unordered_set>
+
 using namespace std;
 
 //DirectX d3d 11
@@ -64,7 +66,6 @@ using namespace SimpleMath;
 
 //PerlinNoise
 #include "PerlinNoise.hpp"
-
 
 //Macro(Pascal)
 #define Check(hr)			{ assert(SUCCEEDED(hr)); }

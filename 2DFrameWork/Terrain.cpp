@@ -425,17 +425,16 @@ void Terrain::RenderDetail()
 
 			if (ImGui::Button("ground"))
 			{
-				SetPerlinNoise();
+				GroundPerlinNoise();
 			}ImGui::SameLine();
 			if (ImGui::Button("Water"))
 			{
-				AddPerlinNoise();
+				WaterPerlinNoise();
 			}ImGui::SameLine();
-		
-
-
-
-
+			if (ImGui::Button("Tree"))
+			{
+				TreeCreateIntersect();
+			}
 
 			int last = garo;
 			if (ImGui::SliderInt("rowSize", &garo, 2, 513))
@@ -503,12 +502,12 @@ void Terrain::RenderDetail()
 	}
 }
 
-void Terrain::SetPerlinNoise()
+void Terrain::GroundPerlinNoise()
 {
 	SafeReset(mesh);
 	size = garo * garo;
 	CreateMesh(garo);
-	siv::PerlinNoise pn(RANDOM->Int(0, 10));
+	siv::PerlinNoise pn(RANDOM->Int(0, 10000));
 	double baseFrequency = 3;                   // 기본 주파수
 	double frequencyScale = 1.0 / garo * 2;    // 맵 크기에 따른 주파수 스케일 조정
 	double centerX = garo / 2.0;
@@ -542,31 +541,89 @@ void Terrain::SetPerlinNoise()
 	UpdateNormal();
 }
 
-void Terrain::AddPerlinNoise()
+
+
+void Terrain::WaterPerlinNoise()
 {
+
 	SafeReset(mesh);
 	size = garo * garo;
 	CreateMesh(garo);
-	siv::PerlinNoise pn;
-	double baseFrequency = 5.0;                   // 기본 주파수
+	siv::PerlinNoise pn(RANDOM->Int(0, 10000));
+	double baseFrequency = 3;                   // 기본 주파수
 	double frequencyScale = 1.0 / garo * 2;    // 맵 크기에 따른 주파수 스케일 조정
-	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
+	double centerX = garo / 2.0;
+	double centerY = garo / 2.0;
+	double defHeight = 5;
 
+	double desiredHeight = 30;
+
+	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
 	for (int i = 0; i < garo; i++)
 	{
 		for (int j = 0; j < garo; j++)
 		{
-			double x = (double)i / 2;
-			double y = (double)j / 2;
+			double x = (double)i;
+			double y = (double)j;
 			double z = 0.5;
 			double noiseValue = pn.noise3D(x, y, z);
-
 			vertices[i * garo + j].position.y = noiseValue;
 		}
 	}
 
 	mesh->UpdateBuffer();
 	UpdateNormal();
+}
+
+void Terrain::TreeCreateIntersect()
+{
+	if (not this->children.empty()) {
+		this->ReleaseMember();
+	}
+
+	Actor* Node = Actor::Create("Node");
+	AddChild(Node);
+
+	siv::PerlinNoise pn;
+	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
+
+	// 조절할 주파수와 진폭
+	double frequency = 0.1;  // 주파수
+	double tree = 0;
+	double treeNoise = RANDOM->Float(0.055, 0.06);
+	int Count = 0;
+
+	for (int i = 0; i < garo; i++)
+	{
+		for (int j = 0; j < garo; j++)
+		{
+			double x = frequency * (double)i;
+			double y = frequency * (double)j;
+			tree = pn.noise2D(x * treeNoise, y * treeNoise);
+
+			bool hasTree = tree > 0.5;
+
+			Vector3 Pos = Vector3(RANDOM->Int(-garo, garo), 0, RANDOM->Int(-garo, garo));
+			Ray heightChecker;
+			heightChecker.position = Pos;
+			heightChecker.direction = Vector3(0, -1, 0);
+
+			Vector3 hit;
+
+			if (Utility::RayIntersectMap(heightChecker, this, hit)) {
+				
+				if (hasTree) {
+					Actor* Tree = Actor::Create();
+					Tree->LoadFile("Beech.xml");
+					Tree->name = "Tree" + to_string(Count++);
+					Tree->SetWorldPosX(Pos.x);
+					Tree->SetWorldPosY(hit.y);
+					Tree->SetWorldPosZ(Pos.z);
+					Find("Node")->AddChild(Tree);
+				}
+			}
+		}
+	}
 }
 
 

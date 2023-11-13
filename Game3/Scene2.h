@@ -1,11 +1,15 @@
 #pragma once
-
-class Main : public Scene
+class Scene2 : public Scene
 {
 private:
+	Camera* cam1;
+	Grid* grid;
+	Terrain* map;
+	Terrain* water;
+
 public:
-	Main();
-	~Main();
+	Scene2();
+	~Scene2();
 
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶
