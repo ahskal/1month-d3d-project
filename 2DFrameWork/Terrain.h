@@ -45,6 +45,7 @@ public:
 	int				size;
 	float			uvScale;
 	int				garo;
+    int             last;
     //CS            컴퓨트 쉐이더로 피킹할때만 만들기
     void            CreateStructuredBuffer();
     void            DeleteStructuredBuffer();
@@ -58,6 +59,8 @@ public:
     void            GroundPerlinNoise(); // ground
     void            WaterPerlinNoise(); // water
     void            TreeCreateIntersect();
+
+    void            MeshResizeUpdate();
 
     bool            ComPutePicking(Ray WRay, OUT Vector3& HitPoint);
     

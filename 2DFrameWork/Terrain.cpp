@@ -436,66 +436,11 @@ void Terrain::RenderDetail()
 				TreeCreateIntersect();
 			}
 
-			int last = garo;
+			last = garo;
 			if (ImGui::SliderInt("rowSize", &garo, 2, 513))
 			{
-				UINT vertexCount = garo * garo;
-				VertexType type = VertexType::TERRAIN;
-				VertexTerrain* vertices = new VertexTerrain[garo * garo];
-
-
-				float half = garo * 0.5f;
-				//정점 갯수만큼 반복문
-				for (int i = 0; i < garo; i++)
-				{
-					for (int j = 0; j < garo; j++)
-					{
-						vertices[i * garo + j].position = Vector3(j - half, 0, -i + half);
-						vertices[i * garo + j].normal = Vector3(0, 1, 0);
-						vertices[i * garo + j].uv = Vector2(j / float(garo - 1), i / float(garo - 1));
-					}
-				}
-
-				UINT indexCount = (garo - 1) * (garo - 1) * 6;
-				UINT* indices = new UINT[indexCount];
-
-				//사각형 갯수만큼 반복문
-				int idxCount = 0;
-				for (int i = 0; i < (garo - 1); i++)      //세로
-				{
-					for (int j = 0; j < (garo - 1); j++)  //가로
-					{
-						int RectIdx = i * garo + j;
-
-						indices[idxCount] = i * garo + j + 0; idxCount++;
-						indices[idxCount] = i * garo + j + 1; idxCount++;
-						indices[idxCount] = i * garo + j + garo + 1; idxCount++;
-
-						indices[idxCount] = i * garo + j + 0; idxCount++;
-						indices[idxCount] = i * garo + j + garo + 1; idxCount++;
-						indices[idxCount] = i * garo + j + garo; idxCount++;
-					}
-				}
-				int Min = min(last, garo);
-
-
-				for (int i = 0; i < Min; i++)
-				{
-					for (int j = 0; j < Min; j++)
-					{
-						VertexTerrain* ver = (VertexTerrain*)mesh->vertices;
-						vertices[i * garo + j].position.y = ver[i * last + j].position.y;
-						vertices[i * garo + j].normal = ver[i * last + j].normal;
-						vertices[i * garo + j].uv = ver[i * last + j].uv;
-					}
-				}
-				mesh.reset();
-				mesh = make_shared<Mesh>(vertices, vertexCount, indices, indexCount, type);
-
+				MeshResizeUpdate();
 			}
-
-
-
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
@@ -509,7 +454,7 @@ void Terrain::GroundPerlinNoise()
 	CreateMesh(garo);
 	siv::PerlinNoise pn(RANDOM->Int(0, 10000));
 	double baseFrequency = 3;                   // 기본 주파수
-	double frequencyScale = 1.0 / garo * 2;    // 맵 크기에 따른 주파수 스케일 조정
+	double frequencyScale = 0.50 / garo * 2;    // 맵 크기에 따른 주파수 스케일 조정
 	double centerX = garo / 2.0;
 	double centerY = garo / 2.0;
 	double defHeight = 5;
@@ -624,6 +569,63 @@ void Terrain::TreeCreateIntersect()
 			}
 		}
 	}
+}
+
+void Terrain::MeshResizeUpdate()
+{
+	UINT vertexCount = garo * garo;
+	VertexType type = VertexType::TERRAIN;
+	VertexTerrain* vertices = new VertexTerrain[garo * garo];
+
+
+	float half = garo * 0.5f;
+	//정점 갯수만큼 반복문
+	for (int i = 0; i < garo; i++)
+	{
+		for (int j = 0; j < garo; j++)
+		{
+			vertices[i * garo + j].position = Vector3(j - half, 0, -i + half);
+			vertices[i * garo + j].normal = Vector3(0, 1, 0);
+			vertices[i * garo + j].uv = Vector2(j / float(garo - 1), i / float(garo - 1));
+		}
+	}
+
+	UINT indexCount = (garo - 1) * (garo - 1) * 6;
+	UINT* indices = new UINT[indexCount];
+
+	//사각형 갯수만큼 반복문
+	int idxCount = 0;
+	for (int i = 0; i < (garo - 1); i++)      //세로
+	{
+		for (int j = 0; j < (garo - 1); j++)  //가로
+		{
+			int RectIdx = i * garo + j;
+
+			indices[idxCount] = i * garo + j + 0; idxCount++;
+			indices[idxCount] = i * garo + j + 1; idxCount++;
+			indices[idxCount] = i * garo + j + garo + 1; idxCount++;
+
+			indices[idxCount] = i * garo + j + 0; idxCount++;
+			indices[idxCount] = i * garo + j + garo + 1; idxCount++;
+			indices[idxCount] = i * garo + j + garo; idxCount++;
+		}
+	}
+	int Min = min(last, garo);
+
+
+	for (int i = 0; i < Min; i++)
+	{
+		for (int j = 0; j < Min; j++)
+		{
+			VertexTerrain* ver = (VertexTerrain*)mesh->vertices;
+			vertices[i * garo + j].position.y = ver[i * last + j].position.y;
+			vertices[i * garo + j].normal = ver[i * last + j].normal;
+			vertices[i * garo + j].uv = ver[i * last + j].uv;
+		}
+	}
+	mesh.reset();
+	mesh = make_shared<Mesh>(vertices, vertexCount, indices, indexCount, type);
+
 }
 
 

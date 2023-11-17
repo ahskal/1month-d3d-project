@@ -3,9 +3,14 @@ class Scene2 : public Scene
 {
 private:
 	Camera* cam1;
+	Actor* CamCollsion;
+
 	Grid* grid;
 	Terrain* map;
-	Terrain* water;
+	Sky* skybox;
+	Sky* skybox2;
+
+	Actor* Tile;
 
 public:
 	Scene2();

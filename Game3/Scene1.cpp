@@ -101,6 +101,10 @@ void Scene1::Update()
 		map->TreeCreateIntersect();
 	}
 
+	if (INPUT->KeyDown(VK_F5)) {
+		map->GroundPerlinNoise();
+	}
+
 
 	ImGui::Begin("Hierarchy");
 	grid->RenderHierarchy();

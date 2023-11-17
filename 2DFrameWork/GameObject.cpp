@@ -161,8 +161,6 @@ void GameObject::Update()
 			{
 				Transform::UpdateAnim(skelRoot->anim->GetFrameBone(boneIndex));
 			}
-
-
 		}
 		else
 		{
@@ -217,7 +215,7 @@ void GameObject::Render(shared_ptr<Shader> pShader)
 			it->second->Render();
 	}
 
-	if (collider and pShader != nullptr)
+	if (collider and pShader == nullptr)
 		collider->Render();
 }
 

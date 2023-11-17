@@ -20,7 +20,7 @@ void Main::Init()
 
     SCENE->AddScene("SC1", new Scene1);
     SCENE->AddScene("SC2", new Scene2);
-    SCENE->ChangeScene("SC1");
+    SCENE->ChangeScene("SC2");
 }
 
 void Main::Release()
