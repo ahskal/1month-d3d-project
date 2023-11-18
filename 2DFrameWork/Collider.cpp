@@ -152,6 +152,40 @@ bool Collider::Intersect(Collider* target)
 	return false;
 }
 
+bool Collider::Intersect(Vector3 coord)
+{
+	float Dis;
+	bool result = false;
+	if (type == ColliderType::BOX)
+	{
+		BoundingBox box1;
+		box1.Center = GetWorldPos();
+		box1.Extents = Vector3(S._11, S._22, S._33);
+
+		//XMVECTOR temp = XMLoadFloat3(&coord);
+		result = box1.Contains(coord) >= INTERSECTS;
+	}
+	else if (type == ColliderType::OBOX)
+	{
+		BoundingBox box1;
+		box1.Center = Vector3(0, 0, 0);
+		box1.Extents = Vector3(S._11, S._22, S._33);
+		Matrix inverse = S.Invert() * W;
+		inverse = inverse.Invert();
+
+		coord = Vector3::Transform(coord, inverse);
+		result = box1.Contains(coord) >= INTERSECTS;
+	}
+	else
+	{
+		BoundingSphere box1;
+		box1.Center = GetWorldPos();
+		box1.Radius = scale.x;
+		result = box1.Contains(coord) >= INTERSECTS;
+	}
+	return result;
+}
+
 bool Collider::Intersect(Ray Ray, Vector3& Hit)
 {
 	Ray.direction.Normalize();
@@ -163,6 +197,9 @@ bool Collider::Intersect(Ray Ray, Vector3& Hit)
 		box1.Center = GetWorldPos();
 		box1.Extents = Vector3(S._11, S._22, S._33);
 		result = Ray.Intersects(box1, Dis);
+
+		
+
 		Hit = Ray.position + Ray.direction * Dis;
 	}
 	else if (type == ColliderType::OBOX)

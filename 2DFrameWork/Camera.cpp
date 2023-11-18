@@ -49,7 +49,7 @@ void Camera::CreateStaticMember()
 
 void Camera::DeleteStaticMember()
 {
-	SafeRelease(viewPosBuffer);
+    SafeRelease(viewPosBuffer);
 }
 
 void Camera::ControlMainCam()
@@ -169,12 +169,12 @@ void Camera::Set()
 
 void Camera::ResizeScreen()
 {
-	////viewport.x = 100.0f;
-	////viewport.y = 100.0f;
+    ////viewport.x = 100.0f;
+    ////viewport.y = 100.0f;
 
-	//viewport.width = App.GetWidth();
-	//viewport.height = App.GetHeight();
+    //viewport.width = App.GetWidth();
+    //viewport.height = App.GetHeight();
 
-	//D3D->GetDC()->RSSetViewports(1, viewport.Get11());
+    //D3D->GetDC()->RSSetViewports(1, viewport.Get11());
 }
 

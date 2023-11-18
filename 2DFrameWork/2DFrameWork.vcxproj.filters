@@ -69,7 +69,7 @@
       <Filter>FIle</Filter>
     </ClInclude>
     <ClInclude Include="DepthState.h">
-      <Filter>Render\State</Filter>
+      <Filter>State</Filter>
     </ClInclude>
     <ClInclude Include="ResouceManager.h">
       <Filter>System</Filter>
@@ -81,7 +81,7 @@
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="BlendState.h">
-      <Filter>Render\State</Filter>
+      <Filter>State</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>GameObject\Member</Filter>
@@ -99,7 +99,7 @@
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="RasterState.h">
-      <Filter>Render\State</Filter>
+      <Filter>State</Filter>
     </ClInclude>
     <ClInclude Include="Billboard.h">
       <Filter>GameObject</Filter>
@@ -117,8 +117,15 @@
     <ClInclude Include="Rain.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="PerlinNoise.hpp">
+    <ClInclude Include="AStar.h" />
+    <ClInclude Include="Pop.h">
       <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Water.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Deferred.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -134,11 +141,11 @@
     <Filter Include="FIle">
       <UniqueIdentifier>{f56901cf-2a9d-438c-810e-10eef59d2b88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{be799d93-e2a2-453f-9c54-cb63513f33a8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Render">
       <UniqueIdentifier>{9cb44796-607f-45a2-988f-69e09d717f02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render\State">
-      <UniqueIdentifier>{be799d93-e2a2-453f-9c54-cb63513f33a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +216,7 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="DepthState.cpp">
-      <Filter>Render\State</Filter>
+      <Filter>State</Filter>
     </ClCompile>
     <ClCompile Include="ResouceManager.cpp">
       <Filter>System</Filter>
@@ -221,7 +228,7 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="BlendState.cpp">
-      <Filter>Render\State</Filter>
+      <Filter>State</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>GameObject\Member</Filter>
@@ -239,7 +246,7 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="RasterState.cpp">
-      <Filter>Render\State</Filter>
+      <Filter>State</Filter>
     </ClCompile>
     <ClCompile Include="Billboard.cpp">
       <Filter>GameObject</Filter>
@@ -256,6 +263,16 @@
     <ClCompile Include="SlashTrail.cpp" />
     <ClCompile Include="Rain.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar.cpp" />
+    <ClCompile Include="Pop.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Water.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Deferred.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

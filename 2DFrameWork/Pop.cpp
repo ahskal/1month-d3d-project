@@ -1,109 +1,65 @@
 #include "framework.h"
-
-//길찾기,파티클
-
-
-//물반사물굴절
-//디퍼드렌더링
-//대기산란
-//테셀레이션
-
-void Particle::UpdateParticle()
-{
-	if (isPlaying)
-	{
-		playTime += DELTA;
-		if (playTime > duration)
-		{
-			Stop();
-		}
-	}
-}
-
-void Particle::Gui()
-{
-	if (ImGui::Button("Play"))
-	{
-		Play();
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Stop"))
-	{
-		Stop();
-	}
-	//현재 재생 시간
-	ImGui::Text("Playtime : %f", PlayTime());
-	//총 재생할 시간
-	ImGui::SliderFloat("duration", &duration, 0.0f, 100.0f);
-}
-ID3D11Buffer* Rain::RainBuffer = nullptr;
-void Rain::CreateStaticMember()
+ID3D11Buffer* Pop::PopBuffer = nullptr;
+void Pop::CreateStaticMember()
 {
 	{
 		D3D11_BUFFER_DESC desc = { 0 };
-		desc.ByteWidth = sizeof(RAIN_DESC);
+		desc.ByteWidth = sizeof(POP_DESC);
 		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;//상수버퍼
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
-		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &RainBuffer);
+		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &PopBuffer);
 		assert(SUCCEEDED(hr));
-
 	}
 }
 
-void Rain::DeleteStaticMember()
+void Pop::DeleteStaticMember()
 {
-	SafeRelease(RainBuffer);
+	SafeRelease(PopBuffer);
 }
 
-Rain* Rain::Create(string name)
+Pop* Pop::Create(string name)
 {
-	Rain* temp = new Rain();
+	Pop* temp = new Pop();
 	temp->name = name;
-
 	temp->mesh = make_shared<Mesh>();
-	temp->mesh->LoadFile("7.Billboard.mesh");
-	temp->shader = RESOURCE->shaders.Load("7.Rain.hlsl");
+	temp->mesh->LoadFile("8.Billboard.mesh");
+	temp->shader = RESOURCE->shaders.Load("8.Pop.hlsl");
 	temp->shader->LoadGeometry();
-	temp->Reset();
-	temp->Play();
-	temp->type = ObType::Rain;
-	//temp->visible = false;
-
+	temp->type = ObType::Pop;
 	return temp;
 }
 
-void Rain::Render()
+void Pop::Render()
 {
-	//프로그램 실행된 시간
-	desc.time = TIMER->GetWorldTime();
+	desc.duration = duration;
+	//재생을 시작한 시간
+	desc.time = playTime;
 	{
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		D3D->GetDC()->Map(RainBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-		memcpy_s(mappedResource.pData, sizeof(RAIN_DESC), &desc,
-			sizeof(RAIN_DESC));
-		D3D->GetDC()->Unmap(RainBuffer, 0);
-		D3D->GetDC()->VSSetConstantBuffers(10, 1, &RainBuffer);
+		D3D->GetDC()->Map(PopBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		memcpy_s(mappedResource.pData, sizeof(POP_DESC), &desc,
+			sizeof(POP_DESC));
+		D3D->GetDC()->Unmap(PopBuffer, 0);
+		D3D->GetDC()->VSSetConstantBuffers(10, 1, &PopBuffer);
 	}
 	if (isPlaying)
 		Actor::Render();
 }
 
-void Rain::Update()
+void Pop::Update()
 {
 	Particle::UpdateParticle();
 	Actor::Update();
 }
 
-
-
-void Rain::Reset()
+void Pop::Reset()
 {
-	delete[](VertexBillboard*)mesh->vertices;
+	delete[](VertexPSV*)mesh->vertices;
 	delete[] mesh->indices;
-	mesh->vertices = new VertexBillboard[particleCount];
+	mesh->vertices = new VertexPSV[particleCount];
 	mesh->indices = new UINT[particleCount];
 	mesh->vertexCount = particleCount;
 	mesh->indexCount = particleCount;
@@ -115,8 +71,6 @@ void Rain::Reset()
 	{
 		//이미지 크기 가로세로를 랜덤값
 		//4~8 사이값
-
-		//오차값
 		scale.x = RANDOM->Float(-particleScale.x, particleScale.x);
 		scale.y = RANDOM->Float(-particleScale.y, particleScale.y);
 		scale.x = S._11 + scale.x;
@@ -124,14 +78,28 @@ void Rain::Reset()
 		if (scale.x < 1.0f)scale.x = 1.0f;
 		if (scale.y < 1.0f)scale.y = 1.0f;
 
-		Vector3 position;
-		//생성될위치   //-4~8   ~ 4~ 8
-		position.x = RANDOM->Float(-desc.range.x, desc.range.x);
-		position.y = RANDOM->Float(-desc.range.y, desc.range.y);
-		position.z = RANDOM->Float(-desc.range.z, desc.range.z);
+		Vector3 position = Vector3(0, 0, 0);
 
-		((VertexBillboard*)mesh->vertices)[i].position = position;
-		((VertexBillboard*)mesh->vertices)[i].size = scale;
+
+		//방향벡터 Right
+		Vector3 velocity = Vector3(1, 0, 0);
+
+		//임의의 회전된 3개축
+		Vector3 rot;
+		rot.y = RANDOM->Float(0.0f, PI * 2.0f);
+		rot.x = RANDOM->Float(0.0f, PI * 2.0f);
+		rot.z = RANDOM->Float(0.0f, PI * 2.0f);
+
+		//임의의 회전행렬
+		Matrix matRot = Matrix::CreateFromYawPitchRoll(rot.y, rot.x, rot.z);
+		// v = v * R
+		velocity = Vector3::TransformNormal(velocity, matRot);
+		velocity *= velocityScalar;
+
+		//내가 방향벡터를 3개축을 랜덤값으로 회전시켜 잡는다.
+		((VertexPSV*)mesh->vertices)[i].velocity = velocity;
+		((VertexPSV*)mesh->vertices)[i].position = position;
+		((VertexPSV*)mesh->vertices)[i].size = scale;
 		mesh->indices[i] = i;
 	}
 	SafeRelease(mesh->vertexBuffer);
@@ -142,7 +110,7 @@ void Rain::Reset()
 		D3D11_BUFFER_DESC desc;
 		desc = { 0 };
 		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.ByteWidth = sizeof(VertexBillboard) * particleCount;
+		desc.ByteWidth = sizeof(VertexPSV) * particleCount;
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -167,28 +135,28 @@ void Rain::Reset()
 	}
 }
 
-void Rain::Play()
+void Pop::Play()
 {
 	Reset();
 	Particle::Play();
 }
 
-void Rain::Stop()
+void Pop::Stop()
 {
 	Particle::Stop();
 }
 
 
-void Rain::RenderDetail()
+void Pop::RenderDetail()
 {
 	Actor::RenderDetail();
 	if (ImGui::BeginTabBar("MyTabBar3"))
 	{
-		if (ImGui::BeginTabItem("Rain"))
+		if (ImGui::BeginTabItem("Pop"))
 		{
 			Particle::Gui();
-			ImGui::SliderFloat3("velocity", (float*)&desc.velocity, -1000, 1000);
-			ImGui::SliderFloat3("particleRange", (float*)&desc.range, 0, 1000);
+			ImGui::SliderFloat("gravity", &desc.gravity, -100.0f, 100.0f);
+			ImGui::SliderFloat("velocityScalar", &velocityScalar, 0.0f, 1000.0f);
 			ImGui::SliderFloat2("particleSize", (float*)&scale, 0, 100);
 			ImGui::SliderFloat2("particleRandomSizeRange", (float*)&particleScale, 0, 100);
 			ImGui::SliderInt("particleCount", &particleCount, 1, 100);
@@ -202,3 +170,4 @@ void Rain::RenderDetail()
 		ImGui::EndTabBar();
 	}
 }
+

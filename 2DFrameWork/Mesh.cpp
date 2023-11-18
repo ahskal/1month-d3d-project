@@ -733,7 +733,7 @@ void Mesh::InstanceEdit()
     }
 
 
-    if (GUI->FileImGui("Save", "Save Instance",
+    if (GUI->FileImGui("Save Instance", "Save Instance",
         ".ins", "../Contents/Instance"))
     {
         string path = ImGuiFileDialog::Instance()->GetCurrentPath();
@@ -753,7 +753,7 @@ void Mesh::InstanceEdit()
 
     ImGui::SameLine();
 
-    if (GUI->FileImGui("Load", "Load Instance",
+    if (GUI->FileImGui("Load Instance", "Load Instance",
         ".ins", "../Contents/Instance"))
     {
         string path = ImGuiFileDialog::Instance()->GetCurrentPath();

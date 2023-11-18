@@ -173,7 +173,46 @@ void GameObject::SaveObject(Xml::XMLElement* This, Xml::XMLDocument* doc)
 		light->SetAttribute("radius", LightOb->light->radius);
 		light->SetAttribute("num", LightOb->light->size);
 	}
+	else if (type == ObType::Rain)
+	{
+		Xml::XMLElement* rain = doc->NewElement("Rain");
+		This->LinkEndChild(rain);
+		Rain* RainOb = dynamic_cast<Rain*>(this);
+		rain->SetAttribute("particleScaleX", RainOb->particleScale.x);
+		rain->SetAttribute("particleScaleY", RainOb->particleScale.y);
+		rain->SetAttribute("particleCount", RainOb->particleCount);
+		rain->SetAttribute("rangeX", RainOb->desc.range.x);
+		rain->SetAttribute("rangeY", RainOb->desc.range.y);
+		rain->SetAttribute("rangeZ", RainOb->desc.range.z);
+		rain->SetAttribute("velocityX", RainOb->desc.velocity.x);
+		rain->SetAttribute("velocityY", RainOb->desc.velocity.y);
+		rain->SetAttribute("velocityZ", RainOb->desc.velocity.z);
+		rain->SetAttribute("duration", RainOb->duration);
 
+	}
+	else if (type == ObType::Pop)
+	{
+		Xml::XMLElement* pop = doc->NewElement("Pop");
+		This->LinkEndChild(pop);
+		Pop* PopOb = dynamic_cast<Pop*>(this);
+		pop->SetAttribute("particleScaleX", PopOb->particleScale.x);
+		pop->SetAttribute("particleScaleY", PopOb->particleScale.y);
+		pop->SetAttribute("particleCount", PopOb->particleCount);
+		pop->SetAttribute("velocityScalar", PopOb->velocityScalar);
+		pop->SetAttribute("duration", PopOb->desc.duration);
+		pop->SetAttribute("gravity", PopOb->desc.gravity);
+		pop->SetAttribute("duration", PopOb->duration);
+	}
+	else if (type == ObType::Water)
+	{
+		Xml::XMLElement* water = doc->NewElement("Water");
+		This->LinkEndChild(water);
+		Water* WaterOb = dynamic_cast<Water*>(this);
+		water->SetAttribute("uvScale", WaterOb->uvScale);
+		water->SetAttribute("velocityX", WaterOb->waterBufferDesc.velocity.x);
+		water->SetAttribute("velocityY", WaterOb->waterBufferDesc.velocity.y);
+		
+	}
 
 	Xml::XMLElement* Chidren = doc->NewElement("Children");
 	This->LinkEndChild(Chidren);
@@ -313,6 +352,50 @@ void GameObject::LoadObject(Xml::XMLElement* This)
 		LightOb->light->radius = component->FloatAttribute("radius");
 		LightOb->light->size = component->IntAttribute("num");
 	}
+
+	else if (type == ObType::Rain)
+	{
+		Rain* RainOb = dynamic_cast<Rain*>(this);
+		component = This->FirstChildElement("Rain");
+
+		RainOb->particleScale.x = component->FloatAttribute("particleScaleX");
+		RainOb->particleScale.y = component->FloatAttribute("particleScaleY");
+		RainOb->particleCount = component->IntAttribute("particleCount");
+		RainOb->desc.range.x = component->FloatAttribute("rangeX");
+		RainOb->desc.range.y = component->FloatAttribute("rangeY");
+		RainOb->desc.range.z = component->FloatAttribute("rangeZ");
+		RainOb->desc.velocity.x = component->FloatAttribute("velocityX");
+		RainOb->desc.velocity.y = component->FloatAttribute("velocityY");
+		RainOb->desc.velocity.z = component->FloatAttribute("velocityZ");
+		RainOb->duration = component->FloatAttribute("duration");
+		RainOb->Reset();
+	}
+	else if (type == ObType::Pop)
+	{
+		Pop* PopOb = dynamic_cast<Pop*>(this);
+		component = This->FirstChildElement("Pop");
+		PopOb->particleScale.x = component->FloatAttribute("particleScaleX");
+		PopOb->particleScale.y = component->FloatAttribute("particleScaleY");
+		PopOb->particleCount = component->IntAttribute("particleCount");
+		PopOb->velocityScalar = component->FloatAttribute("velocityScalar");
+		PopOb->desc.duration = component->FloatAttribute("duration");
+		PopOb->desc.gravity = component->FloatAttribute("gravity");
+		PopOb->duration = component->FloatAttribute("duration");
+		PopOb->Reset();
+	}
+
+
+	else if (type == ObType::Water)
+	{
+		Water* WaterOb = dynamic_cast<Water*>(this);
+		component = This->FirstChildElement("Water");
+		WaterOb->uvScale = component->FloatAttribute("uvScale");
+		WaterOb->waterBufferDesc.velocity.x = component->FloatAttribute("velocityX");
+		WaterOb->waterBufferDesc.velocity.y = component->FloatAttribute("velocityY");
+		WaterOb->UpdateUv();
+
+
+	}
 	component = This->FirstChildElement("Children");
 	int size = component->IntAttribute("Size");
 	for (int i = 0; i != size; i++)
@@ -370,6 +453,24 @@ void GameObject::LoadObject(Xml::XMLElement* This)
 			temp->mesh = make_shared<Mesh>();
 			temp->mesh->LoadFile("7.Billboard.mesh");
 			temp->shader->LoadGeometry();
+		}
+		else if (Type == ObType::Rain)
+		{
+			Rain* temp = Rain::Create(childName);
+			AddChild(temp);
+			temp->LoadObject(ob);
+		}
+		else if (Type == ObType::Pop)
+		{
+			Pop* temp = Pop::Create(childName);
+			AddChild(temp);
+			temp->LoadObject(ob);
+		}
+		else if (Type == ObType::Water)
+		{
+			Water* temp = Water::Create(childName);
+			AddChild(temp);
+			temp->LoadObject(ob);
 		}
 	}
 

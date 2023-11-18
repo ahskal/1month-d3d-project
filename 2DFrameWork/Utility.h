@@ -19,6 +19,7 @@ namespace Utility
 
 
     bool RayIntersectMap(IN Ray WRay, IN GameObject* Terrain, OUT Vector3& HitPoint);
+    bool RayIntersectLocalMap(IN Ray WRay, IN GameObject* Terrain, OUT Vector3& HitPoint);
 
 
     //템플릿 함수는 선언,정의 분리 불가

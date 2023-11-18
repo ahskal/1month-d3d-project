@@ -217,3 +217,46 @@ bool Utility::RayIntersectMap(IN Ray WRay, IN GameObject* Terrain, OUT Vector3& 
 	}
 	return false;
 }
+
+bool Utility::RayIntersectLocalMap(IN Ray WRay, IN GameObject* Terrain, OUT Vector3& HitPoint)
+{
+	if (not Terrain->mesh)return false;
+
+	//Terrain 중심점 0,0,0이 가운데가 아닌 왼쪽상단이 0,0,0이 되게끔 이동
+
+	int terrainSize = (int)sqrt(Terrain->mesh->vertexCount);
+	float half = terrainSize * 0.5f;
+	int TerrainIdxX, TerrainIdxZ;
+	TerrainIdxX = WRay.position.x + half;
+	TerrainIdxZ = -(WRay.position.z - half);
+
+	if (TerrainIdxX < 0 or TerrainIdxZ < 0 or
+		TerrainIdxX >= terrainSize - 1 or TerrainIdxZ >= terrainSize - 1)
+	{
+		//cout << "OutofRange" << endl;
+		return false;
+	}
+	//사각형 인덱스
+	int index = (terrainSize - 1) * TerrainIdxZ + TerrainIdxX;
+	//사각형의 첫번째 정점 인덱스
+	index *= 6;
+
+	for (int i = 0; i < 6; i += 3)
+	{
+		Vector3 v[3];
+		v[0] = Terrain->mesh->GetVertexPosition(index + i);
+		v[1] = Terrain->mesh->GetVertexPosition(index + i + 1);
+		v[2] = Terrain->mesh->GetVertexPosition(index + i + 2);
+
+		float Dis;
+		if (WRay.Intersects(v[0], v[1], v[2], Dis))
+		{
+			//                         스칼라 x 방향
+			HitPoint = WRay.position + Dis * WRay.direction;
+			//다시 W 로 변환
+			HitPoint = Vector3::Transform(HitPoint, Terrain->W);
+			return true;
+		}
+	}
+	return false;
+}

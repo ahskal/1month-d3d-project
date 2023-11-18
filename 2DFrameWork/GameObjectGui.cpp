@@ -514,6 +514,56 @@ bool Camera::Intersect(Vector3 coord)
 	return false;
 }
 
+bool Camera::Intersect(Collider* target)
+{
+	BoundingFrustum Frustum;
+
+	Frustum.Origin = GetWorldPos();
+	Frustum.Orientation = Quaternion::CreateFromRotationMatrix(R);
+	Frustum.RightSlope = tanf(fov);
+	Frustum.LeftSlope = -Frustum.RightSlope;
+	Frustum.TopSlope = Frustum.RightSlope * App.GetHeight() / App.GetWidth();
+	Frustum.BottomSlope = -Frustum.TopSlope;
+	Frustum.Near = nearZ;
+	Frustum.Far = farZ;
+
+
+	if (target->type == ColliderType::BOX)
+	{
+		BoundingBox box2;
+		box2.Center = target->GetWorldPos();
+		box2.Extents = Vector3(target->S._11, target->S._22, target->S._33);
+
+		if (Frustum.Contains(box2) != DISJOINT)
+		{
+			return true;
+		}
+	}
+	else if (target->type == ColliderType::OBOX)
+	{
+		BoundingOrientedBox box2;
+		box2.Center = target->GetWorldPos();
+		box2.Extents = Vector3(target->S._11, target->S._22, target->S._33);
+		box2.Orientation = Quaternion::CreateFromRotationMatrix(target->RT);
+		if (Frustum.Contains(box2) != DISJOINT)
+		{
+			return true;
+		}
+	}
+	else
+	{
+		BoundingSphere box2;
+		box2.Center = target->GetWorldPos();
+		box2.Radius = target->S._11;
+		if (Frustum.Contains(box2) != DISJOINT)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void Texture::RenderDetail()
 {
 	ImGui::Text(file.c_str());
