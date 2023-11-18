@@ -5,10 +5,19 @@
         <Rotation X="0" Y="0" Z="0"/>
     </Collider>
     <Transform>
-        <Position X="0.48089883" Y="36.621822" Z="-45.831203"/>
+        <Position X="0" Y="0" Z="0"/>
         <Scale X="1" Y="1" Z="1"/>
-        <Rotation X="0.76899922" Y="75.549828" Z="0"/>
+        <Rotation X="0" Y="0" Z="0"/>
     </Transform>
     <Camera Ortho="false" Fov="1.047192" Width="1441" Height="883" NearZ="0.1" FarZ="500" viewportX="0" viewportY="0" viewportW="1441" viewportH="883"/>
-    <Children Size="0"/>
+    <Children Size="1"/>
+    <Child0 Name="None" Visible="true" ObType="2">
+        <Transform>
+            <Position X="0" Y="0" Z="-20"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Transform>
+		<Camera Ortho="false" Fov="1.047192" Width="1441" Height="883" NearZ="0.1" FarZ="500" viewportX="0" viewportY="0" viewportW="1441" viewportH="883"/>
+        <Children Size="0"/>
+    </Child0>
 </Root>

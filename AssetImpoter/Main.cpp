@@ -282,6 +282,7 @@ void Main::Render()
 {
     Camera::main->Set();
     BLEND->Set(false);
+    LIGHT->Set();
 
     grid->Render();
     temp->Render();
