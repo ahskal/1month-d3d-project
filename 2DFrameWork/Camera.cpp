@@ -2,25 +2,14 @@
 
 ID3D11Buffer* Camera::VBuffer = nullptr;
 ID3D11Buffer* Camera::PBuffer = nullptr;
-ID3D11Buffer* Camera::viewPosBuffer = nullptr;
+ID3D11Buffer* Camera::InvV = nullptr;
 Camera* Camera::main = nullptr;
 
 float Camera::mainCamSpeed = 10.0f;
 
 void Camera::CreateStaticMember()
 {
-	{
-		D3D11_BUFFER_DESC desc = { 0 };
-		desc.ByteWidth = sizeof(Vector4);
-		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;//상수버퍼
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		desc.MiscFlags = 0;
-		desc.StructureByteStride = 0;
-		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &viewPosBuffer);
-		assert(SUCCEEDED(hr));
-
-	}
+	
 	{
 		D3D11_BUFFER_DESC desc = { 0 };
 		desc.ByteWidth = sizeof(Matrix);
@@ -45,11 +34,24 @@ void Camera::CreateStaticMember()
 		assert(SUCCEEDED(hr));
 
 	}
+
+	{
+		D3D11_BUFFER_DESC desc = { 0 };
+		desc.ByteWidth = sizeof(Matrix);
+		desc.Usage = D3D11_USAGE_DYNAMIC;
+		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;//상수버퍼
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		desc.MiscFlags = 0;
+		desc.StructureByteStride = 0;
+		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &InvV);
+		assert(SUCCEEDED(hr));
+
+	}
 }
 
 void Camera::DeleteStaticMember()
 {
-    SafeRelease(viewPosBuffer);
+    //SafeRelease(viewPosBuffer);
 }
 
 void Camera::ControlMainCam()
@@ -131,6 +133,7 @@ void Camera::Set()
 	{
 		//        RT역행렬
 		view = RT.Invert();
+		//RT; //view 역행렬
 		if (ortho)
 			proj = Matrix::CreateOrthographic(width, height, nearZ, farZ);
 		else
@@ -140,6 +143,12 @@ void Camera::Set()
 
 		Matrix TV = view.Transpose();
 		Matrix TP = proj.Transpose();
+		Matrix TInvV = RT.Transpose();
+
+		D3D11_MAPPED_SUBRESOURCE mappedResource1;
+		D3D->GetDC()->Map(VBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource1);
+		memcpy_s(mappedResource1.pData, sizeof(Matrix), &TV, sizeof(Matrix));
+		D3D->GetDC()->Unmap(VBuffer, 0);
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource2;
 		D3D->GetDC()->Map(PBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource2);
@@ -147,21 +156,26 @@ void Camera::Set()
 		D3D->GetDC()->Unmap(PBuffer, 0);
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource3;
-		D3D->GetDC()->Map(VBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource3);
-		memcpy_s(mappedResource3.pData, sizeof(Matrix), &TV, sizeof(Matrix));
-		D3D->GetDC()->Unmap(VBuffer, 0);
+		D3D->GetDC()->Map(InvV, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource3);
+		memcpy_s(mappedResource3.pData, sizeof(Matrix), &TInvV, sizeof(Matrix));
+		D3D->GetDC()->Unmap(InvV, 0);
+
 
 		D3D->GetDC()->VSSetConstantBuffers(1, 1, &VBuffer);
 		D3D->GetDC()->VSSetConstantBuffers(2, 1, &PBuffer);
 		D3D->GetDC()->GSSetConstantBuffers(0, 1, &PBuffer);
+
+		D3D->GetDC()->PSSetConstantBuffers(0, 1, &InvV);
+		D3D->GetDC()->PSSetConstantBuffers(6, 1, &PBuffer);
+
 	}
 	{
-		Vector4 viewPos = Vector4(GetWorldPos().x, GetWorldPos().y, GetWorldPos().z, 1.0f);
+		/*Vector4 viewPos = Vector4(GetWorldPos().x, GetWorldPos().y, GetWorldPos().z, 1.0f);
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		D3D->GetDC()->Map(viewPosBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		memcpy_s(mappedResource.pData, sizeof(Vector4), &viewPos, sizeof(Vector4));
 		D3D->GetDC()->Unmap(viewPosBuffer, 0);
-		D3D->GetDC()->PSSetConstantBuffers(0, 1, &viewPosBuffer);
+		D3D->GetDC()->PSSetConstantBuffers(0, 1, &viewPosBuffer);*/
 	}
 	D3D->GetDC()->RSSetViewports(1, viewport.Get11());
 

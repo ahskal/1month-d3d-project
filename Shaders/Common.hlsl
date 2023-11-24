@@ -1,3 +1,4 @@
+#define MAX_SHININESS 256
 
 cbuffer VS_W : register(b0)
 {
@@ -44,10 +45,16 @@ TextureCube TextureShadow : register(t5);
 SamplerState SamplerShadow : register(s5);
 
 //현재카메라
-cbuffer PS_ViewPos : register(b0)
+cbuffer PS_InvView : register(b0)
 {
-	float4 ViewPos;
+    matrix InvView;
 }
+
+cbuffer PS_Proj : register(b6)
+{
+    matrix PSProj;
+}
+
 cbuffer PS_Material : register(b1)
 {
 	float4 Ka;
@@ -99,8 +106,6 @@ cbuffer PS_ShadowView : register(b5)
 	matrix ShadowViews[6];
 	matrix ShadowProjection;
 }
-
-
 
 cbuffer GS_P : register(b0)
 {
@@ -165,10 +170,10 @@ float3 NormalMapping(float3 N, float3 T, float3 B, float2 Uv)
         // rgb (-1~1,-1~1,-1~1)
 		N = normal * 2.0f - 1.0f;
         //매핑한 법선을 회전시키기  normal * Matrix
-		N = normalize(mul(N, TBN));
+		N = mul(N, TBN);
 	}
     
-	return N;
+    return normalize(N);
 }
 
 
@@ -177,7 +182,7 @@ float3 EmissiveMapping(float3 BaseColor, float2 Uv, float3 Normal, float3 wPosit
     //Emissive
 	float3 Emissive = 0;
 	float3 EmissiveMap = BaseColor;
-	float3 ViewDir = normalize(wPosition - ViewPos.xyz);
+    float3 ViewDir = normalize(wPosition - InvView._41_42_43);
     //반사색이 있을때만 Emissive 값을 계산한다.
     [flatten]
     //rgb중에 값이 하나라도 0 이 아니면
@@ -205,9 +210,9 @@ float3 DirLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 w
 	float Diffuse = saturate(dot(-DirectionLight, Normal));
     
 	float3 RecflectLight = reflect(DirectionLight, Normal);
-	float3 ViewDir = normalize(ViewPos.xyz - wPostion);
+    float3 ViewDir = normalize(InvView._41_42_43 - wPostion);
 	float Specular = saturate(dot(ViewDir, RecflectLight));
-	Specular = pow(Specular, Shininess);
+    Specular = pow(Specular, saturate(Shininess / MAX_SHININESS));
     
     //         계수 * 머터리얼 *  DiffuseMap
 	float3 D = Diffuse * Kd.rgb * BaseColor;
@@ -215,15 +220,15 @@ float3 DirLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 w
 	return saturate((D + S) * DirColor.rgb);
 }
 
-float3 DeferredDirLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPostion)
+float3 DeferredDirLighting(float3 BaseColor, float4 SpecularMap, float3 Normal, float3 wPostion)
 {
 	float3 DirectionLight = normalize(DirLight.xyz);
 	float Diffuse = saturate(dot(-DirectionLight, Normal));
     
 	float3 RecflectLight = reflect(DirectionLight, Normal);
-	float3 ViewDir = normalize(ViewPos.xyz - wPostion);
+	float3 ViewDir = normalize(InvView._41_42_43 - wPostion);
 	float Specular = saturate(dot(ViewDir, RecflectLight));
-	Specular = pow(Specular, Shininess);
+    Specular = pow(Specular, SpecularMap.a);
     
     //         계수 * 머터리얼 *  DiffuseMap
 	float3 D = Diffuse * BaseColor;
@@ -247,16 +252,16 @@ float3 PointLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3
   
     
 	float3 RecflectLight = reflect(DirectionLight, Normal);
-	float3 ViewDir = normalize(ViewPos.xyz - wPosition);
+    float3 ViewDir = normalize(InvView._41_42_43 - wPosition);
 	float Specular = saturate(dot(ViewDir, RecflectLight)) * attention;
-	Specular = pow(Specular, Shininess);
+    Specular = pow(Specular, saturate(Shininess / MAX_SHININESS));
     
 	float3 D = Diffuse * Kd.rgb * BaseColor;
 	float3 S = Specular * Ks.rgb * SpecularMap;
     
 	return saturate((D + S) * lights[idx].Color.rgb);
 }
-float3 DeferredPointLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPosition, int idx)
+float3 DeferredPointLighting(float3 BaseColor, float4 SpecularMap, float3 Normal, float3 wPosition, int idx)
 {
     //return float3(1, 1, 1);
 	float3 DirectionLight = lights[idx].Position - wPosition;
@@ -271,9 +276,9 @@ float3 DeferredPointLighting(float3 BaseColor, float3 SpecularMap, float3 Normal
   
     
 	float3 RecflectLight = reflect(DirectionLight, Normal);
-	float3 ViewDir = normalize(ViewPos.xyz - wPosition);
+    float3 ViewDir = normalize(InvView._41_42_43 - wPosition);
 	float Specular = saturate(dot(ViewDir, RecflectLight)) * attention;
-	Specular = pow(Specular, Shininess);
+    Specular = pow(Specular, SpecularMap.a);
     
 	float3 D = Diffuse * BaseColor;
 	float3 S = Specular * SpecularMap;
@@ -308,9 +313,9 @@ float3 SpotLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 
   
     
 	float3 RecflectLight = reflect(DirectionLight, Normal);
-	float3 ViewDir = normalize(ViewPos.xyz - wPosition);
+    float3 ViewDir = normalize(InvView._41_42_43 - wPosition);
 	float Specular = saturate(dot(ViewDir, RecflectLight)) * attention;
-	Specular = pow(Specular, Shininess);
+    Specular = pow(Specular, saturate(Shininess / MAX_SHININESS));
     
 	float3 D = Diffuse * Kd.rgb * BaseColor;
 	float3 S = Specular * Ks.rgb * SpecularMap;
@@ -318,7 +323,7 @@ float3 SpotLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 
 	return saturate((D + S) * lights[idx].Color.rgb);
 }
 
-float3 DeferredSpotLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPosition, int idx)
+float3 DeferredSpotLighting(float3 BaseColor, float4 SpecularMap, float3 Normal, float3 wPosition, int idx)
 {
     //픽셀에서 라이트향하는 방향
 	float3 DirectionLight = lights[idx].Position - wPosition;
@@ -346,9 +351,9 @@ float3 DeferredSpotLighting(float3 BaseColor, float3 SpecularMap, float3 Normal,
   
     
 	float3 RecflectLight = reflect(DirectionLight, Normal);
-	float3 ViewDir = normalize(ViewPos.xyz - wPosition);
+    float3 ViewDir = normalize(InvView._41_42_43 - wPosition);
 	float Specular = saturate(dot(ViewDir, RecflectLight)) * attention;
-	Specular = pow(Specular, Shininess);
+    Specular = pow(Specular, SpecularMap.a);
     
 	float3 D = Diffuse  * BaseColor;
 	float3 S = Specular  * SpecularMap;
@@ -361,7 +366,7 @@ float3 EnvironmentMapping(float3 Normal, float3 wPosition)
 	 [flatten]
 	if (roughness != 0.0f)
 	{
-		float3 ViewDir = normalize(wPosition - ViewPos.xyz);
+        float3 ViewDir = normalize(wPosition - InvView._41_42_43);
 		float3 reflection = reflect(ViewDir, Normal);
 		return TextureBG.Sample(SamplerBG, reflection.xyz) * roughness;
 		
@@ -439,7 +444,7 @@ float4 Lighting(float4 BaseColor, float2 Uv, float3 Normal, float3 wPosition)
 	
 	//발광
 	//Ambient
-	Result.rgb += Ka.rgb * BaseColor.rgb * 1.2f;
+	Result.rgb += Ka.rgb * BaseColor.rgb;
     //Emissive
 	Result.rgb += EmissiveMapping(BaseColor.rgb, Uv, Normal, wPosition);
 	//Environment

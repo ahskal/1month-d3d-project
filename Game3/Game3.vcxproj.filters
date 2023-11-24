@@ -12,6 +12,9 @@
     <ClInclude Include="Scene2.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -24,6 +27,9 @@
     <ClCompile Include="Scene2.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Object">
@@ -34,6 +40,9 @@
     </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{5604d1b7-6c61-468d-a548-e939ecdb46b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Monster">
+      <UniqueIdentifier>{954fba8a-293e-4a81-ae31-8efcbe626a77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

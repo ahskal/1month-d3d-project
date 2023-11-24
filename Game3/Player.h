@@ -29,15 +29,12 @@ enum AniState {
 	// 11 ~ 12 Idle Equip, unEquip
 	Ani_Idle_Equip,
 	Ani_Idle_UnEquip,
-
 };
 
 class Player : public Actor
 {
 public:
-
 	friend class Scene2;
-
 
 	static Player* Create(string name = "Player");
 	static Player* Create(Player* src);

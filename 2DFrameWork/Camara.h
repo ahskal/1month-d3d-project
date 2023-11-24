@@ -5,7 +5,7 @@ class Camera : public Actor
 private:
     static ID3D11Buffer* VBuffer;
     static ID3D11Buffer* PBuffer;
-    static ID3D11Buffer* viewPosBuffer;
+    static ID3D11Buffer* InvV;
 
 public:
     Matrix              view, proj, VP;     

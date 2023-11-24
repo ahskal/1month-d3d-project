@@ -6,12 +6,15 @@ private:
     RenderTarget* diffuseTarget;
     RenderTarget* specularTarget;
     RenderTarget* normalTarget;
-    RenderTarget* posTarget;
     RenderTarget* ambientTarget;
     RenderTarget* emissiveTarget;
+    //RenderTarget* posTarget;
 
-    RenderTarget* rtvs[6];
+    RenderTarget* rtvs[5];
     ID3D11ShaderResourceView* srvs[6];
+
+    ID3D11Buffer*       buffer;
+    shared_ptr<Shader>  shader;
 public:
     Deferred(UINT width = App.GetWidth(),
         UINT height = App.GetHeight());
@@ -21,5 +24,6 @@ public:
     //창사이즈 조절
     void ResizeScreen(float width, float height);
     void RenderDetail();
+    void Render();
 };
 

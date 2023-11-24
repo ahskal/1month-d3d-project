@@ -20,9 +20,8 @@ struct DeferredOutput
 	float4 diffuse : SV_TARGET0;
 	float4 specular : SV_TARGET1;
 	float4 normal : SV_TARGET2;
-	float4 wPosition : SV_TARGET3;
-	float4 emissive : SV_TARGET4;
-	float4 ambient : SV_TARGET5;
+    float4 emissive : SV_TARGET3;
+    float4 ambient : SV_TARGET4;
 };
 PixelInput VS(VertexInput input)
 {
@@ -34,6 +33,8 @@ PixelInput VS(VertexInput input)
 	output.wPosition = output.Position;
 	output.Position = mul(output.Position, View);
 	output.Position = mul(output.Position, Proj);
+	
+	
 	output.Normal = mul(input.Normal, (float3x3) World);
 	output.Weights = input.Weights;
     return output;
@@ -65,11 +66,10 @@ DeferredOutput PS(PixelInput input)
 	
 	
 	
-	output.specular = float4(1, 1, 1, 0);
-	output.normal = float4(normalize(input.Normal), 0);
-	output.wPosition = input.wPosition;
-	output.emissive = float4(EmissiveMapping(output.diffuse.xyz, input.Uv, output.normal.xyz, input.wPosition.xyz), 0);
-	output.ambient = float4(Ka.rgb * output.diffuse.rgb, 1);
+    output.specular = float4(1, 1, 1, saturate(Shininess / MAX_SHININESS));
+    output.normal = float4(normalize(input.Normal)*0.5f + 0.5f,1);
+    output.emissive = float4(EmissiveMapping(output.diffuse.xyz, input.Uv, input.Normal, input.wPosition.xyz), 1);
+    output.ambient = float4(Ka.rgb * output.diffuse.rgb, 1);
 	
 	output.diffuse.rgb *= Kd.rgb;
 	output.specular.rgb *= Ks.rgb;
