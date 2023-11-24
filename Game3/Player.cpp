@@ -7,6 +7,16 @@ Player* Player::Create(string name)
 	temp->LoadFile("Man2.xml");
 	temp->type = ObType::Actor;
 	temp->state = PlayerState::IDLE;
+
+	Camera* Cam = Camera::Create();
+	Cam->LoadFile("Cam2.xml");
+
+	Cam->SetLocalPosY(3.5);
+	Cam->SetLocalPosZ(-5);
+	temp->lastPos = Vector3();
+	temp->AddChild(Cam);
+	Camera::main = Cam;
+	temp->Cam = Cam;
 	return temp;
 }
 
@@ -18,20 +28,38 @@ Player* Player::Create(Player* src)
 	temp->rotTime = 0.0f;
 	temp->CopyChild(src);
 
+	Camera* Cam = Camera::Create();
+	Cam->LoadFile("Cam2.xml");
+
+	temp->AddChild(Cam);
+	Camera::main = Cam;
+
+	temp->Cam = Cam;
 	return temp;
 }
 
 Player::Player()
 {
 	MoveSpeed = 5;
+
+
 }
 
 Player::~Player()
 {
 }
 
+void Player::SetSpawn(Vector3 spawn)
+{
+	SetWorldPosX(spawn.x);
+	SetWorldPosZ(spawn.z);
+
+	lastPos = spawn;
+}
+
 void Player::Init()
 {
+
 	slash = new SlashTrail();
 	slash->Top = Find("Start");
 	slash->Bottom = Find("End");
@@ -45,8 +73,6 @@ void Player::Init()
 	slash->material->diffuse.y = 0.0f;
 	slash->material->diffuse.z = 1.0f;
 
-
-
 	dir[0] = Ani_Move_Left;
 	dir[1] = Ani_Move_Back_Right;
 	dir[2] = Ani_Move_Back;
@@ -57,10 +83,16 @@ void Player::Init()
 	dir[7] = Ani_Move_Front_Left;
 
 	anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Equip, 0.1f);
+
 }
 
 void Player::Update()
 {
+	//rotation.y = Cam->rotation.y - PI;
+	Cam->Find("None")->rotation.y = rotation.y - PI;
+	lastPos = GetWorldPos();
+	Actor::Update();
+
 	if (Once) {
 		Init();
 		Once = false;
@@ -71,6 +103,7 @@ void Player::Update()
 
 	// 기본모션
 	if (state == PlayerState::IDLE) {
+
 
 		if (INPUT->KeyPress('W') or INPUT->KeyPress('A')
 			or INPUT->KeyPress('S') or INPUT->KeyPress('D'))
@@ -88,7 +121,7 @@ void Player::Update()
 
 		if (INPUT->KeyDown(VK_LBUTTON)) {
 			state = PlayerState::ATTACK;
-			
+
 			if (AttackCount == 0) {
 				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
 
@@ -99,12 +132,25 @@ void Player::Update()
 
 				AttackCount = 0;
 			}
-			
 		}
 	}
 	// 걷기
 	else if (state == PlayerState::WALK) {
 
+		if (INPUT->KeyDown(VK_LBUTTON)) {
+			state = PlayerState::ATTACK;
+
+			if (AttackCount == 0) {
+				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
+
+				AttackCount = 1;
+			}
+			else if (AttackCount == 1) {
+				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_03, 0.1f);
+
+				AttackCount = 0;
+			}
+		}
 		if (not(INPUT->KeyPress('W') or INPUT->KeyPress('A')
 			or INPUT->KeyPress('S') or INPUT->KeyPress('D')))
 		{
@@ -116,6 +162,7 @@ void Player::Update()
 				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Equip, 0.1f);
 			}
 		}
+
 
 	}
 	// 무기 장비 해체
@@ -144,7 +191,6 @@ void Player::Update()
 	}
 	// 공격
 	else if (state == PlayerState::ATTACK) {
-		
 		if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
 		{
 			slash->Play();
@@ -153,7 +199,7 @@ void Player::Update()
 		{
 			slash->Stop();
 		}
-		if (anim->GetPlayTime() >= 0.98f) {			
+		if (anim->GetPlayTime() >= 0.98f) {
 			slash->Update();
 			state = PlayerState::IDLE;
 			if (isUnEquip) {
@@ -164,22 +210,23 @@ void Player::Update()
 			}
 		}
 	}
-	slash->RenderDetail();
 
 	slash->Update();
-	Actor::Update();
 
 }
 
-void Player::PreRender()
+void Player::LateUpdate()
 {
-	Actor::Render();
-	slash->Render();
 }
 
 void Player::Render(shared_ptr<Shader> pShader)
 {
 	Actor::Render(pShader);
+
+}
+
+void Player::EffectRender()
+{
 	slash->Render();
 }
 
@@ -191,41 +238,35 @@ void Player::Hierarchy()
 
 void Player::Control()
 {
-	if (!INPUT->KeyPress(VK_LSHIFT)) {
+	bool keyW = INPUT->KeyPress('W');
+	bool keyS = INPUT->KeyPress('S');
+	bool keyA = INPUT->KeyPress('A');
+	bool keyD = INPUT->KeyPress('D');
+	if (not moving) {
 		return;
 	}
-	MoveDir = Vector2(0,0);
+	MoveDir = Vector3(0, 0, 0);
+	if (keyW)
+		MoveDir += GetForward();
+	else if (keyS)
+		MoveDir -= GetForward();
+	if (keyA)
+		MoveDir -= GetRight();
+	else if (keyD)
+		MoveDir += GetRight();
+	MoveDir.Normalize();
+	MoveWorldPos(MoveDir * DELTA * MoveSpeed);
 
-	if (INPUT->KeyPress('W'))
-	{
-		MoveDir.y = 1.0f;
-	}
-	else if (INPUT->KeyPress('S'))
-	{
-		MoveDir.y = -1.0f;
-	}
-	if (INPUT->KeyPress('A'))
-	{
-		MoveDir.x = -1.0f;
-	}
-	else if (INPUT->KeyPress('D'))
-	{
-		MoveDir.x = 1.0f;
-	}
-	//MoveDir.Normalize();
+	float dotAngle = GetForward().Dot(MoveDir);
+	float dotAngle2 = GetRight().Dot(MoveDir);
 
-	MoveWorldPos(Vector3(MoveDir.x, 0, MoveDir.y) * DELTA * MoveSpeed);
-
-	int index =
-		round((atan2f(MoveDir.y, MoveDir.x) + PI) / (45.f * ToRadian));
-
-	if (index == 8) index = 0;
+	int index = round((atan2f(dotAngle, dotAngle2) + PI) / (45.f * ToRadian));
+	index = (index == 8) ? 0 : index;
 	this->index = index;
 
 	if (lastMoveDir != MoveDir) {
-		anim->ChangeAnimation(AnimationState::LOOP, dir[index], 0.2f);
+		anim->ChangeAnimation(AnimationState::LOOP, dir[index], 0.1f);
 	}
 
 	lastMoveDir = MoveDir;
-
 }

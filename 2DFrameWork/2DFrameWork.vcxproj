@@ -166,6 +166,7 @@
     <ClInclude Include="Camara.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CubeRenderTarget.h" />
+    <ClInclude Include="Deferred.h" />
     <ClInclude Include="DepthState.h" />
     <ClInclude Include="Direct3D11.h" />
     <ClInclude Include="Dwrite.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="PerlinNoise.hpp" />
+    <ClInclude Include="Pop.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="Rain.h" />
     <ClInclude Include="Random.h" />
@@ -198,6 +200,7 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="VertexType.h" />
+    <ClInclude Include="Water.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Xml.h" />
   </ItemGroup>
@@ -209,6 +212,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CubeRenderTarget.cpp" />
+    <ClCompile Include="Deferred.cpp" />
     <ClCompile Include="DepthState.cpp" />
     <ClCompile Include="Direct3D11.cpp" />
     <ClCompile Include="Dwrite.cpp" />
@@ -221,6 +225,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Pop.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Rain.cpp" />
     <ClCompile Include="Random.cpp" />
@@ -239,6 +244,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="Water.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Xml.cpp" />
   </ItemGroup>

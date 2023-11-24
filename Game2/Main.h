@@ -5,11 +5,20 @@ class Main : public Scene
 private:
 	Camera* cam1;
 	Grid* grid;
-	Actor* root;
-	map < string, Material*> mtlList;
+
+	Mesh* mesh;
+	Shader* shader;
+	struct EdgeBuffer
+	{
+		Vector4 edges;
+		Vector2 inside;
+		Vector2 padding;
+	}edgeBufferDesc;
+	ID3D11Buffer* edgeBuffer;
+
+
 
 public:
-	void ReadMtl(string file);
 	Main();
 	~Main();
 	virtual void Init() override;

@@ -35,25 +35,33 @@ enum AniState {
 class Player : public Actor
 {
 public:
+
+	friend class Scene2;
+
+
 	static Player* Create(string name = "Player");
 	static Player* Create(Player* src);
 private:
+
+	Camera* Cam;
+
 	// 플레이어 FSM
 	PlayerState state;
 	// 키 입력에 따른 방향값
-	Vector2 MoveDir;
+	Vector3 MoveDir;
+	Vector3 lastMoveDir;
 	// 이전에 키 입력에 따른 방향값
-	Vector2 lastMoveDir;
+	Vector3 lastPos = Vector3();
 	// 방향값을 정수로 변환
 	int index;
 	// 정수방향값을 애니메이션 순서에 맞게 정렬
 	int dir[8];
-	
+
 	// 장비 해체 여부
 	bool isUnEquip = false;
 	// 장비 해체를 한번만 실행 불린변수
 	bool shouldOnce = false;
-	
+
 	//이동속도
 	float	MoveSpeed;
 
@@ -71,28 +79,37 @@ private:
 	float   rotSpeed;
 	float   rotTime;
 
-	Vector3 last;
-
 	Ray attackRay;
 
+	float CamLength = 5;
+
 public:
+	bool moving = true;;
 
-
+	const Vector3& GetDir() { return MoveDir; }
 
 
 	Player();
 	~Player();
-
+	void SetSpawn(Vector3 spawn);
 	void Init();
 	void Update();
+	void LateUpdate();
 	void PreRender();
 	void Render(shared_ptr<Shader> pShader = nullptr) override;
+	void EffectRender();
+
 	void Hierarchy();
 
 	void Control();
 	void WolrdUpdate()
 	{
 		GameObject::Update();
+	}
+
+	void GoBack() {
+		SetWorldPos(lastPos);
+		Update();
 	}
 
 

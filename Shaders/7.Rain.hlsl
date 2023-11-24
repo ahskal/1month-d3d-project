@@ -1,5 +1,13 @@
 #include "Common.hlsl"
 
+cbuffer VS_Data : register(b10)
+{
+	float3 velocity;
+	float padding;
+    
+	float3 range;
+	float time;
+}
 struct VertexInput
 {
 	float4 Position : POSITION0;
@@ -12,14 +20,7 @@ struct PixelInput
     float2 Uv : UV0;
 };
 
-cbuffer VS_Data : register(b10)
-{
-    float3 velocity;
-    float padding;
-    
-    float3 range;
-    float time;
-}
+
 VertexInput VS(VertexInput input)
 {
     VertexInput output;

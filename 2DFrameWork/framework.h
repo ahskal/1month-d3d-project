@@ -15,6 +15,8 @@
 #include <iostream>
 #include <unordered_map>
 #include <queue>
+#include <unordered_set>
+
 using namespace std;
 
 //DirectX d3d 11
@@ -62,6 +64,10 @@ using namespace SimpleMath;
 //TinyXML2
 #include "Xml.h"
 
+//PerlinNoise
+#include "PerlinNoise.hpp"
+
+
 //Macro(Pascal)
 #define Check(hr)			{ assert(SUCCEEDED(hr)); }
 #define SafeRelease(p)		{ if(p){ (p)->Release(); (p) = nullptr; } }
@@ -107,7 +113,6 @@ extern Application App;//Extern Global
 #include "RenderTarget.h"
 #include "CubeRenderTarget.h"
 #include "Deferred.h"
-
 
 #include "ResouceManager.h"
 #include "GameObject.h"

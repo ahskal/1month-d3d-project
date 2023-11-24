@@ -212,7 +212,7 @@ void GameObject::Render(shared_ptr<Shader> pShader)
 		}
 		
 		for (auto it = children.begin(); it != children.end(); it++)
-			it->second->Render();
+			it->second->Render(shader);
 	}
 
 	if (collider and pShader == nullptr)

@@ -129,7 +129,6 @@ void Rain::Reset()
 		position.x = RANDOM->Float(-desc.range.x, desc.range.x);
 		position.y = RANDOM->Float(-desc.range.y, desc.range.y);
 		position.z = RANDOM->Float(-desc.range.z, desc.range.z);
-
 		((VertexBillboard*)mesh->vertices)[i].position = position;
 		((VertexBillboard*)mesh->vertices)[i].size = scale;
 		mesh->indices[i] = i;

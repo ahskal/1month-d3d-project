@@ -7,7 +7,7 @@
     <Children Size="1"/>
     <Child0 Name="Box01" Visible="true" ObType="0">
         <Mesh File="2.Cube.mesh"/>
-        <Shader File="2.Instance.hlsl"/>
+        <Shader File="2.Cube.hlsl"/>
         <Material File="Sphere.mtl"/>
         <Transform>
             <Position X="0" Y="0" Z="0"/>

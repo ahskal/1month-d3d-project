@@ -117,7 +117,7 @@
     <ClInclude Include="Rain.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="AStar.h" />
+    <ClInclude Include="PerlinNoise.hpp" />
     <ClInclude Include="Pop.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -264,7 +264,6 @@
     <ClCompile Include="Rain.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="AStar.cpp" />
     <ClCompile Include="Pop.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>

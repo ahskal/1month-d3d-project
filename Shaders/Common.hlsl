@@ -18,6 +18,11 @@ cbuffer VS_Bones : register(b3)
 	matrix Bones[MAX_BONE];
 }
 
+cbuffer VS_ClipPlane : register(b4)
+{
+	float4 ClipPlane;
+}
+
 
 
 Texture2D TextureN : register(t0);
@@ -210,6 +215,22 @@ float3 DirLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 w
 	return saturate((D + S) * DirColor.rgb);
 }
 
+float3 DeferredDirLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPostion)
+{
+	float3 DirectionLight = normalize(DirLight.xyz);
+	float Diffuse = saturate(dot(-DirectionLight, Normal));
+    
+	float3 RecflectLight = reflect(DirectionLight, Normal);
+	float3 ViewDir = normalize(ViewPos.xyz - wPostion);
+	float Specular = saturate(dot(ViewDir, RecflectLight));
+	Specular = pow(Specular, Shininess);
+    
+    //         계수 * 머터리얼 *  DiffuseMap
+	float3 D = Diffuse * BaseColor;
+	float3 S = Specular * SpecularMap;
+	return saturate((D + S) * DirColor.rgb);
+}
+
 
 float3 PointLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPosition, int idx)
 {
@@ -235,7 +256,30 @@ float3 PointLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3
     
 	return saturate((D + S) * lights[idx].Color.rgb);
 }
-
+float3 DeferredPointLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPosition, int idx)
+{
+    //return float3(1, 1, 1);
+	float3 DirectionLight = lights[idx].Position - wPosition;
+	float distanceToLight = length(DirectionLight);
+	DirectionLight /= distanceToLight;
+    
+	float distanceToLightNormal = 1.0f - saturate(distanceToLight / lights[idx].Radius);
+	float attention = distanceToLightNormal * distanceToLightNormal;
+    
+    //빛의계수
+	float Diffuse = saturate(dot(DirectionLight, Normal)) * attention;
+  
+    
+	float3 RecflectLight = reflect(DirectionLight, Normal);
+	float3 ViewDir = normalize(ViewPos.xyz - wPosition);
+	float Specular = saturate(dot(ViewDir, RecflectLight)) * attention;
+	Specular = pow(Specular, Shininess);
+    
+	float3 D = Diffuse * BaseColor;
+	float3 S = Specular * SpecularMap;
+    
+	return saturate((D + S) * lights[idx].Color.rgb);
+}
 float3 SpotLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPosition, int idx)
 {
     //픽셀에서 라이트향하는 방향
@@ -270,6 +314,44 @@ float3 SpotLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 
     
 	float3 D = Diffuse * Kd.rgb * BaseColor;
 	float3 S = Specular * Ks.rgb * SpecularMap;
+    
+	return saturate((D + S) * lights[idx].Color.rgb);
+}
+
+float3 DeferredSpotLighting(float3 BaseColor, float3 SpecularMap, float3 Normal, float3 wPosition, int idx)
+{
+    //픽셀에서 라이트향하는 방향
+	float3 DirectionLight = lights[idx].Position - wPosition;
+	float distanceToLight = length(DirectionLight);
+	DirectionLight /= distanceToLight;
+    
+	float distanceToLightNormal = 1.0f - saturate(distanceToLight / lights[idx].Radius);
+	float attention = distanceToLightNormal * distanceToLightNormal;
+    
+	float cosAngle = saturate(dot(normalize(-lights[idx].Direction),
+    DirectionLight));
+    
+    
+    // 0 ~ 90 -> 1 ~ 0 
+	float outer = cos(radians(lights[idx].Outer));
+    // 0 ~ 90   -> 1 ~ 무한
+	float inner = 1.0f / cos(radians(lights[idx].Inner));
+    
+	//                    1~0        -1
+	cosAngle = saturate((cosAngle - outer) * inner);
+	attention *= cosAngle;
+    
+    //빛의계수
+	float Diffuse = saturate(dot(DirectionLight, Normal)) * attention;
+  
+    
+	float3 RecflectLight = reflect(DirectionLight, Normal);
+	float3 ViewDir = normalize(ViewPos.xyz - wPosition);
+	float Specular = saturate(dot(ViewDir, RecflectLight)) * attention;
+	Specular = pow(Specular, Shininess);
+    
+	float3 D = Diffuse  * BaseColor;
+	float3 S = Specular  * SpecularMap;
     
 	return saturate((D + S) * lights[idx].Color.rgb);
 }
@@ -357,7 +439,7 @@ float4 Lighting(float4 BaseColor, float2 Uv, float3 Normal, float3 wPosition)
 	
 	//발광
 	//Ambient
-	Result.rgb += Ka.rgb * BaseColor.rgb;
+	Result.rgb += Ka.rgb * BaseColor.rgb * 1.2f;
     //Emissive
 	Result.rgb += EmissiveMapping(BaseColor.rgb, Uv, Normal, wPosition);
 	//Environment

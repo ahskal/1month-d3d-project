@@ -1,0 +1,512 @@
+<Root Name="Actor" Visible="true" ObType="1">
+    <Transform>
+        <Position X="0" Y="0" Z="0"/>
+        <Scale X="1" Y="1" Z="1"/>
+        <Rotation X="0" Y="0" Z="0"/>
+    </Transform>
+    <Children Size="2"/>
+    <Child0 Name="Floor_Instance" Visible="true" ObType="1">
+        <Mesh File="SM_Env/SM_Env_Tiles_07.mesh"/>
+        <Instance File=""/>
+        <Shader File="4.Instance.hlsl"/>
+        <Material File="SM_Env/lambert248.mtl"/>
+        <Transform>
+            <Position X="0" Y="0" Z="0"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="-1.5707879" Z="-0"/>
+        </Transform>
+        <Children Size="0"/>
+    </Child0>
+    <Child1 Name="floor0" Visible="true" ObType="1">
+        <Transform>
+            <Position X="0" Y="0" Z="0"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Transform>
+        <Children Size="19"/>
+        <Child0 Name="0x3x0" Visible="true" ObType="1">
+            <Collider ColliderType="2" Visible="true">
+                <Position X="2.5" Y="2.5" Z="0"/>
+                <Scale X="2.5" Y="2.5" Z="0.5"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Collider>
+            <Transform>
+                <Position X="-12.5" Y="0" Z="2.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="3"/>
+            <Child0 Name="floor0_0y3_0" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_0y3_1" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+            <Child2 Name="floor0_0y3_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child2>
+        </Child0>
+        <Child1 Name="0x4x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-12.5" Y="0" Z="7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_0y4_0" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_0y4_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child1>
+        <Child2 Name="1x0x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-7.5" Y="0" Z="-12.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_1y0_0" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_1y0_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child2>
+        <Child3 Name="1x1x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-7.5" Y="0" Z="-7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="floor0_1y1_0" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+        </Child3>
+        <Child4 Name="1x2x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-7.5" Y="0" Z="-2.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_1y2_0" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_1y2_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child4>
+        <Child5 Name="1x4x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-7.5" Y="0" Z="7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_1y4_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_1y4_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child5>
+        <Child6 Name="2x0x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-2.5" Y="0" Z="-12.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="floor0_2y0_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+        </Child6>
+        <Child7 Name="2x1x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-2.5" Y="0" Z="-7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="box0" Visible="true" ObType="1">
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="1"/>
+                <Child0 Name="Box01" Visible="true" ObType="0">
+                    <Mesh File="2.Cube.mesh"/>
+                    <Shader File="2.Cube.hlsl"/>
+                    <Material File="Sphere.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="0"/>
+                    </Transform>
+                    <Children Size="0"/>
+                </Child0>
+            </Child0>
+        </Child7>
+        <Child8 Name="2x2x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-2.5" Y="0" Z="-2.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="floor0_2y2_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+        </Child8>
+        <Child9 Name="2x4x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="-2.5" Y="0" Z="7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_2y4_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_2y4_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child9>
+        <Child10 Name="3x0x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="2.5" Y="0" Z="-12.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="floor0_3y0_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+        </Child10>
+        <Child11 Name="3x1x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="2.5" Y="0" Z="-7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="0"/>
+        </Child11>
+        <Child12 Name="3x2x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="2.5" Y="0" Z="-2.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="floor0_3y2_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+        </Child12>
+        <Child13 Name="3x4x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="2.5" Y="0" Z="7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_3y4_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_3y4_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child13>
+        <Child14 Name="4x0x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="7.5" Y="0" Z="-12.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_4y0_1" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_4y0_2" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-3.1415758" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child14>
+        <Child15 Name="4x1x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="7.5" Y="0" Z="-7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="floor0_4y1_1" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+        </Child15>
+        <Child16 Name="4x2x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="7.5" Y="0" Z="-2.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="floor0_4y2_1" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+        </Child16>
+        <Child17 Name="4x3x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="7.5" Y="0" Z="2.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_4y3_0" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="-1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_4y3_1" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child17>
+        <Child18 Name="4x4x0" Visible="true" ObType="1">
+            <Transform>
+                <Position X="7.5" Y="0" Z="7.5"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Children Size="2"/>
+            <Child0 Name="floor0_4y4_1" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="5" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="1.5707879" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="floor0_4y4_3" Visible="true" ObType="1">
+                <Mesh File="SM_Env/SM_Env_Wall_01.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="SM_Env/blinn4.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="5"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+        </Child18>
+    </Child1>
+</Root>

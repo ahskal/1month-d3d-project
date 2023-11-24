@@ -16,14 +16,14 @@
 				File12="/Idle_Uneqip0.anim"/>
     <Transform>
         <Position X="0" Y="0" Z="0"/>
-        <Scale X="0.1" Y="0.1" Z="0.1"/>
-        <Rotation X="0" Y="3.14" Z="0"/>
+        <Scale X="1" Y="1" Z="1"/>
+        <Rotation X="0" Y="0" Z="0"/>
     </Transform>
     <Children Size="1"/>
     <Child0 Name="RootNode" Visible="true" ObType="0" BoneIndex="1">
         <Transform>
             <Position X="0" Y="0" Z="0"/>
-            <Scale X="1" Y="1" Z="1"/>
+            <Scale X="0.02" Y="0.02" Z="0.02"/>
             <Rotation X="0" Y="0" Z="-0"/>
         </Transform>
         <Children Size="1"/>
@@ -32,7 +32,7 @@
             <Transform>
                 <Position X="0" Y="0" Z="0"/>
                 <Scale X="1" Y="1" Z="1"/>
-                <Rotation X="0" Y="0" Z="-0"/>
+                <Rotation X="0" Y="3.14" Z="-0"/>
             </Transform>
             <Children Size="2"/>
             <Child0 Name="Blueisland" Visible="true" ObType="0" BoneIndex="3">

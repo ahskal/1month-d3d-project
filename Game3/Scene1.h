@@ -7,7 +7,9 @@ private:
 
 	Terrain* map;
 	Terrain* water;
+
 	class Player* player;
+
 	Sky* skybox;
 	Sky* skybox2;
 

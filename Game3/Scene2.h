@@ -6,12 +6,25 @@ struct MapGenerator {
 	const int dy[4] = { 0, 0, -1, 1 };
 
 	int rows, cols, floors;
+	float tileSize = 5.0f;
 	std::vector<std::vector<std::vector<int>>> Tiles;
 	std::vector<std::vector<std::vector<bool>>> visited;
 
+	vector<Actor*> WallPoint;
+
 
 	// Constructor
+	MapGenerator() : rows(0), cols(0), floors(0) {}
 	MapGenerator(int rows, int cols, int floors) : rows(rows), cols(cols), floors(floors) {
+		Tiles.resize(rows, std::vector<std::vector<int>>(cols, std::vector<int>(floors, 0)));
+		visited.resize(rows, std::vector<std::vector<bool>>(cols, std::vector<bool>(floors, false)));
+		WallPoint.resize(0);
+	}
+
+	void set(int rows, int cols, int floors) {
+		this->rows = rows;
+		this->cols = cols;
+		this->floors = floors;
 		Tiles.resize(rows, std::vector<std::vector<int>>(cols, std::vector<int>(floors, 0)));
 		visited.resize(rows, std::vector<std::vector<bool>>(cols, std::vector<bool>(floors, false)));
 	}
@@ -148,6 +161,9 @@ struct MapGenerator {
 							bigTiles = temp;
 							max_size = bigTiles.size();
 						}
+						if (max_size > (rows * cols) / 2) {
+							break;
+						}
 					}
 				}
 			}
@@ -166,35 +182,79 @@ struct MapGenerator {
 				}
 			}
 		}
-
-
 	}
+
+	void coutTile() {
+		for (int k = 0; k < floors; k++) {
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					string temp = Tiles[i][j][k] == 1 ? "■" : "□";
+					cout << temp << " ";
+				}
+				cout << endl;
+			}
+			cout << endl;
+		}
+	}
+
+
 
 	void printConnectedComponentsSize() {
-		// ... (code for printing connected components size)
+		
 	}
 
-	// 마지막 생성
-	void finalizeMap(GameObject* act) {
+	void InstanceTile(GameObject* act) {
 		float tileSize = 5.0f;
 		float tileWidth = tileSize * rows;
 		float tileHeight = tileSize * cols;
 		float centerX = -tileWidth / 2;
 		float centerZ = -tileHeight / 2;
+
+		float IndexWidth = rows * cols * floors;
+		Matrix* matrix = new Matrix[IndexWidth];
+
+		Actor* temp = Actor::Create();
+		temp->LoadFile("Tile1.xml");
+		temp->name = "Floor_Instance";
+		temp->shader = RESOURCE->shaders.Load("4.Instance_Deferred.hlsl");
+		int count2 = 0;
 		for (int k = 0; k < floors; k++) {
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					matrix[count2] = Matrix::CreateTranslation(Vector3(centerX + i * 5, k * 5, centerZ + j * 5));
+					matrix[count2] = matrix[count2].Transpose();
+					count2++;
+				}
+			}
+		}
+		temp->mesh->CreateInstanceBuffer(matrix, count2);
+		act->AddChild(temp);
+	}
+
+	// 마지막 생성
+	void finalizeMap(GameObject* act) {
+
+		float tileWidth = tileSize * rows;
+		float tileHeight = tileSize * cols;
+		float centerX = -tileWidth / 2;
+		float centerZ = -tileHeight / 2;
+
+		for (int k = 0; k < floors; k++) {
+			Actor* floor = Actor::Create();
+			floor->name = "floor" + to_string(k);
+			act->AddChild(floor);
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					if (Tiles[i][j][k] == 1) {
 						Actor* temp = Actor::Create();
-
-						temp->LoadFile("Tile1.xml");
+						//temp->LoadFile("Tile1.xml");
 						temp->name = to_string(i) + "x" + to_string(j) + "x" + to_string(k);
 						temp->SetLocalPosX(centerX + (tileSize * i));
 						temp->SetLocalPosZ(centerZ + (tileSize * j));
 						temp->SetWorldPosY(k * tileSize);
 						temp->scale.x;
 						temp->scale.z;
-						act->AddChild(temp);
+						floor->AddChild(temp);
 					}
 				}
 			}
@@ -203,9 +263,9 @@ struct MapGenerator {
 
 	void WallCreateMap(Actor* act) {
 		// 각 타일 주변에 특정 조건을 만족할 때 벽 생성 (rows, cols 사이즈 기준)
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				for (int k = 0; k < floors; k++) {
+		for (int k = 0; k < floors; k++) {
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
 					// 현재 타일이 1인 경우에만 검사
 					if (Tiles[i][j][k] == 1) {
 						// 사방을 탐색하여 특정 조건을 만족하면 벽 생성
@@ -216,58 +276,115 @@ struct MapGenerator {
 							// 범위를 벗어나면 현재 타일에서도 벽을 그림
 							Actor* temp = Actor::Create();
 							temp->LoadFile("Wall1.xml");
+							temp->shader = RESOURCE->shaders.Load("4.Cube_Deferred.hlsl");
 							// 회전 각도 배열
-							float rotationAngles[4] = { 0, -180, -90, 90 };
+							float rotationAngles[4] = { -90, 90, -180, 0 };
 							// 방향에 따른 생성 해주는 코드
 							temp->rotation.y = rotationAngles[l] * ToRadian;
 							if (ni < 0 || nj < 0 || ni >= rows || nj >= cols) {
 								if (l == 1) {
 									temp->SetLocalPosX(5);
-									temp->SetLocalPosZ(-5);
+									temp->SetLocalPosZ(5);
 								}
 								else if (l == 2) {
-									temp->SetLocalPosZ(-5);
+									temp->SetLocalPosX(5);
 								}
 								else if (l == 3) {
-									temp->SetLocalPosX(5);
+									temp->SetLocalPosZ(5);
 								}
 								temp->name = "floor" + to_string(k) + "_" + to_string(i) + "y" + to_string(j) + "_" + to_string(l);
 								act->Find(to_string(i) + "x" + to_string(j) + "x" + to_string(k))->AddChild(temp);
+								WallPoint.push_back(temp);
 							}
 							else if (Tiles[ni][nj][k] != 1) {
 								if (l == 1) {
 									temp->SetLocalPosX(5);
-									temp->SetLocalPosZ(-5);
+									temp->SetLocalPosZ(5);
 								}
 								else if (l == 2) {
-									temp->SetLocalPosZ(-5);
+									temp->SetLocalPosX(5);
 								}
 								else if (l == 3) {
-									temp->SetLocalPosX(5);
+									temp->SetLocalPosZ(5);
 								}
 								temp->name = "floor" + to_string(k) + "_" + to_string(i) + "y" + to_string(j) + "_" + to_string(l);
 								act->Find(to_string(i) + "x" + to_string(j) + "x" + to_string(k))->AddChild(temp);
+								WallPoint.push_back(temp);
 							}
+
 						}
 					}
 				}
 			}
 		}
 	}
+
+
+	bool WorldPosToTileIdx(Vector3 WPos, Int2& TileIdx) {
+		float tileWidth = tileSize * rows;
+		float tileHeight = tileSize * cols;
+
+		// 중심점 계산 및 이동
+		Vector3 centerOffset(tileWidth / 2, 0, tileHeight / 2);
+		WPos += centerOffset;
+
+		// 타일 좌표 계산
+		Vector2 tileCoord;
+		tileCoord.x = WPos.x / tileSize;
+		tileCoord.y = WPos.z / tileSize;
+
+		if ((tileCoord.x < 0) or (tileCoord.y < 0) or
+			(tileCoord.x >= rows) or (tileCoord.y >= cols))
+		{
+			return false;
+		}
+
+		// 결과 저장
+		TileIdx.x = static_cast<int>(tileCoord.x);
+		TileIdx.y = static_cast<int>(tileCoord.y);
+
+		return true;
+	}
+
+	int GetTileState(Vector3 WPos) {
+		Int2 idx;
+		int floor = WPos.y / 5.0f;
+		if (WorldPosToTileIdx(WPos, idx)) {
+			return GetTileState(idx, floor);
+		}
+		return false;
+	}
+
+	bool GetTileState(Int2 TileIdx, int floor)
+	{
+		return Tiles[TileIdx.x][TileIdx.y][floor];
+	}
+
+
 };
 
 class Scene2 : public Scene
 {
 private:
 	Camera* cam1;
-	Actor* CamCollsion;
+
+	class Player* player;
+	MapGenerator mapGen;
 
 	Grid* grid;
 	Terrain* map;
 	Sky* skybox;
 	Sky* skybox2;
 
+	Light* Lightting;
+
 	Actor* Tile;
+
+	Deferred* deferred;   //4개의 렌더타겟  
+	UI* post;       //4개의 렌더타겟을 받아 그려줄
+
+
+	Rain* rain;
 
 public:
 	Scene2();
