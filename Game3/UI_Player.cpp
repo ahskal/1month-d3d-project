@@ -26,8 +26,8 @@ void UI_Player::Update()
 	if (player != nullptr) {
 		auto hp = Find("HpCurrent");
 		auto sp = Find("SpCurrent");
-		hp->scale.x = player->Hp / player->MaxHp;
-		sp->scale.x = player->Sp / player->MaxSp;
+		hp->scale.x = (player->Hp / player->MaxHp);
+		sp->scale.x = (player->Sp / player->MaxSp);
 	}
 }
 

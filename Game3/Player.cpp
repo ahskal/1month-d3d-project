@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Subject.h"
 #include "Player.h"
 
 extern bool DEBUG_MODE;
@@ -212,10 +213,11 @@ void Player::Render(shared_ptr<Shader> pShader)
 	Actor::Render(pShader);
 }
 
-void Player::LateRender()
+void Player::SpecialEffectsRender()
 {
 	slash->Render();
 }
+
 void Player::ChangeAni() {
 
 	if (MoveDir == Vector3())
@@ -242,6 +244,7 @@ void Player::ChangeAni() {
 	}
 	this->index = index;
 }
+
 void Player::Control()
 {
 	bool keyW = INPUT->KeyPress('W');

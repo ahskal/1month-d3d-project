@@ -4,7 +4,14 @@
 #include "MonsterObserver.h"
 #include "MonsterData.h"
 
-MonsterData::MonsterData(Vector3 pos)
+MonsterData* MonsterData::Create(string name)
+{
+	MonsterData* MD = new MonsterData();
+	MD->Mon->name = name;
+	return MD;
+}
+
+MonsterData::MonsterData()
 {
 	Mon = Monster::Create();
 	Mon->LoadFile("Unit/Man2.xml");
@@ -14,9 +21,8 @@ MonsterData::MonsterData(Vector3 pos)
 
 	UI = UI_Monster::Create();
 	UI->LoadFile("UI/Hpbar.xml");
-
-	Mon->SetSpawn(pos);
 	UI->parent = Mon;
+	UI->SetData(Mon);
 
 	// 추가 데이터 초기화
 }
@@ -27,9 +33,9 @@ void MonsterData::Update()
 	UI->Update();
 }
 
-void MonsterData::Render()
+void MonsterData::Render(shared_ptr<Shader> pShader)
 {
-	UI->Render();
+	UI->Render(pShader);
 }
 
 void MonsterData::DeferredRender(shared_ptr<Shader> pShader)

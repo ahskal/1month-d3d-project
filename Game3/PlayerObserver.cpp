@@ -1,4 +1,4 @@
-#include "stdafx.h";
+#include "stdafx.h"
 #include "Observer.h"
 #include "Player.h"
 #include "PlayerObserver.h"

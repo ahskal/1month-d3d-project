@@ -6,12 +6,6 @@
       <Filter>Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Scene1.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene2.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -42,22 +36,26 @@
     <ClInclude Include="MonsterManager.h">
       <Filter>Object\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerData.h" />
-    <ClInclude Include="MonsterData.h" />
     <ClInclude Include="MonsterObserver.h">
       <Filter>Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterData.h">
+      <Filter>Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene1.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene2.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp">
       <Filter>Object\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene1.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene2.cpp">
-      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>Object</Filter>
@@ -71,7 +69,6 @@
     <ClCompile Include="UI_Player.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Subject.cpp" />
     <ClCompile Include="Scene3.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -84,13 +81,26 @@
     <ClCompile Include="MonsterManager.cpp">
       <Filter>Object\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerData.cpp" />
-    <ClCompile Include="MonsterData.cpp" />
     <ClCompile Include="MonsterObserver.cpp">
       <Filter>Object\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Observer.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterData.cpp">
+      <Filter>Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerData.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene1.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene2.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,5 +122,9 @@
     <Filter Include="Object\UI">
       <UniqueIdentifier>{1b722d55-85b0-4131-8a30-6c972810a16d}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.ini" />
+    <None Include="window.ini" />
   </ItemGroup>
 </Project>

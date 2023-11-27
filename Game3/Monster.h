@@ -1,5 +1,4 @@
 #pragma once
-#include "Subject.h"
 namespace Mon {
 	enum class State
 	{
@@ -97,7 +96,6 @@ public:
 private:
 	Mon::State state;
 
-	int Eqip[8];
 	float	MoveSpeed;
 	int AttackCount = 0;
 	SlashTrail* slash;
@@ -120,7 +118,7 @@ public:
 	void LateUpdate();
 
 	void Render(shared_ptr<Shader> pShader = nullptr);
-	void LateRender();
+	void SpecialEffectsRender();
 
 	void FSM();
 	void Move();

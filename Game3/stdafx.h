@@ -3,9 +3,10 @@
 #pragma comment (lib,"../Build/2DFrameWork/2DFrameWork.lib")
 
 #include "Unit.h"
+#include "Subject.h"
+#include "Observer.h"
 
 #include "MonsterManager.h"
-
 #define MonMGR	MonsterManager::GetInstance()
 
 extern bool DEBUG_MODE;

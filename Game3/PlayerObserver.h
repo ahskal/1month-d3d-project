@@ -7,7 +7,7 @@ private:
 	string observerName;
 
 public:
-	PlayerObserver(Player* data = nullptr, string name = "Observer");
+	PlayerObserver(Player* data = nullptr, string name = "P_Observer");
 	void Update(const string& message);
 
 	// void*를 다루기 위한 getter와 setter 추가

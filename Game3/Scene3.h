@@ -9,11 +9,7 @@ private:
 	Deferred* deferred;   //4∞≥¿« ∑ª¥ı≈∏∞Ÿ  
 	UI* post;       //4∞≥¿« ∑ª¥ı≈∏∞Ÿ¿ª πﬁæ∆ ±◊∑¡¡Ÿ
 
-	class Subject* sub;
-
-	class Player* player;
-	class UI_Player* pUI;
-	class PlayerObserver* pObserver;
+	class PlayerData* player;
 
 
 public:

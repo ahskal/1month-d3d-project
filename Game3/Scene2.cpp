@@ -293,7 +293,7 @@ void Scene2::Render()
 	deferred->Render();
 	DEPTH->Set(false);
 	BLEND->Set(true);
-	player->LateRender();
+	player->SpecialEffectsRender();
 	DEPTH->Set(true);
 	BLEND->Set(false);
 	ui->Render();

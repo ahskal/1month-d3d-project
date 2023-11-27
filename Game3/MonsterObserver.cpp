@@ -1,5 +1,5 @@
-#include "stdafx.h";
 #include "Observer.h"
+#include "stdafx.h"
 #include "Monster.h"
 #include "MonsterObserver.h"
 

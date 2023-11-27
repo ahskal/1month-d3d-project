@@ -1,5 +1,4 @@
 #pragma once
-#include "Subject.h"
 namespace play {
 	enum class State
 	{
@@ -13,7 +12,6 @@ namespace play {
 		PICKUP,
 		DEAD,
 	};
-
 	enum AniState {
 		// 0 ~ 7 Uneqip Move
 		Ani_Move_Eqip_Front,
@@ -88,7 +86,6 @@ namespace play {
 		Ani_Dead_03,
 		Ani_Dead_04,
 	};
-
 }
 
 class Player : public Subject
@@ -129,12 +126,6 @@ private:
 	SlashTrail* slash;
 
 
-	
-
-	Ray attackRay;
-
-
-
 public:
 	//STATUS
 	// HP는 부모클레스에서 정의
@@ -142,7 +133,6 @@ public:
 	// Defense는 부모클레스에서 정의
 	// SP는 스테미나
 	float Sp, MaxSp;
-
 
 	bool isHit = true;
 
@@ -156,7 +146,7 @@ public:
 	void LateUpdate();
 
 	void Render(shared_ptr<Shader> pShader = nullptr) override;
-	void LateRender();
+	void SpecialEffectsRender();
 
 	void FSM();
 	void Control();

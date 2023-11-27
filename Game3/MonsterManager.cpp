@@ -15,7 +15,8 @@ MonsterManager::~MonsterManager()
 
 void MonsterManager::CreateMonster(Vector3 pos)
 {
-	MonsterData* Mon = new MonsterData(pos);
+	MonsterData* Mon = new MonsterData();
+	Mon->Mon->SetSpawn(pos);
 	MonVec.push_back(Mon);
 }
 

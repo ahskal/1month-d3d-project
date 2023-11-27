@@ -1,4 +1,5 @@
 #pragma once
+
 class Unit : public Actor
 {
 public:
@@ -17,5 +18,6 @@ public:
 
 	void Update();
 	void Render(shared_ptr<Shader> pShader = nullptr) override;
+	virtual void	RenderDetail();
 };
 

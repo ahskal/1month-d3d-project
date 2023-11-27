@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Subject.h"
 #include "Monster.h"
 
 extern bool DEBUG_MODE;
@@ -25,18 +26,7 @@ Monster* Monster::Create(Monster* src)
 
 Monster::Monster()
 {
-	MoveSpeed = 5;
 
-	Eqip[0] = Ani_Move_Eqip_Left;
-	Eqip[1] = Ani_Move_Eqip_Back_Right;
-	Eqip[2] = Ani_Move_Eqip_Back;
-	Eqip[3] = Ani_Move_Eqip_Back_Left;
-	Eqip[4] = Ani_Move_Eqip_Right;
-	Eqip[5] = Ani_Move_Eqip_Front_Right;
-	Eqip[6] = Ani_Move_Eqip_Front;
-	Eqip[7] = Ani_Move_Eqip_Front_Left;
-
-	Length = 15;
 
 }
 
@@ -69,6 +59,11 @@ void Monster::Init()
 	MaxHp = Hp = 200;
 	Attack = 10;
 	Defense = 5;
+
+	anim->aniScale = 0.6f;
+	MoveSpeed = 3;
+
+	Length = 10;
 }
 
 void Monster::Update()
@@ -93,7 +88,7 @@ void Monster::Render(shared_ptr<Shader> pShader)
 
 }
 
-void Monster::LateRender()
+void Monster::SpecialEffectsRender()
 {
 }
 
@@ -102,48 +97,40 @@ void Monster::FSM()
 	if (state == State::IDLE) {
 		if (IsInRadius()) {
 			state = State::WALK;
+			anim->ChangeAnimation(AnimationState::LOOP, Ani_Move_Eqip_Front, 0.1f);
 		}
 	}
-	if (state == State::WALK) {
-		
+	else if (state == State::WALK) {
+
 		Vector3 dir = target - GetWorldPos();
 		float dis = dir.Length();
-		if (dis > Length) {
-			state = State::IDLE;
+		if (dis < 3) {
+			state = State::ATTACK;
+			anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
 			return;
 		}
+		else if (dis > Length) {
+			state = State::IDLE;
+			anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
+			return;
+		}		
 		dir.Normalize();
-
-
-		float dotAngle = GetForward().Dot(dir);
-		float dotAngle2 = GetRight().Dot(dir);
-
-
-		int index = round((atan2f(dotAngle, dotAngle2) + PI) / (45.f * ToRadian));
-		index = (index == 8) ? 0 : index;
-
 		rotation.y = atan2f(dir.x, dir.z);
+		MoveWorldPos(dir * DELTA * MoveSpeed);
+	}
+	else if (state == State::ATTACK) {
 
-		ImGui::Text("M index : %d", index);
-
-		MoveWorldPos(dir * DELTA);
-
-		if (this->index != index) {
-			anim->ChangeAnimation(AnimationState::LOOP, Eqip[index], 0.1f);
+		if (anim->GetPlayTime() >= 0.98f) {
+			state = State::IDLE;
 		}
-
-		index = index;
 	}
-	if (state == State::ATTACK) {
+	else if (state == State::GUARD) {
 
 	}
-	if (state == State::GUARD) {
+	else if (state == State::DAMAGE) {
 
 	}
-	if (state == State::DAMAGE) {
-
-	}
-	if (state == State::DEAD) {
+	else if (state == State::DEAD) {
 
 	}
 
