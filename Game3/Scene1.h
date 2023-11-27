@@ -10,6 +10,8 @@ private:
 
 	class Player* player;
 
+	class Monster* monster;
+
 	Sky* skybox;
 	Sky* skybox2;
 

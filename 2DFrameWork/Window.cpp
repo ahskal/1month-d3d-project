@@ -207,11 +207,11 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	if (message == WM_KEYDOWN)
 	{
-		if (wParam == VK_ESCAPE)
-		{
-			//exit(0);
-			PostQuitMessage(0);
-		}
+		//if (wParam == VK_ESCAPE)
+		//{
+		//	//exit(0);
+		//	PostQuitMessage(0);
+		//}
 	}
 
 	if (message == WM_CLOSE || message == WM_DESTROY)

@@ -295,10 +295,6 @@ bool AStar::PathFinding(Vector3 start, Vector3 end, OUT vector<Vector3>& way)
         LoopIdx.clear();
 
         //대각선4개 
-
-
-
-
     }
     //도착지가 설정이 되었을때
     Tile* p = &Tiles[destZ][destX];

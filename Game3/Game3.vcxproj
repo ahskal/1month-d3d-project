@@ -143,18 +143,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConcreteObserver.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="MapGenerator.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterManager.h" />
+    <ClInclude Include="MonsterObserver.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerObserver.h" />
     <ClInclude Include="Scene1.h" />
     <ClInclude Include="Scene2.h" />
+    <ClInclude Include="Scene3.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Subject.h" />
+    <ClInclude Include="UI_Monster.h" />
+    <ClInclude Include="UI_Player.h" />
     <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConcreteObserver.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MapGenerator.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MonsterManager.cpp" />
+    <ClCompile Include="MonsterObserver.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerObserver.cpp" />
     <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="Scene2.cpp" />
+    <ClCompile Include="Scene3.cpp" />
+    <ClCompile Include="Subject.cpp" />
+    <ClCompile Include="UI_Monster.cpp" />
+    <ClCompile Include="UI_Player.cpp" />
     <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

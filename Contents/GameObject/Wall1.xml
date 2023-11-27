@@ -3,8 +3,8 @@
 	<Shader File="4.Cube.hlsl"/>
 	<Material File="SM_Env/blinn4.mtl"/>
 	<Collider ColliderType="2" Visible="true">
-		<Position X="2.5" Y="2.5" Z="0"/>
-		<Scale X="2.5" Y="2.5" Z="0.25"/>
+		<Position X="2.5" Y="2.5" Z="1.5"/>
+		<Scale X="2.5" Y="2.5" Z="2"/>
 		<Rotation X="0" Y="0" Z="0"/>
 	</Collider>
 	<Transform>

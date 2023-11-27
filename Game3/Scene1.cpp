@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "Monster.h"
 #include "Scene1.h"
+extern bool DEBUG_MODE;
 
 Scene1::Scene1()
 {}
@@ -10,18 +12,11 @@ void Scene1::Init()
 {
 	grid = Grid::Create();
 
-	cam1 = Camera::Create();
-	cam1->LoadFile("Cam.xml");
 
-	Camera::main = cam1;
-	cam1->viewport.x = 0.0f;
-	cam1->viewport.y = 0.0f;
-	cam1->viewport.width = App.GetWidth();
-	cam1->viewport.height = App.GetHeight();
-	cam1->width = App.GetWidth();
-	cam1->height = App.GetHeight();
 
 	player = Player::Create();
+
+	monster = Monster::Create();
 
 	water = Terrain::Create("water");
 	water->LoadFile("water.xml");
@@ -33,15 +28,17 @@ void Scene1::Init()
 	map->CreateStructuredBuffer();
 	map->GroundPerlinNoise();
 
-
-
 	skybox = Sky::Create();
 	skybox->LoadFile("Sky1.xml");
 	skybox2 = Sky::Create();
 	skybox2->LoadFile("Sky2.xml");
 
+	cam1 = Camera::Create();
+	cam1->LoadFile("Cam.xml");
 
+	Camera::main = cam1;
 	timer = 0;
+	ResizeScreen();
 }
 
 void Scene1::Release()
@@ -94,6 +91,8 @@ void Scene1::Update()
 
 	// 결과 사용...
 
+	LIGHT->RenderDetail();
+
 	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
 
 	if (ImGui::Button("CreateTree"))
@@ -110,6 +109,9 @@ void Scene1::Update()
 	grid->RenderHierarchy();
 	cam1->RenderHierarchy();
 	player->RenderHierarchy();
+
+	monster->Hierarchy();
+
 	map->RenderHierarchy();
 	water->RenderHierarchy();
 	ImGui::End();
@@ -126,20 +128,39 @@ void Scene1::Update()
 
 	skybox->Update();
 	skybox2->Update();
+
+	monster->Update();
+
+	//// Cube의 좌표에서 플레이어의 Y값 (C)
+	//float offsetY = playerPos.y - cubePos.y;
+	//// 플레이어와 큐브의 좌표 차이를 나타내는 벡터 (C - A)
+	//Vector3 dir = playerPos - cubePos;
+	//// Y 축 주위의 각도 (ABC)
+	//monster->Cube->rotation.y = atan2f(dir.x, dir.z);
+	//// X 축 주위의 각도 (CAB) = asinf(dir.y)와 같다.
+	//monster->Cube->rotation.x = -atan2f(off
+
+
+
+
+
+
 }
 
 void Scene1::LateUpdate()
 {
 	Ray top;
 	top.position = player->GetWorldPos() + Vector3(0, 100, 0);
+
 	top.direction = Vector3(0, -1, 0);
 	Vector3 hit;
 	if (Utility::RayIntersectMap(top, map, hit))
 	{
 		player->SetWorldPosY(hit.y);
 	}
-	player->WolrdUpdate();
 
+
+	player->WolrdUpdate();
 
 	//for (auto it = map->Find("Node")->children.begin(); it != map->Find("Node")->children.end(); it++)
 	//{
@@ -175,24 +196,8 @@ void Scene1::LateUpdate()
 	//			}
 
 
-	//		}
-	//	}
-	//}
 }
 void Scene1::PreRender()
-{
-	/*LIGHT->Set();
-
-	skybox->Render();
-	skybox2->Render();
-
-	cam1->Set();
-	grid->Render();
-	player->Render();
-	map->Render();*/
-}
-
-void Scene1::Render()
 {
 	LIGHT->Set();
 	cam1->Set();
@@ -200,28 +205,27 @@ void Scene1::Render()
 	skybox->Render();
 	skybox2->Render();
 
-	/*if (cam1->Intersect(map->GetWorldPos())) {
+	cam1->Set();
+	grid->Render();
+	player->Render();
 
-	}
-	if (cam1->Intersect(water->GetWorldPos())) {
+	map->Render();
+}
 
-	}*/
-	if (map->Find("Node")) {
+void Scene1::Render()
+{
 
-		for (auto it = map->Find("Node")->children.begin(); it != map->Find("Node")->children.end(); it++)
-		{
-			if (cam1->Intersect(it->second->GetWorldPos())) {
-				it->second->visible = true;
-			}
-			else {
-				it->second->visible = false;
-			}
-		}
-	}
-	water->Render();
+	//water->Render();
 	map->Render();
 	//grid->Render();
+
+
+	BLEND->Set(true);
 	player->Render();
+	BLEND->Set(false);
+	monster->Render();
+
+
 }
 
 void Scene1::ResizeScreen()

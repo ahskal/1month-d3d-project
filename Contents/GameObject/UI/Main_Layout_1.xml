@@ -1,0 +1,60 @@
+<Root Name="UI" Visible="true" ObType="4">
+    <Mesh File="6.UI.mesh"/>
+    <Shader File="6.UI.hlsl"/>
+    <Material File="UI/Layout_1.mtl"/>
+    <Transform>
+        <Position X="0" Y="-0.85000002" Z="0"/>
+        <Scale X="0.5" Y="0.1" Z="1"/>
+        <Rotation X="0" Y="0" Z="0"/>
+    </Transform>
+    <UI PivotX="0" PivotY="0"/>
+    <Children Size="2"/>
+    <Child0 Name="Hp" Visible="true" ObType="4">
+        <Mesh File="6.UI.mesh"/>
+        <Shader File="6.UI.hlsl"/>
+        <Material File="UI/Hp_Back.mtl"/>
+        <Transform>
+            <Position X="0" Y="0.39999998" Z="0"/>
+            <Scale X="0.89999998" Y="0.40000001" Z="1"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Transform>
+        <UI PivotX="0" PivotY="0"/>
+        <Children Size="1"/>
+        <Child0 Name="HpCurrent" Visible="true" ObType="4">
+            <Mesh File="6.UI.mesh"/>
+            <Shader File="6.UI.hlsl"/>
+            <Material File="UI/Hp_front.mtl"/>
+            <Transform>
+                <Position X="-1" Y="0" Z="0"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <UI PivotX="1" PivotY="0"/>
+            <Children Size="0"/>
+        </Child0>
+    </Child0>
+    <Child1 Name="Sp" Visible="true" ObType="4">
+        <Mesh File="6.UI.mesh"/>
+        <Shader File="6.UI.hlsl"/>
+        <Material File="UI/Hp_Back.mtl"/>
+        <Transform>
+            <Position X="-0.89999998" Y="-0.5" Z="0"/>
+            <Scale X="0.7499999" Y="0.30000001" Z="1"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Transform>
+        <UI PivotX="1" PivotY="0"/>
+        <Children Size="1"/>
+        <Child0 Name="SpCurrent" Visible="true" ObType="4">
+            <Mesh File="6.UI.mesh"/>
+            <Shader File="6.UI.hlsl"/>
+            <Material File="UI/Sp_front.mtl"/>
+            <Transform>
+                <Position X="-1" Y="0" Z="0"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <UI PivotX="1" PivotY="0"/>
+            <Children Size="0"/>
+        </Child0>
+    </Child1>
+</Root>

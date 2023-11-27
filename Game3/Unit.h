@@ -2,21 +2,20 @@
 class Unit : public Actor
 {
 public:
-	static void Create(string name = "Unit");
+	static Unit* Create(string name = "Unit");
 	static Unit* Create(Unit* src);
-private:
-
-
-
 public:
 	Unit();
 	~Unit();
 
-	//가상함수
-	virtual void Init() {};
-	virtual void Update() {};
-	virtual void LateUpdate() {};
-	virtual void Render() {};
-	virtual void PreRender() {};
+	float Hp, MaxHp;
+	float Attack;
+	float Defense;
+
+	//한번만 실행되는 변수
+	bool Once = true;
+
+	void Update();
+	void Render(shared_ptr<Shader> pShader = nullptr) override;
 };
 

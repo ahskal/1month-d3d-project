@@ -15,6 +15,39 @@
     <ClInclude Include="Unit.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="MapGenerator.h">
+      <Filter>Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene3.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ConcreteObserver.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Player.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerObserver.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterObserver.h">
+      <Filter>Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Monster.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterManager.h">
+      <Filter>Object\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -30,6 +63,34 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="MapGenerator.cpp">
+      <Filter>Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Player.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp" />
+    <ClCompile Include="Scene3.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ConcreteObserver.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerObserver.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterObserver.cpp">
+      <Filter>Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Monster.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterManager.cpp">
+      <Filter>Object\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Object">
@@ -43,6 +104,12 @@
     </Filter>
     <Filter Include="Object\Monster">
       <UniqueIdentifier>{954fba8a-293e-4a81-ae31-8efcbe626a77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Map">
+      <UniqueIdentifier>{d0af8187-c161-4a02-9279-cb6f33a180c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\UI">
+      <UniqueIdentifier>{1b722d55-85b0-4131-8a30-6c972810a16d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

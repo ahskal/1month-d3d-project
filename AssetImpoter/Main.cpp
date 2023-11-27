@@ -35,6 +35,8 @@ void Main::Update()
     Camera::main->ControlMainCam();
     Camera::main->Update();
 
+    LIGHT->RenderDetail();
+
     ImGui::Begin("Hierarchy");
     grid->RenderHierarchy();
     cam1->RenderHierarchy();
@@ -285,8 +287,9 @@ void Main::Render()
     LIGHT->Set();
 
     grid->Render();
+    BLEND->Set(true);
     temp->Render();
-   
+    BLEND->Set(false);
 }
 
 void Main::ResizeScreen()

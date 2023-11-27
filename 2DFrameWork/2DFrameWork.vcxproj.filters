@@ -127,6 +127,7 @@
     <ClInclude Include="Deferred.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="AStar.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -273,5 +274,6 @@
     <ClCompile Include="Deferred.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="AStar.cpp" />
   </ItemGroup>
 </Project>

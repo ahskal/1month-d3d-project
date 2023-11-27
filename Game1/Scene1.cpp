@@ -25,7 +25,7 @@ Scene1::Scene1()
 
     loadObejct = L"Terrain"; 
     map = Terrain::Create();
-    map->LoadFile("T1.xml");
+    map->LoadFile("Terrain.xml");
     map->CreateStructuredBuffer();
     loadCount++;
 
@@ -40,7 +40,7 @@ Scene1::Scene1()
     sphere = Actor::Create();
     sphere->LoadFile("Sphere.xml");
 
-    mutant = new Mutant();
+    //mutant = new Mutant();
 
     environmentMapSize = 256;
     environmentMap = new CubeRenderTarget(256);
@@ -96,7 +96,7 @@ void Scene1::Update()
     skybox->RenderHierarchy();
     skybox2->RenderHierarchy();
     sphere->RenderHierarchy();
-    mutant->actor->RenderHierarchy();
+    //mutant->actor->RenderHierarchy();
     rain->RenderHierarchy();
     ImGui::End();
 
@@ -107,7 +107,7 @@ void Scene1::Update()
     skybox->Update();
     skybox2->Update();
     sphere->Update();
-    mutant->Update();
+    //mutant->Update();
     rain->Update();
     //sphere[0][0][0]->Update();
 
@@ -186,7 +186,7 @@ void Scene1::PreRender()
     shadowMap->SetTarget();
     //map->Render(RESOURCE->shaders.Load("5.Cube_Shadow.hlsl"));
    // player->Render(RESOURCE->shaders.Load("4.Instance_Shadow.hlsl"));
-    mutant->Render(RESOURCE->shaders.Load("4.Instance_Shadow.hlsl"));
+   // mutant->Render(RESOURCE->shaders.Load("4.Instance_Shadow.hlsl"));
 
 } 
 
@@ -205,7 +205,7 @@ void Scene1::Render()
     map->Render();
 
     player->Render();
-    mutant->Render();
+    //mutant->Render();
 
     //환경맵 텍스처
     environmentMap->SetRGBTexture(4);

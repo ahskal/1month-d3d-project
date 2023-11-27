@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AStar.h" />
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="BinaryFile.h" />
     <ClInclude Include="BlendState.h" />
@@ -206,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AStar.cpp" />
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="BinaryFile.cpp" />
     <ClCompile Include="BlendState.cpp" />

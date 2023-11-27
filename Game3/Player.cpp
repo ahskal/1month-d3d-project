@@ -1,22 +1,16 @@
 #include "stdafx.h"
 #include "Player.h"
 
+extern bool DEBUG_MODE;
+using namespace play;
+
 Player* Player::Create(string name)
 {
 	Player* temp = new Player();
-	temp->LoadFile("Man2.xml");
+	temp->LoadFile("Unit/Man.xml");
 	temp->type = ObType::Actor;
-	temp->state = PlayerState::IDLE;
-
-	Camera* Cam = Camera::Create();
-	Cam->LoadFile("Cam2.xml");
-
-	Cam->SetLocalPosY(3.5);
-	Cam->SetLocalPosZ(-5);
-	temp->lastPos = Vector3();
-	temp->AddChild(Cam);
-	Camera::main = Cam;
-	temp->Cam = Cam;
+	temp->state = State::IDLE;
+	temp->name = name;
 	return temp;
 }
 
@@ -24,17 +18,9 @@ Player* Player::Create(Player* src)
 {
 	Player* temp = new Player(*src);
 	temp->type = ObType::Actor;
-	temp->state = PlayerState::IDLE;
-	temp->rotTime = 0.0f;
+	temp->state = State::IDLE;
 	temp->CopyChild(src);
 
-	Camera* Cam = Camera::Create();
-	Cam->LoadFile("Cam2.xml");
-
-	temp->AddChild(Cam);
-	Camera::main = Cam;
-
-	temp->Cam = Cam;
 	return temp;
 }
 
@@ -42,7 +28,27 @@ Player::Player()
 {
 	MoveSpeed = 5;
 
+	Uneqip[0] = Ani_Move_Uneqip_Left;
+	Uneqip[1] = Ani_Move_Uneqip_Back_Right;
+	Uneqip[2] = Ani_Move_Uneqip_Back;
+	Uneqip[3] = Ani_Move_Uneqip_Back_Left;
+	Uneqip[4] = Ani_Move_Uneqip_Right;
+	Uneqip[5] = Ani_Move_Uneqip_Front_Right;
+	Uneqip[6] = Ani_Move_Uneqip_Front;
+	Uneqip[7] = Ani_Move_Uneqip_Front_Left;
 
+	Eqip[0] = Ani_Move_Eqip_Left;
+	Eqip[1] = Ani_Move_Eqip_Back_Right;
+	Eqip[2] = Ani_Move_Eqip_Back;
+	Eqip[3] = Ani_Move_Eqip_Back_Left;
+	Eqip[4] = Ani_Move_Eqip_Right;
+	Eqip[5] = Ani_Move_Eqip_Front_Right;
+	Eqip[6] = Ani_Move_Eqip_Front;
+	Eqip[7] = Ani_Move_Eqip_Front_Left;
+
+	lastPos = Vector3();
+
+	isEqip = true;
 }
 
 Player::~Player()
@@ -53,12 +59,12 @@ void Player::SetSpawn(Vector3 spawn)
 {
 	SetWorldPosX(spawn.x);
 	SetWorldPosZ(spawn.z);
-
 	lastPos = spawn;
 }
 
 void Player::Init()
 {
+	anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
 
 	slash = new SlashTrail();
 	slash->Top = Find("Start");
@@ -73,124 +79,134 @@ void Player::Init()
 	slash->material->diffuse.y = 0.0f;
 	slash->material->diffuse.z = 1.0f;
 
-	dir[0] = Ani_Move_Left;
-	dir[1] = Ani_Move_Back_Right;
-	dir[2] = Ani_Move_Back;
-	dir[3] = Ani_Move_Back_Left;
-	dir[4] = Ani_Move_Right;
-	dir[5] = Ani_Move_Front_Right;
-	dir[6] = Ani_Move_Front;
-	dir[7] = Ani_Move_Front_Left;
-
-	anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Equip, 0.1f);
+	MaxHp = Hp = 200;
+	MaxSp = Sp = 150;
+	Attack = 10;
+	Defense = 5;
+	UpdateObserver();
 
 }
 
 void Player::Update()
 {
-	//rotation.y = Cam->rotation.y - PI;
-	Cam->Find("None")->rotation.y = rotation.y - PI;
-	lastPos = GetWorldPos();
-	Actor::Update();
+	FSM();
+
+	if (Sp <= MaxSp) {
+		Sp += DELTA * 5;
+	}
 
 	if (Once) {
 		Init();
 		Once = false;
 	}
+	//# Update;
+	if (not DEBUG_MODE)
+		CameraHold();
 
-	if (state == PlayerState::IDLE or state == PlayerState::WALK)
+	UpdateObserver();
+	lastPos = GetWorldPos();
+	Actor::Update();
+	slash->Update();
+
+}
+
+void Player::FSM()
+{
+	if (state == State::IDLE or state == State::WALK) {
 		Control();
+		ChangeAni();
+	}
 
-	// 기본모션
-	if (state == PlayerState::IDLE) {
-
-
+	// IDLE
+	if (state == State::IDLE) {
+		MoveSpeed = 7;
 		if (INPUT->KeyPress('W') or INPUT->KeyPress('A')
-			or INPUT->KeyPress('S') or INPUT->KeyPress('D'))
-		{
-			state = PlayerState::WALK;
+			or INPUT->KeyPress('S') or INPUT->KeyPress('D')) {
+			state = State::WALK;
 		}
 
 		// 무기 장비 해체
 		if (INPUT->KeyDown(VK_LCONTROL)) {
-
 			anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Equip, 0.1f);
-			state = PlayerState::UNEQIP;
+			state = State::UNEQIP;
 			shouldOnce = false;
 		}
 
-		if (INPUT->KeyDown(VK_LBUTTON)) {
-			state = PlayerState::ATTACK;
-
+		if (INPUT->KeyDown(VK_LBUTTON) && Sp > 0 && isEqip) {
+			isHit = false;
+			Laststate = state;
+			state = State::ATTACK;
 			if (AttackCount == 0) {
 				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
-
 				AttackCount = 1;
 			}
 			else if (AttackCount == 1) {
 				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_03, 0.1f);
-
 				AttackCount = 0;
 			}
+			SetState("공격");
+			Sp -= 10;
 		}
 	}
-	// 걷기
-	else if (state == PlayerState::WALK) {
 
-		if (INPUT->KeyDown(VK_LBUTTON)) {
-			state = PlayerState::ATTACK;
-
+	// WALK
+	else if (state == State::WALK) {
+		MoveSpeed = 5;
+		if (INPUT->KeyDown(VK_LBUTTON) && Sp > 0 && isEqip) {
+			isHit = false;
+			Laststate = state;
+			state = State::ATTACK;
 			if (AttackCount == 0) {
 				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
-
 				AttackCount = 1;
 			}
 			else if (AttackCount == 1) {
 				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_03, 0.1f);
-
 				AttackCount = 0;
 			}
+			SetState("공격");
+			Sp -= 10;
 		}
 		if (not(INPUT->KeyPress('W') or INPUT->KeyPress('A')
 			or INPUT->KeyPress('S') or INPUT->KeyPress('D')))
 		{
-			state = PlayerState::IDLE;
-			if (isUnEquip) {
-				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEquip, 0.1f);
+			state = State::IDLE;
+			if (isEqip) {
+				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
 			}
-			if (!isUnEquip) {
-				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Equip, 0.1f);
+			if (!isEqip) {
+				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEqip, 0.1f);
 			}
+			
 		}
-
-
 	}
-	// 무기 장비 해체
-	else if (state == PlayerState::UNEQIP) {
+
+	// UNEQIP
+	else if (state == State::UNEQIP) {
 		if (anim->GetPlayTime() >= 0.35f and not shouldOnce) {
-			isUnEquip = !isUnEquip;
+			isEqip = !isEqip;
 			shouldOnce = true;
 		}
 		if (anim->GetPlayTime() >= 0.98f) {
-			state = PlayerState::IDLE;
-			if (isUnEquip) {
-				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEquip, 0.1f);
+			state = State::IDLE;
+			if (isEqip) {
+				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
 			}
-			if (!isUnEquip) {
-				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Equip, 0.1f);
+			if (!isEqip) {
+				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEqip, 0.1f);
 			}
 		}
-		if (isUnEquip) {
-			Find("sword")->visible = false;
-			Find("shield")->visible = false;
-		}
-		else {
+		if (isEqip) {
 			Find("sword")->visible = true;
 			Find("shield")->visible = true;
 		}
+		else {
+			Find("sword")->visible = false;
+			Find("shield")->visible = false;
+		}
 	}
-	// 공격
-	else if (state == PlayerState::ATTACK) {
+	// ATTACK
+	else if (state == State::ATTACK) {
 		if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
 		{
 			slash->Play();
@@ -201,51 +217,66 @@ void Player::Update()
 		}
 		if (anim->GetPlayTime() >= 0.98f) {
 			slash->Update();
-			state = PlayerState::IDLE;
-			if (isUnEquip) {
-				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEquip, 0.1f);
+			state = State::IDLE;
+			if (Laststate == State::WALK) {
+				anim->ChangeAnimation(AnimationState::LOOP, Eqip[index], 0.1f);
+				return;
 			}
-			if (!isUnEquip) {
-				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Equip, 0.1f);
+			if (isEqip) {
+				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
 			}
 		}
 	}
-
-	slash->Update();
-
 }
 
 void Player::LateUpdate()
 {
+
 }
 
 void Player::Render(shared_ptr<Shader> pShader)
 {
 	Actor::Render(pShader);
-
 }
 
-void Player::EffectRender()
+void Player::LateRender()
 {
 	slash->Render();
 }
+void Player::ChangeAni() {
 
+	if (MoveDir == Vector3())
+	{
+		index = -1;
+		return;
+	}
+	float dotAngle = GetForward().Dot(MoveDir);
+	float dotAngle2 = GetRight().Dot(MoveDir);
 
-void Player::Hierarchy()
-{
-	Actor::RenderHierarchy();
+	int index = round((atan2f(dotAngle, dotAngle2) + PI) / (45.f * ToRadian));
+	index = (index == 8) ? 0 : index;
+	
+	ImGui::Text("index %d", index);
+	ImGui::Text("this->index %d", this->index);
+
+	if (this->index != index) {
+		if (isEqip) {
+			anim->ChangeAnimation(AnimationState::LOOP, Eqip[index], 0.1f);
+		}
+		else {
+			anim->ChangeAnimation(AnimationState::LOOP, Uneqip[index], 0.1f);
+		}
+	}
+	this->index = index;
 }
-
 void Player::Control()
 {
 	bool keyW = INPUT->KeyPress('W');
 	bool keyS = INPUT->KeyPress('S');
 	bool keyA = INPUT->KeyPress('A');
 	bool keyD = INPUT->KeyPress('D');
-	if (not moving) {
-		return;
-	}
 	MoveDir = Vector3(0, 0, 0);
+
 	if (keyW)
 		MoveDir += GetForward();
 	else if (keyS)
@@ -254,19 +285,34 @@ void Player::Control()
 		MoveDir -= GetRight();
 	else if (keyD)
 		MoveDir += GetRight();
+
 	MoveDir.Normalize();
 	MoveWorldPos(MoveDir * DELTA * MoveSpeed);
 
-	float dotAngle = GetForward().Dot(MoveDir);
-	float dotAngle2 = GetRight().Dot(MoveDir);
+}
 
-	int index = round((atan2f(dotAngle, dotAngle2) + PI) / (45.f * ToRadian));
-	index = (index == 8) ? 0 : index;
-	this->index = index;
+void Player::UpdateObserver() {
 
-	if (lastMoveDir != MoveDir) {
-		anim->ChangeAnimation(AnimationState::LOOP, dir[index], 0.1f);
-	}
-
-	lastMoveDir = MoveDir;
+	Status status;
+	status.Hp = Hp;
+	status.MaxHp = MaxHp;
+	status.Sp = Sp;
+	status.MaxSp = MaxSp;
+	status.Attack = Attack;
+	status.Defense = Defense;
+	NotifyStatus(status);
+}
+void Player::CameraHold()
+{
+	//중앙값
+	POINT ptMouse;
+	ptMouse.x = App.GetHalfWidth();
+	ptMouse.y = App.GetHalfHeight();
+	Vector3 Rot;
+	Rot.x = (INPUT->position.y - ptMouse.y) * 0.001f;
+	Rot.y = (INPUT->position.x - ptMouse.x) * 0.001f;
+	rotation.y += Rot.y;
+	Find("Camera")->rotation.x += Rot.x;
+	ClientToScreen(App.GetHandle(), &ptMouse);
+	SetCursorPos(ptMouse.x, ptMouse.y);
 }

@@ -5,6 +5,8 @@ UI* UI::Create(string name)
     UI* temp = new UI();
     temp->name = name;
     temp->type = ObType::UI;
+	temp->mesh = RESOURCE->meshes.Load("6.UI.mesh");
+	temp->shader = RESOURCE->shaders.Load("6.UI.hlsl");
     return temp;
 }
 
