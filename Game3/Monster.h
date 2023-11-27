@@ -102,6 +102,12 @@ private:
 	int AttackCount = 0;
 	SlashTrail* slash;
 	bool Once = true;
+	
+	Vector3 target;
+
+	float Length;
+	
+	int index;
 
 public:
 	Monster();
@@ -120,7 +126,8 @@ public:
 	void Move();
 	void Hierarchy();
 
-
+	bool IsInRadius();
+	void GetTargerPos(Vector3& pos) { target = pos; }
 	
 };
 

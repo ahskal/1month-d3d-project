@@ -35,6 +35,9 @@ Monster::Monster()
 	Eqip[5] = Ani_Move_Eqip_Front_Right;
 	Eqip[6] = Ani_Move_Eqip_Front;
 	Eqip[7] = Ani_Move_Eqip_Front_Left;
+
+	Length = 15;
+
 }
 
 Monster::~Monster()
@@ -66,8 +69,6 @@ void Monster::Init()
 	MaxHp = Hp = 200;
 	Attack = 10;
 	Defense = 5;
-
-	UpdateObserver();
 }
 
 void Monster::Update()
@@ -76,19 +77,12 @@ void Monster::Update()
 		Init();
 		Once = false;
 	}
-
-	
-
+	FSM();
 	Unit::Update();
-	UpdateObserver();
 }
 
 void Monster::LateUpdate()
 {
-	
-	if (state == State::IDLE) {
-
-	}
 
 
 }
@@ -96,7 +90,7 @@ void Monster::LateUpdate()
 void Monster::Render(shared_ptr<Shader> pShader)
 {
 	Unit::Render(pShader);
-	
+
 }
 
 void Monster::LateRender()
@@ -105,6 +99,54 @@ void Monster::LateRender()
 
 void Monster::FSM()
 {
+	if (state == State::IDLE) {
+		if (IsInRadius()) {
+			state = State::WALK;
+		}
+	}
+	if (state == State::WALK) {
+		
+		Vector3 dir = target - GetWorldPos();
+		float dis = dir.Length();
+		if (dis > Length) {
+			state = State::IDLE;
+			return;
+		}
+		dir.Normalize();
+
+
+		float dotAngle = GetForward().Dot(dir);
+		float dotAngle2 = GetRight().Dot(dir);
+
+
+		int index = round((atan2f(dotAngle, dotAngle2) + PI) / (45.f * ToRadian));
+		index = (index == 8) ? 0 : index;
+
+		rotation.y = atan2f(dir.x, dir.z);
+
+		ImGui::Text("M index : %d", index);
+
+		MoveWorldPos(dir * DELTA);
+
+		if (this->index != index) {
+			anim->ChangeAnimation(AnimationState::LOOP, Eqip[index], 0.1f);
+		}
+
+		index = index;
+	}
+	if (state == State::ATTACK) {
+
+	}
+	if (state == State::GUARD) {
+
+	}
+	if (state == State::DAMAGE) {
+
+	}
+	if (state == State::DEAD) {
+
+	}
+
 }
 
 void Monster::Move()
@@ -115,4 +157,13 @@ void Monster::Hierarchy()
 {
 	RenderHierarchy();
 
+}
+
+bool Monster::IsInRadius()
+{
+	Vector3 dis = target - GetWorldPos();
+	if (dis.Length() < Length) {
+		return true;
+	}
+	return false;
 }

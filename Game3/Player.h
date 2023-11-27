@@ -129,20 +129,22 @@ private:
 	SlashTrail* slash;
 
 
-	//STATUS
-	// HP는 부모클레스에서 정의
-	// Attack는 부모클레스에서 정의
-	// Defense는 부모클레스에서 정의
-
-	// SP는 스테미나
-	float Sp, MaxSp;
+	
 
 	Ray attackRay;
 
 
 
 public:
-	bool isHit = false;
+	//STATUS
+	// HP는 부모클레스에서 정의
+	// Attack는 부모클레스에서 정의
+	// Defense는 부모클레스에서 정의
+	// SP는 스테미나
+	float Sp, MaxSp;
+
+
+	bool isHit = true;
 
 	Player();
 	~Player();
@@ -173,7 +175,7 @@ public:
 		WolrdUpdate();
 	}
 
-	void UpdateObserver();
 	void CameraHold(); 
+	void Attacker();
 };
 

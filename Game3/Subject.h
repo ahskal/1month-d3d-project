@@ -38,22 +38,6 @@ public:
 		}
 	}
 
-	void NotifyStatus(const Status& status) {
-		for (Observer* observer : observers) {
-			observer->Update(status);
-		}
-	}
-
-	void UpdateObserver() {
-		Status status;
-		status.Hp = Hp;
-		status.MaxHp = MaxHp;
-		status.Attack = Attack;
-		status.Defense = Defense;
-
-		NotifyStatus(status);
-	}
-
 };
 
 

@@ -217,8 +217,8 @@ void GameObject::Render(shared_ptr<Shader> pShader)
 	}
 
 	//if (collider and pShader == nullptr)
-	if (collider)
-		collider->Render();
+	//if (collider)
+	//	collider->Render();
 }
 
 bool GameObject::Intersect(GameObject* target)

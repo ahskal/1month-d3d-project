@@ -36,6 +36,11 @@ void Scene1::Init()
 	cam1 = Camera::Create();
 	cam1->LoadFile("Cam.xml");
 
+	deferred = new Deferred;
+	post = UI::Create();
+	post->LoadFile("Deferred.xml");
+
+
 	Camera::main = cam1;
 	timer = 0;
 	ResizeScreen();
@@ -92,6 +97,8 @@ void Scene1::Update()
 	// 결과 사용...
 
 	LIGHT->RenderDetail();
+	deferred->RenderDetail();
+
 
 	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
 
@@ -110,6 +117,9 @@ void Scene1::Update()
 	cam1->RenderHierarchy();
 	player->RenderHierarchy();
 
+	skybox->RenderHierarchy();
+	skybox2->RenderHierarchy();
+
 	monster->Hierarchy();
 
 	map->RenderHierarchy();
@@ -117,6 +127,9 @@ void Scene1::Update()
 	ImGui::End();
 
 	cam1->ControlMainCam();
+
+
+	post->Update();
 
 
 	grid->Update();
@@ -131,6 +144,7 @@ void Scene1::Update()
 
 	monster->Update();
 
+
 	//// Cube의 좌표에서 플레이어의 Y값 (C)
 	//float offsetY = playerPos.y - cubePos.y;
 	//// 플레이어와 큐브의 좌표 차이를 나타내는 벡터 (C - A)
@@ -139,12 +153,6 @@ void Scene1::Update()
 	//monster->Cube->rotation.y = atan2f(dir.x, dir.z);
 	//// X 축 주위의 각도 (CAB) = asinf(dir.y)와 같다.
 	//monster->Cube->rotation.x = -atan2f(off
-
-
-
-
-
-
 }
 
 void Scene1::LateUpdate()
@@ -162,68 +170,31 @@ void Scene1::LateUpdate()
 
 	player->WolrdUpdate();
 
-	//for (auto it = map->Find("Node")->children.begin(); it != map->Find("Node")->children.end(); it++)
-	//{
-	//	for (auto it2 = it->second->children.begin(); it2 != it->second->children.end(); it2++)
-	//	{
-	//		for (auto it3 = it2->second->children.begin(); it3 != it2->second->children.end(); it3++)
-	//		{
-	//			float Length = Vector3::Distance(cam1->GetWorldPos(), it3->second->GetWorldPos());
-
-	//			if (Length >= 300) {
-	//				if (it3->second->name == "Lod3") {
-	//					it3->second->visible = true;
-	//				}
-	//				else {
-	//					it3->second->visible = false;
-	//				}
-	//			}
-	//			else if (Length >= 150) {
-	//				if (it3->second->name == "Lod1") {
-	//					it3->second->visible = true;
-	//				}
-	//				else {
-	//					it3->second->visible = false;
-	//				}
-	//			}
-	//			else {
-	//				if (it3->second->name == "Lod0") {
-	//					it3->second->visible = true;
-	//				}
-	//				else {
-	//					it3->second->visible = false;
-	//				}
-	//			}
-
-
 }
 void Scene1::PreRender()
 {
 	LIGHT->Set();
-	cam1->Set();
+	Camera::main->Set();
+	deferred->SetTarget();	
+	map->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
+	player->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	monster->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 
-	skybox->Render();
-	skybox2->Render();
-
-	cam1->Set();
-	grid->Render();
-	player->Render();
-
-	map->Render();
 }
 
 void Scene1::Render()
 {
-
-	//water->Render();
-	map->Render();
+	skybox->Render();
+	skybox2->Render();
 	//grid->Render();
+	deferred->Render();
+	
+	//water->Render();
 
 
-	BLEND->Set(true);
-	player->Render();
-	BLEND->Set(false);
-	monster->Render();
+	//BLEND->Set(true);
+	//player->Render();
+	//BLEND->Set(false);
 
 
 }

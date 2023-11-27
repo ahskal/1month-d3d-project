@@ -4,10 +4,12 @@
 #include "Player.h"
 #include "UI_Player.h"
 #include "PlayerObserver.h"
+#include "PlayerData.h"
 
 #include "Monster.h"
 #include "UI_Monster.h"
 #include "MonsterObserver.h"
+#include "MonsterData.h"
 
 
 #include "Scene3.h"
@@ -32,7 +34,10 @@ Scene3::Scene3()
 	pUI->LoadFile("UI/Main_Layout_1.xml");
 	Camera::main = static_cast<Camera*>(player->Find("Camera"));
 
+
+
 	ResizeScreen();
+
 }
 
 Scene3::~Scene3()
@@ -73,13 +78,11 @@ void Scene3::Update()
 	//Camera::main->ControlMainCam();
 
 	player->Update();
-	pUI->SetStatus(pObserver->GetStatus());
 	pUI->Update();
 
 	if (INPUT->KeyDown('T')) {
 		MonMGR->CreateMonster(Vector3(RANDOM->Int(-10, 10), 0, RANDOM->Int(-10, 10)));
 	}
-
 
 	MonMGR->Update();
 }
@@ -102,8 +105,6 @@ void Scene3::LateUpdate()
 				Mon->SetState("공격받음");
 			}
 		}
-		Vector3 pos = Mon->GetWorldPos() - pPos;
-		ImGui::Text("length : %f", pos.Length());
 	};
 	MonMGR->LateUpdate();
 

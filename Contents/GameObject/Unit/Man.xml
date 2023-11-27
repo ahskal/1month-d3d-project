@@ -601,8 +601,8 @@
                                                 <Mesh File="Sword/sword.mesh"/>
                                                 <Shader File="4.Cube.hlsl"/>
                                                 <Collider ColliderType="2" Visible="true">
-                                                    <Position X="0" Y="0" Z="-80.000011"/>
-                                                    <Scale X="10" Y="10" Z="80"/>
+                                                    <Position X="0" Y="0" Z="-50.000011"/>
+                                                    <Scale X="1" Y="1" Z="40"/>
                                                     <Rotation X="0" Y="0" Z="0"/>
                                                 </Collider>
                                                 <Material File="Sword/Blusialand_weapon_Mat.mtl"/>
@@ -629,7 +629,7 @@
                                                     </Child0>
                                                     <Child1 Name="Start" Visible="true" ObType="0" BoneIndex="-1">
                                                         <Transform>
-                                                            <Position X="0" Y="0" Z="-80.000008"/>
+                                                            <Position X="0" Y="0" Z="-90.000008"/>
                                                             <Scale X="1" Y="1" Z="1"/>
                                                             <Rotation X="0" Y="0" Z="0"/>
                                                         </Transform>

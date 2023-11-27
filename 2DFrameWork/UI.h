@@ -15,5 +15,6 @@ public:
 
 	virtual void	Update() override;
 	void			Render(shared_ptr<Shader> pShader = nullptr);
+	virtual void	Initialize();
 };
 

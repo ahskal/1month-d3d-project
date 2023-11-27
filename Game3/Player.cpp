@@ -83,8 +83,6 @@ void Player::Init()
 	MaxSp = Sp = 150;
 	Attack = 10;
 	Defense = 5;
-	UpdateObserver();
-
 }
 
 void Player::Update()
@@ -103,7 +101,6 @@ void Player::Update()
 	if (not DEBUG_MODE)
 		CameraHold();
 
-	UpdateObserver();
 	lastPos = GetWorldPos();
 	Actor::Update();
 	slash->Update();
@@ -133,19 +130,7 @@ void Player::FSM()
 		}
 
 		if (INPUT->KeyDown(VK_LBUTTON) && Sp > 0 && isEqip) {
-			isHit = false;
-			Laststate = state;
-			state = State::ATTACK;
-			if (AttackCount == 0) {
-				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
-				AttackCount = 1;
-			}
-			else if (AttackCount == 1) {
-				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_03, 0.1f);
-				AttackCount = 0;
-			}
-			SetState("공격");
-			Sp -= 10;
+			Attacker();
 		}
 	}
 
@@ -153,19 +138,7 @@ void Player::FSM()
 	else if (state == State::WALK) {
 		MoveSpeed = 5;
 		if (INPUT->KeyDown(VK_LBUTTON) && Sp > 0 && isEqip) {
-			isHit = false;
-			Laststate = state;
-			state = State::ATTACK;
-			if (AttackCount == 0) {
-				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
-				AttackCount = 1;
-			}
-			else if (AttackCount == 1) {
-				anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_03, 0.1f);
-				AttackCount = 0;
-			}
-			SetState("공격");
-			Sp -= 10;
+			Attacker();
 		}
 		if (not(INPUT->KeyPress('W') or INPUT->KeyPress('A')
 			or INPUT->KeyPress('S') or INPUT->KeyPress('D')))
@@ -256,8 +229,8 @@ void Player::ChangeAni() {
 	int index = round((atan2f(dotAngle, dotAngle2) + PI) / (45.f * ToRadian));
 	index = (index == 8) ? 0 : index;
 	
-	ImGui::Text("index %d", index);
-	ImGui::Text("this->index %d", this->index);
+	//ImGui::Text("index %d", index);
+	//ImGui::Text("this->index %d", this->index);
 
 	if (this->index != index) {
 		if (isEqip) {
@@ -291,17 +264,6 @@ void Player::Control()
 
 }
 
-void Player::UpdateObserver() {
-
-	Status status;
-	status.Hp = Hp;
-	status.MaxHp = MaxHp;
-	status.Sp = Sp;
-	status.MaxSp = MaxSp;
-	status.Attack = Attack;
-	status.Defense = Defense;
-	NotifyStatus(status);
-}
 void Player::CameraHold()
 {
 	//중앙값
@@ -315,4 +277,21 @@ void Player::CameraHold()
 	Find("Camera")->rotation.x += Rot.x;
 	ClientToScreen(App.GetHandle(), &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
+}
+
+void Player::Attacker()
+{
+	isHit = false;
+	Laststate = state;
+	state = State::ATTACK;
+	if (AttackCount == 0) {
+		anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
+		AttackCount = 1;
+	}
+	else if (AttackCount == 1) {
+		anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_03, 0.1f);
+		AttackCount = 0;
+	}
+	SetState("공격");
+	Sp -= 10;
 }

@@ -17,6 +17,9 @@ private:
 
 	float timer;
 
+	Deferred* deferred;   //4개의 렌더타겟  
+	UI* post;       //4개의 렌더타겟을 받아 그려줄
+
 public:
 	Scene1();
 	~Scene1();

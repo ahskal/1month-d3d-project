@@ -4,6 +4,10 @@
 
 #include "Unit.h"
 
+#include "MonsterManager.h"
+
+#define MonMGR	MonsterManager::GetInstance()
+
 extern bool DEBUG_MODE;
 
 struct Status {
@@ -12,9 +16,5 @@ struct Status {
 	float Attack;
 	float Defense;
 };
-
-#include "MonsterManager.h"
-
-#define MonMGR	MonsterManager::GetInstance()
 
 

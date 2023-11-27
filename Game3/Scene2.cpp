@@ -133,8 +133,6 @@ void Scene2::Update()
 
 	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
 
-	ImGui::Text("Player moveDir %f, %f, %f", player->MoveDir.x, player->MoveDir.y, player->MoveDir.z);
-
 	// # DEBUG #
 
 
@@ -232,8 +230,7 @@ void Scene2::LateUpdate()
 //	
 //	
 //}
-
-//float maxDistance = 5.0f;
+	//float maxDistance = 5.0f;
 //Ray CameraRay;
 //Vector3 hit;
 //CameraRay.direction = player->Cam->GetWorldPos() - player->GetWorldPos();
@@ -264,10 +261,6 @@ void Scene2::LateUpdate()
 //		}
 //	}
 //}
-
-	if (INPUT->KeyDown('1')) {
-		ui->Find("HpCurrent")->scale.x -= 0.01;
-	}
 }
 
 void Scene2::PreRender()
@@ -277,9 +270,9 @@ void Scene2::PreRender()
 
 	deferred->SetTarget();
 	Tile->Render();
-	BLEND->Set(true);
+
 	player->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-	BLEND->Set(false);
+
 }
 
 void Scene2::Render()
@@ -294,11 +287,15 @@ void Scene2::Render()
 		}
 	}
 
-	//skybox->Render();
-	//skybox2->Render();
+	skybox->Render();
+	skybox2->Render();
 
 	deferred->Render();
+	DEPTH->Set(false);
+	BLEND->Set(true);
 	player->LateRender();
+	DEPTH->Set(true);
+	BLEND->Set(false);
 	ui->Render();
 
 }

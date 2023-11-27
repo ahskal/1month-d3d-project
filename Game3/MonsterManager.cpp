@@ -1,7 +1,6 @@
 #include "stdafx.h"
-
+#include "MonsterData.h"
 #include "Monster.h"
-#include "UI_Monster.h"
 #include "MonsterObserver.h"
 #include "MonsterManager.h"
 
@@ -20,15 +19,18 @@ void MonsterManager::CreateMonster(Vector3 pos)
 	MonVec.push_back(Mon);
 }
 
+void MonsterManager::GetTargetPos(Vector3 pos)
+{
+	for (auto it : MonVec) {
+		it->Mon->GetTargerPos(pos);
+	}
+}
+
 void MonsterManager::Update()
 {
-
 	for (auto it : MonVec) {
 		it->Update();
 	}
-	
-
-	
 }
 
 void MonsterManager::LateUpdate()
@@ -41,7 +43,7 @@ void MonsterManager::LateUpdate()
 			[&](MonsterData* Md) {
 				// 현재 체력이 0 이하인 경우 해당 몬스터를 제거하려면 true를 반환
 				// 그렇지 않은 경우 유지하려면 false를 반환
-				bool Remove = Md->mObserver->GetStatus().Hp <= 0;
+				bool Remove = Md->mObserver->GetData()->Hp <= 0;
 				if (Remove) {
 					delete Md;
 				}
@@ -60,38 +62,3 @@ void MonsterManager::Render(shared_ptr<Shader> pShader)
 	}
 }
 
-MonsterData::MonsterData(Vector3 pos)
-{
-	Mon = Monster::Create();
-	Mon->LoadFile("Unit/Man2.xml");
-
-	mObserver = new MonsterObserver(Mon);
-	Mon->Attach(mObserver);
-
-	UI = UI_Monster::Create();
-	UI->LoadFile("UI/Hpbar.xml");
-
-	Mon->SetSpawn(pos);
-	UI->parent = Mon;
-
-	Mon->UpdateObserver();
-	UI->SetStatus(mObserver->GetStatus());
-	// 추가 데이터 초기화
-}
-
-void MonsterData::Update()
-{
-	Mon->Update();
-	UI->SetStatus(mObserver->GetStatus());
-	UI->Update();
-}
-
-void MonsterData::DeferredRender(shared_ptr<Shader> pShader)
-{
-	Mon->Render(pShader);
-}
-
-void MonsterData::Render()
-{
-	UI->Render();
-}

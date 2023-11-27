@@ -30,22 +30,21 @@
     <ClInclude Include="Scene3.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="ConcreteObserver.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Player.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
     <ClInclude Include="PlayerObserver.h">
       <Filter>Object\Player</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterObserver.h">
-      <Filter>Object\Map</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Monster.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
     <ClInclude Include="MonsterManager.h">
+      <Filter>Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h" />
+    <ClInclude Include="MonsterData.h" />
+    <ClInclude Include="MonsterObserver.h">
       <Filter>Object\Monster</Filter>
     </ClInclude>
   </ItemGroup>
@@ -76,20 +75,22 @@
     <ClCompile Include="Scene3.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ConcreteObserver.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerObserver.cpp">
       <Filter>Object\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="MonsterObserver.cpp">
-      <Filter>Object\Map</Filter>
     </ClCompile>
     <ClCompile Include="UI_Monster.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
     <ClCompile Include="MonsterManager.cpp">
       <Filter>Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerData.cpp" />
+    <ClCompile Include="MonsterData.cpp" />
+    <ClCompile Include="MonsterObserver.cpp">
+      <Filter>Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
