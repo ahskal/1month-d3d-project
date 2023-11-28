@@ -81,6 +81,8 @@ float4 PS(PixelInput input) : SV_TARGET
     float3 emissive = emissiveTexture.Load(location3).xyz;
     float3 ambient = ambientTexture.Load(location3).xyz;
 	
+    if (Normal.x == 0.0f && Normal.y == 0.0f && Normal.z == 0.0f)
+        return BaseColor;
 	
 	float4 Result = float4(DeferredDirLighting(BaseColor.rgb, Specular,
     Normal, wPosition.xyz),

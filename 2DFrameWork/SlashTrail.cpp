@@ -12,7 +12,7 @@ SlashTrail::SlashTrail()
     byteWidth = sizeof(VertexPT);
 
 
-    shader = RESOURCE->shaders.Load("6.Trail.hlsl");
+    shader = RESOURCE->shaders.Load("6.Trail_Deferred.hlsl");
     isPlaying = false;
     time = 0.0f;
     interval = 0.1f;
@@ -128,11 +128,11 @@ void SlashTrail::Render()
     material->Set();
     shader->Set();
 
-    BLEND->Set(true);
+   // BLEND->Set(true);
     RASTER->Set(D3D11_CULL_NONE);
     D3D->GetDC()->Draw(vertices.size(), 0);
     RASTER->Set(D3D11_CULL_BACK);
-    BLEND->Set(false);
+   // BLEND->Set(false);
 }
 
 void SlashTrail::RenderDetail()

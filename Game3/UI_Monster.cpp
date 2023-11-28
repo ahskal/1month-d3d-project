@@ -22,8 +22,8 @@ void UI_Monster::Update()
 {
 	Billboard::Update();
 	if (monster != nullptr) {
-		auto hp = Find("HpCurrent");
-		hp->scale.x = (monster->Hp / monster->MaxHp) * scale.x;
+		auto hpCurrent = Find("HpCurrent");
+		scale.x = (monster->Hp / monster->MaxHp) * hpCurrent->scale.x;
 	}
 }
 

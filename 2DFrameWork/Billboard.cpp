@@ -28,14 +28,14 @@ void Billboard::Update()
 void Billboard::Render(shared_ptr<Shader> pShader)
 {
 	//±íÀÌ ²ô±â
-	DEPTH->Set(false);
+	//DEPTH->Set(false);
 	//ºí·»µå ÄÑ±â
 	BLEND->Set(true);
 	Actor::Render(pShader);
 	//ºí·»µå²ô±â
 	BLEND->Set(false);
 	//±íÀÌ ÄÑ±â
-	DEPTH->Set(true);
+	//DEPTH->Set(true);
 }
 
 void Billboard::RenderDetail()

@@ -1,34 +1,31 @@
 #include "stdafx.h"
+
 #include "Player.h"
-#include "Scene2.h"
+#include "PlayerData.h"
+#include "PlayerObserver.h"
+
+#include "Monster.h"
+#include "MonsterData.h"
+
 #include "MapGenerator.h"
+#include "Scene2.h"
 
 extern bool DEBUG_MODE;
 
 Scene2::Scene2()
 {
-	grid = Grid::Create();
 
 	cam1 = Camera::Create();
 	cam1->LoadFile("Cam2.xml");
 
-	player = Player::Create();
-	Camera::main = static_cast<Camera*>(player->Find("Camera"));
+	player = PlayerData::Create();
+	player->MainCamSet();
 	ResizeScreen();
-
-	map = Terrain::Create("ground");
-	//map->material->normalMap = RESOURCE->textures.Load("concrete_modular_1x1.png");
-	map->material->LoadFile("TestMap1.mtl");
-	map->CreateStructuredBuffer();
-	//map->TreeCreateIntersect();
-	map->garo = 100;
-	map->MeshResizeUpdate();
 
 	skybox = Sky::Create();
 	skybox->LoadFile("Sky1.xml");
 	skybox2 = Sky::Create();
 	skybox2->LoadFile("Sky2.xml");
-
 
 	Tile = Actor::Create();
 	Tile->name = "Tile";
@@ -40,14 +37,9 @@ Scene2::Scene2()
 	mapGen = new MapGenerator(rows, cols, floors);
 
 	deferred = new Deferred;
-
 	post = UI::Create();
 	post->LoadFile("Deferred.xml");
 
-	rain = Rain::Create();
-
-	ui = UI::Create();
-	ui->LoadFile("UI/Main_Layout_1.xml");
 	LIGHT->dirLight.color = Color(0, 0, 0);
 }
 
@@ -110,7 +102,7 @@ void Scene2::Init()
 		}
 	} while (count != 4);
 	float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
-	player->SetSpawn(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
+	
 
 }
 
@@ -137,17 +129,10 @@ void Scene2::Update()
 
 
 	ImGui::Begin("Hierarchy", nullptr);
-	grid->RenderHierarchy();
 	cam1->RenderHierarchy();
-	map->RenderHierarchy();
 	Tile->RenderHierarchy();
 
-	//post->RenderHierarchy();
-	player->RenderHierarchy();
-
-	ui->RenderHierarchy();
-
-	//Lightting->RenderHierarchy();
+	player->Hierarchy();
 
 	ImGui::End();
 
@@ -160,17 +145,37 @@ void Scene2::Update()
 		}
 	}
 	else {
-		Camera::main = static_cast<Camera*>(player->Find("Camera"));
+		player->MainCamSet();
 		ResizeScreen();
 	}
+
 	if (INPUT->KeyDown(VK_F5)) {
 		Tile->ReleaseMember();
 		Init();
 	}
 
-	grid->Update();
-	map->Update();
-	cam1->Update();
+	if (INPUT->KeyDown('T')) {
+		int count;
+		int x; 
+		int y;
+		do
+		{
+			x = RANDOM->Int(0, mapGen->rows - 1);
+			y = RANDOM->Int(0, mapGen->cols - 1);
+			count = 0;
+			for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
+				for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
+					// 현재 좌표 (i, j, k)의 타일을 검사
+					// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
+					if (mapGen->Tiles[i][j][0] == 1) {
+						count++;
+					}
+				}
+			}
+		} while (count != 1);
+		MonMGR->CreateMonster(Vector3(x, 0, y));
+	}
+
 	Camera::main->Update();
 
 	skybox->Update();
@@ -179,19 +184,18 @@ void Scene2::Update()
 	post->Update();
 
 	player->Update();
-	rain->Update();
 
-	//Lightting->Update();
-	ui->Update();
+	MonMGR->Update();
+	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
 }
 
 void Scene2::LateUpdate()
 {
-	Vector3 target = player->GetWorldPos();
+	Vector3 target = player->pObserver->GetPos();
 	static bool isOnece = false;
 	if (isOnece) {
 		if (!mapGen->GetTileState(target)) {
-			player->GoBack();
+			player->pObserver->GetData()->GoBack();
 		}
 	}
 	isOnece = true;
@@ -205,29 +209,6 @@ void Scene2::LateUpdate()
 //	}
 //}
 //{
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
-//	
 //	
 //}
 	//float maxDistance = 5.0f;
@@ -261,6 +242,7 @@ void Scene2::LateUpdate()
 //		}
 //	}
 //}
+	MonMGR->LateUpdate();
 }
 
 void Scene2::PreRender()
@@ -271,13 +253,17 @@ void Scene2::PreRender()
 	deferred->SetTarget();
 	Tile->Render();
 
-	player->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-
+	auto Monster = MonMGR->GetMonsterVector();
+	for (auto Mvector : Monster) {
+		Mvector->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+		Mvector->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
+	}
+	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 }
 
 void Scene2::Render()
 {
-	auto playerCam = player->Find("Camera");
+	auto playerCam = player->pObserver->GetData()->Find("Camera");
 	for (auto it : mapGen->WallActorList) {
 		if (it->Intersect(playerCam)) {
 			it->visible = false;
@@ -289,15 +275,11 @@ void Scene2::Render()
 
 	skybox->Render();
 	skybox2->Render();
-
+	
 	deferred->Render();
-	DEPTH->Set(false);
-	BLEND->Set(true);
-	player->SpecialEffectsRender();
-	DEPTH->Set(true);
-	BLEND->Set(false);
-	ui->Render();
-
+	player->EffectRender();
+	player->Render();
+	
 }
 
 void Scene2::ResizeScreen()

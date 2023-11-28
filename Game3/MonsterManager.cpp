@@ -46,6 +46,7 @@ void MonsterManager::LateUpdate()
 				// 그렇지 않은 경우 유지하려면 false를 반환
 				bool Remove = Md->mObserver->GetData()->Hp <= 0;
 				if (Remove) {
+					Md->Mon->SetState("객체 삭제");
 					delete Md;
 				}
 				return Remove;

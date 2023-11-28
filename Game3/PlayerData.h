@@ -4,14 +4,15 @@ class PlayerData
 {
 public:
 	static PlayerData* Create(string name = "PlayerData");
-
-	class Player* play;
+private:
+	class Player* actor;
+public:
 	class UI_Player* UI;
 	class PlayerObserver* pObserver;
 	// 추가 데이터 필드들
 
 	PlayerData();
-	
+
 	//메인 카메라 설정
 	void MainCamSet();
 
@@ -28,5 +29,9 @@ public:
 
 	// 디퍼드 렌더링을 위한 객체 렌더링
 	void DeferredRender(shared_ptr<Shader> pShader = nullptr);
+
+
+
+
 };
 

@@ -1,7 +1,4 @@
 #include "stdafx.h"
-#include "Subject.h"
-#include "Unit.h"
-#include "Observer.h"
 #include "Player.h"
 #include "UI_Player.h"
 #include "PlayerObserver.h"
@@ -10,42 +7,42 @@
 PlayerData* PlayerData::Create(string name)
 {
 	PlayerData* temp = new PlayerData();
-	temp->play->name = name;
+	temp->actor->name = name;
 	return temp;
 }
 
 PlayerData::PlayerData()
 {
-	play = Player::Create();
-	play->LoadFile("Unit/Man.xml");
+	actor = Player::Create();
+	actor->LoadFile("Unit/Man.xml");
 
-	pObserver = new PlayerObserver(play);
-	play->Attach(pObserver);
+	pObserver = new PlayerObserver(actor);
+	actor->Attach(pObserver);
 
 	UI = UI_Player::Create();
 	UI->LoadFile("UI/Main_Layout_1.xml");
-	UI->SetData(play);
+	UI->SetData(actor);
 }
 
 void PlayerData::MainCamSet()
 {
-	Camera::main = static_cast<Camera*>(play->Find("Camera"));
+	Camera::main = static_cast<Camera*>(actor->Find("Camera"));
 }
 
 void PlayerData::Update()
 {
-	play->Update();
+	actor->Update();
 	UI->Update();
 }
 
 void PlayerData::LateUpdate()
 {
-	play->LateUpdate();
+	actor->LateUpdate();
 }
 
 void PlayerData::Hierarchy()
 {
-	play->RenderHierarchy();
+	actor->RenderHierarchy();
 	UI->RenderHierarchy();
 }
 
@@ -56,10 +53,10 @@ void PlayerData::Render(shared_ptr<Shader> pShader)
 
 void PlayerData::EffectRender()
 {
-	play->SpecialEffectsRender();
+	actor->SpecialEffectsRender();
 }
 
 void PlayerData::DeferredRender(shared_ptr<Shader> pShader)
 {
-	play->Render(pShader);
+	actor->Render(pShader);
 }

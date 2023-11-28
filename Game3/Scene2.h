@@ -5,24 +5,18 @@ class Scene2 : public Scene
 private:
 	Camera* cam1;
 
-	class Player* player;
+	class PlayerData* player;
 	class MapGenerator *mapGen;
 
-	Grid* grid;
-	Terrain* map;
 	Sky* skybox;
 	Sky* skybox2;
-
-	Light* Lightting;
 
 	Actor* Tile;
 
 	Deferred* deferred;   //4∞≥¿« ∑ª¥ı≈∏∞Ÿ  
 	UI* post;       //4∞≥¿« ∑ª¥ı≈∏∞Ÿ¿ª πﬁæ∆ ±◊∑¡¡Ÿ
 
-	Rain* rain;
 
-	UI* ui;
 
 
 public:

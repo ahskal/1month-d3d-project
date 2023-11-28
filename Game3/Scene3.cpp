@@ -60,6 +60,12 @@ void Scene3::Update()
 	grid->RenderHierarchy();
 	cam1->RenderHierarchy();
 	player->Hierarchy();
+
+	auto Monster = MonMGR->GetMonsterVector();
+	for (auto Mvector : Monster) {
+		Mvector->UI->RenderHierarchy();
+	}
+
 	ImGui::End();
 
 	post->Update();
@@ -81,21 +87,21 @@ void Scene3::Update()
 void Scene3::LateUpdate()
 {
 
-	//auto pPos = player->GetWorldPos();
-	//
-	//auto col = player->Find("sword");
-	//
-	//auto Monster = MonMGR->GetMonsterVector();
-	//for (auto Mvector : Monster) {
-	//	auto Mon = Mvector->Mon;
-	//	if (Mon->Intersect(col)) {
-	//		if (player->isHit == false) {
-	//			player->isHit = true;
-	//			Mon->Hp -= 50;
-	//			Mon->SetState("공격받음");
-	//		}
-	//	}
-	//};
+	Vector3 pPos = player->pObserver->GetPos();
+	
+	auto* col = player->pObserver->GetSword();
+	
+	auto Monster = MonMGR->GetMonsterVector();
+	for (auto Mvector : Monster) {
+		auto Mon = Mvector->Mon;
+		if (Mon->Intersect(col)) {
+			if (player->pObserver->GetData()->isHit == false) {
+				player->pObserver->GetData()->isHit = true;
+				Mon->Hp -= 50;
+				Mon->SetState("공격받음");
+			}
+		}
+	};
 	player->LateUpdate();
 	MonMGR->LateUpdate();
 }
@@ -111,7 +117,9 @@ void Scene3::PreRender()
 	auto Monster = MonMGR->GetMonsterVector();
 	for (auto Mvector : Monster) {
 		Mvector->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+		Mvector->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
 	}
+	player->EffectRender();
 }
 
 void Scene3::Render()
@@ -119,12 +127,11 @@ void Scene3::Render()
 	deferred->Render();
 	grid->Render();
 
-	player->EffectRender();
 	player->Render();
+
 
 	auto Monster = MonMGR->GetMonsterVector();
 	for (auto Mvector : Monster) {
-		Mvector->Render();
 	}
 }
 

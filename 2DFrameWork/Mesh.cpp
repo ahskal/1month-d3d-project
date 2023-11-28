@@ -669,7 +669,7 @@ void Mesh::InstanceEdit()
             r = Utility::QuaternionToYawPtichRoll(q);
 
             ImGui::DragFloat3("scale", (float*)&s, 0.05f);
-            ImGui::InputFloat3("rot", (float*)&r);
+            ImGui::DragFloat3("rot", (float*)&r, 0.05f);
             ImGui::DragFloat3("pos", (float*)&t, 0.05f);
                // SetWorldPos(wol);
             Matrix S = Matrix::CreateScale(s.x, s.y, s.z);

@@ -27,6 +27,14 @@ MonsterData::MonsterData()
 	// 추가 데이터 초기화
 }
 
+MonsterData::~MonsterData()
+{
+
+	delete mObserver;
+
+
+}
+
 void MonsterData::Update()
 {
 	Mon->Update();

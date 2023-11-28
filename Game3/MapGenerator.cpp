@@ -198,7 +198,7 @@ void MapGenerator::InstanceTile(GameObject* act)
 	for (int k = 0; k < floors; k++) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				Matrix temp = Matrix::CreateTranslation(Vector3(centerX + i * 5, k * 5, centerZ + j * 5));
+				Matrix temp = Matrix::CreateTranslation(Vector3(centerX + i * 5, k * 5, centerZ + j * 5 + 5));
 				matrix[count2] = temp;
 				matrix[count2] = temp.Transpose();
 				count2++;
