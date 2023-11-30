@@ -15,6 +15,7 @@ protected:
 public:
 	std::string ItemName;
 	float Cost;
+	float size;
 
 	Item();
 	Item(const std::string& itemName, float itemCost);

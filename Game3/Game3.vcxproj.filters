@@ -51,20 +51,23 @@
     <ClInclude Include="Observer.h">
       <Filter>Object\Observer</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
+    <ClInclude Include="Inventory.h">
       <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Object\Item\member</Filter>
     </ClInclude>
     <ClInclude Include="ItemFactory.h">
-      <Filter>Object\Item</Filter>
+      <Filter>Object\Item\member</Filter>
     </ClInclude>
     <ClInclude Include="ItemTable.h">
-      <Filter>Object\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="RootItemFactory.h">
-      <Filter>Object\Item</Filter>
+      <Filter>Object\Item\member</Filter>
     </ClInclude>
     <ClInclude Include="RootItem.h">
-      <Filter>Object\Item</Filter>
+      <Filter>Object\Item\member</Filter>
+    </ClInclude>
+    <ClInclude Include="RootItemFactory.h">
+      <Filter>Object\Item\member</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -117,20 +120,23 @@
     <ClCompile Include="Subject.cpp">
       <Filter>Object\Observer</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
+    <ClCompile Include="Inventory.cpp">
       <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Object\Item\member</Filter>
     </ClCompile>
     <ClCompile Include="ItemFactory.cpp">
-      <Filter>Object\Item</Filter>
+      <Filter>Object\Item\member</Filter>
     </ClCompile>
     <ClCompile Include="ItemTable.cpp">
-      <Filter>Object\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="RootItemFactory.cpp">
-      <Filter>Object\Item</Filter>
+      <Filter>Object\Item\member</Filter>
     </ClCompile>
     <ClCompile Include="RootItem.cpp">
-      <Filter>Object\Item</Filter>
+      <Filter>Object\Item\member</Filter>
+    </ClCompile>
+    <ClCompile Include="RootItemFactory.cpp">
+      <Filter>Object\Item\member</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +163,9 @@
     </Filter>
     <Filter Include="Object\Item">
       <UniqueIdentifier>{dd070cf7-7a49-4b80-aefd-1dd6157e084d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Item\member">
+      <UniqueIdentifier>{4a1638f6-bbec-434d-9ef5-6ba014311de0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

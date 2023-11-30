@@ -98,6 +98,7 @@ public:
 private:
 	Mon::State state;
 
+
 	float	MoveSpeed;
 	int AttackCount = 0;
 	SlashTrail* slash;
@@ -109,7 +110,10 @@ private:
 	
 	int index;
 
+	Vector3 lastPos;
 public:
+	Vector3 moveDir;
+
 	Monster();
 	~Monster();
 
@@ -128,6 +132,19 @@ public:
 
 	bool IsInRadius();
 	void GetTargerPos(Vector3& pos) { target = pos; }
-	
+	Mon::State GetState() const { return state; }
+
+	// 좌표 업데이트
+	void WolrdUpdate()
+	{
+		GameObject::Update();
+	}
+
+	// 충돌시 이전 좌표로 이동
+	void GoBack() {
+		//MoveWorldPos(moveDir * DELTA * MoveSpeed);
+		SetWorldPos(lastPos);
+		WolrdUpdate();
+	}
 };
 

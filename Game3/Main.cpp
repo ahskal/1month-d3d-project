@@ -3,11 +3,13 @@
 #include "Scene2.h"
 #include "Scene3.h"
 #include "ItemTable.h"
+#include "Inventory.h"
 
 #include "Main.h"
 
 
 bool DEBUG_MODE = false;
+bool None_Scene = false;;
 
 Main::Main()
 {
@@ -23,11 +25,36 @@ Main::~Main()
 
 void Main::Init()
 {
-	LIGHT->dirLight.color = Color(0, 0, 0);
-	//SCENE->AddScene("SC1", new Scene1);
-	SCENE->AddScene("SC2", new Scene2);
-	SCENE->AddScene("SC3", new Scene3);
-	SCENE->ChangeScene("SC3");
+	if (not None_Scene) {
+		LIGHT->dirLight.color = Color(0, 0, 0);
+		//SCENE->AddScene("SC1", new Scene1);
+		SCENE->AddScene("SC2", new Scene2);
+		SCENE->AddScene("SC3", new Scene3);
+		SCENE->ChangeScene("SC2");
+	}
+
+	Inventory inventory;
+
+	ITEM->AddItemInfo("½ºÄÌ·¹Åæ »À", 10.0f);
+	ITEM->AddItemInfo("¾²·¹±â", 1.0f);
+	ITEM->AddItemInfo("¾²·¹±â", 1.0f);
+	ITEM->AddItemInfo("°¡Á×", 30.0f);
+	ITEM->AddItemInfo("°¡Á×", 30.0f);
+	ITEM->AddItemInfo("°¡Á×", 30.0f);
+	ITEM->AddItemInfo("µ¹", 100.0f);
+	ITEM->AddItemInfo("ÀÌ¸§ ¸ð¸¦ °¡·ç", 10.0f);
+	ITEM->OpenList();
+
+	inventory.AddItem(ITEM->CreateItem("¾²·¹±â", new RootItemFactory));
+	inventory.AddItem(ITEM->CreateItem("°¡Á×", new RootItemFactory));
+	inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
+	inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
+	inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
+
+	cout << "##############################################" << endl;
+
+	inventory.OpenList();
+
 }
 
 void Main::Release()
@@ -37,15 +64,20 @@ void Main::Release()
 
 void Main::Update()
 {
-	SCENE->Update();
+
+
+	if (not None_Scene)
+		SCENE->Update();
 	/*if (INPUT->KeyDown(VK_F1)) {
 		SCENE->ChangeScene("SC1");
 	}*/
 	if (INPUT->KeyDown(VK_F2)) {
-		SCENE->ChangeScene("SC2");
+		if (not None_Scene)
+			SCENE->ChangeScene("SC2");
 	}
 	if (INPUT->KeyDown(VK_F3)) {
-		SCENE->ChangeScene("SC3");
+		if (not None_Scene)
+			SCENE->ChangeScene("SC3");
 	}
 
 	if (INPUT->KeyDown(VK_F8) or INPUT->KeyDown(VK_XBUTTON1)) {
@@ -58,22 +90,26 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-	SCENE->LateUpdate();
+	if (not None_Scene)
+		SCENE->LateUpdate();
 
 }
 void Main::PreRender()
 {
-	SCENE->PreRender();
+	if (not None_Scene)
+		SCENE->PreRender();
 }
 
 void Main::Render()
 {
-	SCENE->Render();
+	if (not None_Scene)
+		SCENE->Render();
 }
 
 void Main::ResizeScreen()
 {
-	SCENE->ResizeScreen();
+	if (not None_Scene)
+		SCENE->ResizeScreen();
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)

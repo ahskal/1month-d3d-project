@@ -63,7 +63,7 @@ void Monster::Init()
 	anim->aniScale = 0.6f;
 	MoveSpeed = 3;
 
-	Length = 10;
+	Length = 300;
 }
 
 void Monster::Update()
@@ -73,6 +73,7 @@ void Monster::Update()
 		Once = false;
 	}
 	FSM();
+	lastPos = GetWorldPos();
 	Unit::Update();
 }
 
@@ -102,8 +103,8 @@ void Monster::FSM()
 	}
 	else if (state == State::WALK) {
 
-		Vector3 dir = target - GetWorldPos();
-		float dis = dir.Length();
+		moveDir = target - GetWorldPos();
+		float dis = moveDir.Length();
 		if (dis < 3) {
 			state = State::ATTACK;
 			anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
@@ -114,9 +115,9 @@ void Monster::FSM()
 			anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
 			return;
 		}		
-		dir.Normalize();
-		rotation.y = atan2f(dir.x, dir.z);
-		MoveWorldPos(dir * DELTA * MoveSpeed);
+		moveDir.Normalize();
+		rotation.y = atan2f(moveDir.x, moveDir.z);
+		MoveWorldPos(moveDir * DELTA * MoveSpeed);
 	}
 	else if (state == State::ATTACK) {
 

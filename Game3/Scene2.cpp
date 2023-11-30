@@ -1,13 +1,17 @@
 #include "stdafx.h"
 
-#include "Player.h"
 #include "PlayerData.h"
+#include "Player.h"
+#include "UI_Player.h"
 #include "PlayerObserver.h"
 
 #include "Monster.h"
+#include "UI_Monster.h"
+#include "MonsterObserver.h"
 #include "MonsterData.h"
 
 #include "MapGenerator.h"
+
 #include "Scene2.h"
 
 extern bool DEBUG_MODE;
@@ -102,7 +106,9 @@ void Scene2::Init()
 		}
 	} while (count != 4);
 	float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
-	
+	player->pObserver->GetData()->SetSpawn(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
+
+
 
 }
 
@@ -156,7 +162,7 @@ void Scene2::Update()
 
 	if (INPUT->KeyDown('T')) {
 		int count;
-		int x; 
+		int x;
 		int y;
 		do
 		{
@@ -173,7 +179,8 @@ void Scene2::Update()
 				}
 			}
 		} while (count != 1);
-		MonMGR->CreateMonster(Vector3(x, 0, y));
+		float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
+		MonMGR->CreateMonster(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
 	}
 
 	Camera::main->Update();
@@ -191,14 +198,65 @@ void Scene2::Update()
 
 void Scene2::LateUpdate()
 {
-	Vector3 target = player->pObserver->GetPos();
+	Vector3 playerPos = player->pObserver->GetPos();
+
 	static bool isOnece = false;
 	if (isOnece) {
-		if (!mapGen->GetTileState(target)) {
+		if (!mapGen->GetTileState(playerPos)) {
 			player->pObserver->GetData()->GoBack();
+		}
+		auto Monster = MonMGR->GetMonsterVector();
+		for (auto Mvector : Monster) {
+			Vector3 monsterPos = Mvector->mObserver->GetPos();
+			if (!mapGen->GetTileState(monsterPos)) {
+				Mvector->mObserver->GetData()->GoBack();
+			}
 		}
 	}
 	isOnece = true;
+
+	auto Monster = MonMGR->GetMonsterVector();
+	for (auto Mvector : Monster) {
+		Vector3 monsterPos = Mvector->mObserver->GetPos();
+		Vector3 mDir = Mvector->mObserver->GetData()->GetForward();
+		for (auto Wcoll : mapGen->WallActorList) {
+			float ForwardAngle = Wcoll->GetForward().Dot(mDir);
+			float RightAngle = Wcoll->GetRight().Dot(mDir);
+			if (fabs(ForwardAngle) < fabs(RightAngle)) {
+
+				Mvector->mObserver->GetData()->MoveWorldPos(Wcoll->GetForward() * DELTA * 10);
+			}
+			else {
+				Mvector->mObserver->GetData()->MoveWorldPos(Wcoll->GetRight() * DELTA * 10);
+			}
+		}
+
+
+	}
+	Vector3 pDir = player->pObserver->GetData()->GetForward();
+
+	for (auto Wcoll : mapGen->WallActorList) {
+
+		if (Wcoll->Intersect(player->pObserver->GetData())) {
+			float ForwardAngle = Wcoll->GetForward().Dot(pDir);
+			float RightAngle = Wcoll->GetRight().Dot(pDir);
+			if (fabs(ForwardAngle) < fabs(RightAngle)) {
+				player->pObserver->GetData()->MoveWorldPos(-Wcoll->GetForward() * DELTA * 6);
+			}
+			else {
+				player->pObserver->GetData()->MoveWorldPos(-Wcoll->GetRight() * DELTA * 6);
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+
 
 	//for (auto it : mapGen->WallPoint) {
 	//	if (it->Intersect(player->Cam)) {
@@ -275,11 +333,11 @@ void Scene2::Render()
 
 	skybox->Render();
 	skybox2->Render();
-	
+
 	deferred->Render();
 	player->EffectRender();
 	player->Render();
-	
+
 }
 
 void Scene2::ResizeScreen()

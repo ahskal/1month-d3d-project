@@ -38,6 +38,12 @@ MonsterData::~MonsterData()
 void MonsterData::Update()
 {
 	Mon->Update();
+	if (Mon->GetState() != Mon::State::IDLE) {
+		UI->visible = true;
+	}
+	else {
+		UI->visible = false;
+	}
 	UI->Update();
 }
 
