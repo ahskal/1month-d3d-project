@@ -11,11 +11,14 @@ class Item
 private:
 	friend class ItemTable;
 protected:
+	
+public:
 	std::string ItemName;
 	float Cost;
 
-public:
 	Item();
+	Item(const std::string& itemName, float itemCost);
+	
 	virtual ~Item() = default;
 
 	void ShowItemInfo() const;
