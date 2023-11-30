@@ -15,12 +15,6 @@
     <ClInclude Include="Monster.h">
       <Filter>Object\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="Subject.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="Scene3.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -50,6 +44,27 @@
     </ClInclude>
     <ClInclude Include="Scene2.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Object\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Object\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemFactory.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemTable.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="RootItemFactory.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="RootItem.h">
+      <Filter>Object\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -84,12 +99,6 @@
     <ClCompile Include="MonsterObserver.cpp">
       <Filter>Object\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="Observer.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Subject.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="MonsterData.cpp">
       <Filter>Object\Monster</Filter>
     </ClCompile>
@@ -101,6 +110,27 @@
     </ClCompile>
     <ClCompile Include="Scene2.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Object\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Object\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemFactory.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemTable.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="RootItemFactory.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="RootItem.cpp">
+      <Filter>Object\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +151,12 @@
     </Filter>
     <Filter Include="Object\UI">
       <UniqueIdentifier>{1b722d55-85b0-4131-8a30-6c972810a16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Observer">
+      <UniqueIdentifier>{953b01da-2dd0-4658-b029-4067dc14712d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{dd070cf7-7a49-4b80-aefd-1dd6157e084d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

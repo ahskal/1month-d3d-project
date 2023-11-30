@@ -20,4 +20,3 @@ public:
 	void Render(shared_ptr<Shader> pShader = nullptr) override;
 	virtual void	RenderDetail();
 };
-

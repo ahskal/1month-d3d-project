@@ -6,16 +6,19 @@
 #include "Subject.h"
 #include "Observer.h"
 
+#include "Item.h"
+#include "RootItem.h"
+
+#include "ItemFactory.h"
+#include "RootItemFactory.h"
+
 #include "MonsterManager.h"
+#include "ItemTable.h"
+
+
+
+
 #define MonMGR	MonsterManager::GetInstance()
+#define ITEM	ItemTable::GetInstance()
 
 extern bool DEBUG_MODE;
-
-struct Status {
-	float Hp, MaxHp;
-	float Sp, MaxSp;
-	float Attack;
-	float Defense;
-};
-
-

@@ -117,7 +117,8 @@ void Scene3::PreRender()
 	auto Monster = MonMGR->GetMonsterVector();
 	for (auto Mvector : Monster) {
 		Mvector->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-		Mvector->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
+		
+		Mvector->Render();
 	}
 	player->EffectRender();
 }

@@ -39,7 +39,7 @@ DeferredOutput PS(PixelInput input)
     
     if (! any(output.diffuse.a))
     {
-    //    discard;
+        discard;
     }
     
 	

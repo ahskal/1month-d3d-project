@@ -2,7 +2,10 @@
 #include "Scene1.h"
 #include "Scene2.h"
 #include "Scene3.h"
+#include "ItemTable.h"
+
 #include "Main.h"
+
 
 bool DEBUG_MODE = false;
 

@@ -16,6 +16,3 @@ public:
 	void SetState(const string& message);
 	void NotifyObservers();
 };
-
-
-

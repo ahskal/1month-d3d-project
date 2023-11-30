@@ -96,6 +96,9 @@ public:
 	static Player* Create(string name = "Player");
 	static Player* Create(Player* src);
 private:
+	std::vector<class Item> inventory;
+	float Money;
+
 	// 플레이어 FSM
 	play::State state;
 	play::State Laststate;

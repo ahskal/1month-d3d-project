@@ -1,7 +1,7 @@
 <Root Name="UI_Monster" Visible="true" ObType="7">
 	<Mesh File="7.Billboard.mesh"/>
-	<Shader File="7.Billboard.hlsl"/>
-	<Material File="UI/Hp_front.mtl"/>
+	<Shader File="7.Billboard_Deferred.hlsl"/>
+	<Material File="UI/Hp_Back.mtl"/>
 	<Transform>
 		<Position X="0" Y="3.5" Z="0"/>
 		<Scale X="4" Y="0.5" Z="1"/>
@@ -10,10 +10,10 @@
 	<Children Size="1"/>
 	<Child0 Name="HpCurrent" Visible="true" ObType="7">
 		<Mesh File="7.Billboard.mesh"/>
-		<Shader File="7.Billboard.hlsl"/>
-		<Material File="UI/Hp_Back.mtl"/>
+		<Shader File="7.Billboard_Deferred.hlsl"/>
+		<Material File="UI/Hp_front.mtl"/>
 		<Transform>
-			<Position X="0" Y="0" Z="0"/>
+			<Position X="0" Y="-0.01 " Z="0"/>
 			<Scale X="4" Y="0.5" Z="1"/>
 			<Rotation X="-2" Y="0" Z="0"/>
 		</Transform>
