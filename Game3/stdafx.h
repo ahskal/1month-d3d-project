@@ -15,9 +15,6 @@
 #include "MonsterManager.h"
 #include "ItemTable.h"
 
-
-
-
 #define MonMGR	MonsterManager::GetInstance()
 #define ITEM	ItemTable::GetInstance()
 

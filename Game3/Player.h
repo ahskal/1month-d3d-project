@@ -94,7 +94,6 @@ public:
 	friend class Scene2;
 
 	static Player* Create(string name = "Player");
-	static Player* Create(Player* src);
 private:
 	std::vector<class Item> inventory;
 	float Money;
@@ -149,7 +148,6 @@ public:
 	void LateUpdate();
 
 	void Render(shared_ptr<Shader> pShader = nullptr) override;
-	void SpecialEffectsRender();
 
 	void FSM();
 	void Control();

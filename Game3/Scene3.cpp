@@ -7,7 +7,6 @@
 
 #include "Monster.h"
 #include "UI_Monster.h"
-#include "MonsterObserver.h"
 #include "MonsterData.h"
 
 
@@ -120,7 +119,6 @@ void Scene3::PreRender()
 		
 		Mvector->Render();
 	}
-	player->EffectRender();
 }
 
 void Scene3::Render()

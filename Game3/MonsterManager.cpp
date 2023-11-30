@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MonsterData.h"
 #include "Monster.h"
-#include "MonsterObserver.h"
 #include "MonsterManager.h"
 
 MonsterManager::MonsterManager()
@@ -44,7 +43,7 @@ void MonsterManager::LateUpdate()
 			[&](MonsterData* Md) {
 				// 현재 체력이 0 이하인 경우 해당 몬스터를 제거하려면 true를 반환
 				// 그렇지 않은 경우 유지하려면 false를 반환
-				bool Remove = Md->mObserver->GetData()->Hp <= 0;
+				bool Remove = Md->Mon->Hp <= 0;
 				if (Remove) {
 					Md->Mon->SetState("객체 삭제");
 					delete Md;

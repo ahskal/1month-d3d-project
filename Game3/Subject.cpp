@@ -31,12 +31,25 @@ void Subject::Detach(Observer* observer)
 void Subject::SetState(const string& message)
 {
 	this->message = message;
-	NotifyObservers();
+	NotifyMessageObservers();
 }
 
-void Subject::NotifyObservers()
+void Subject::NotifyMessageObservers()
 {
 	for (Observer* observer : observers) {
 		observer->Update(message);
+	}
+}
+
+void Subject::SetState(const Vector3& position)
+{
+	this->position = position;
+	NotifyPosObservers();
+}
+
+void Subject::NotifyPosObservers()
+{
+	for (Observer* observer : observers) {
+		observer->Update(position);
 	}
 }

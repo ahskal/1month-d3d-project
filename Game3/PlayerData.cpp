@@ -51,11 +51,6 @@ void PlayerData::Render(shared_ptr<Shader> pShader)
 	UI->Render(pShader);
 }
 
-void PlayerData::EffectRender()
-{
-	actor->SpecialEffectsRender();
-}
-
 void PlayerData::DeferredRender(shared_ptr<Shader> pShader)
 {
 	actor->Render(pShader);

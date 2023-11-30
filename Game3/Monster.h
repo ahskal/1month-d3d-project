@@ -90,14 +90,14 @@ namespace Mon {
 		Ani_Dead_04,
 	};
 }
-class Monster : public Subject
+class Monster : public Subject, public Observer
 {
 public:
 	static Monster* Create(string name = "Monster");
-	static Monster* Create(Monster* src);
 private:
-	Mon::State state;
+	string observerName;
 
+	Mon::State state;
 
 	float	MoveSpeed;
 	int AttackCount = 0;
@@ -121,30 +121,25 @@ public:
 	void Init();
 
 	void Update();
-	void LateUpdate();
-
 	void Render(shared_ptr<Shader> pShader = nullptr);
-	void SpecialEffectsRender();
+
 
 	void FSM();
 	void Move();
 	void Hierarchy();
-
 	bool IsInRadius();
+
 	void GetTargerPos(Vector3& pos) { target = pos; }
 	Mon::State GetState() const { return state; }
 
 	// 좌표 업데이트
-	void WolrdUpdate()
-	{
-		GameObject::Update();
-	}
+	void WolrdUpdate();
 
 	// 충돌시 이전 좌표로 이동
-	void GoBack() {
-		//MoveWorldPos(moveDir * DELTA * MoveSpeed);
-		SetWorldPos(lastPos);
-		WolrdUpdate();
-	}
+	void GoBack();
+
+	// Observer을(를) 통해 상속됨
+	void Update(const string& message);
+	void Update(const Vector3& position);
 };
 

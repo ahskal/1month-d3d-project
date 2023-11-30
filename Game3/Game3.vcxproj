@@ -152,7 +152,6 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MonsterData.h" />
     <ClInclude Include="MonsterManager.h" />
-    <ClInclude Include="MonsterObserver.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerData.h" />
@@ -165,7 +164,9 @@
     <ClInclude Include="Scene2.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Scene3.h" />
+    <ClInclude Include="Scene3.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="UI_Monster.h" />
@@ -182,7 +183,6 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterData.cpp" />
     <ClCompile Include="MonsterManager.cpp" />
-    <ClCompile Include="MonsterObserver.cpp" />
     <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerData.cpp" />
@@ -195,7 +195,9 @@
     <ClCompile Include="Scene2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Scene3.cpp" />
+    <ClCompile Include="Scene3.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="UI_Monster.cpp" />
     <ClCompile Include="UI_Player.cpp" />

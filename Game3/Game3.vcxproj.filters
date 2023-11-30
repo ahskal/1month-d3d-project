@@ -30,9 +30,6 @@
     <ClInclude Include="MonsterManager.h">
       <Filter>Object\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterObserver.h">
-      <Filter>Object\Monster</Filter>
-    </ClInclude>
     <ClInclude Include="MonsterData.h">
       <Filter>Object\Monster</Filter>
     </ClInclude>
@@ -97,9 +94,6 @@
       <Filter>Object\UI</Filter>
     </ClCompile>
     <ClCompile Include="MonsterManager.cpp">
-      <Filter>Object\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="MonsterObserver.cpp">
       <Filter>Object\Monster</Filter>
     </ClCompile>
     <ClCompile Include="MonsterData.cpp">

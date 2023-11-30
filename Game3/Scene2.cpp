@@ -7,7 +7,6 @@
 
 #include "Monster.h"
 #include "UI_Monster.h"
-#include "MonsterObserver.h"
 #include "MonsterData.h"
 
 #include "MapGenerator.h"
@@ -192,7 +191,7 @@ void Scene2::Update()
 
 	player->Update();
 
-	MonMGR->Update();
+	//MonMGR->Update();
 	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
 }
 
@@ -207,9 +206,9 @@ void Scene2::LateUpdate()
 		}
 		auto Monster = MonMGR->GetMonsterVector();
 		for (auto Mvector : Monster) {
-			Vector3 monsterPos = Mvector->mObserver->GetPos();
+			Vector3 monsterPos = Mvector->Mon->GetWorldPos();
 			if (!mapGen->GetTileState(monsterPos)) {
-				Mvector->mObserver->GetData()->GoBack();
+				Mvector->Mon->GoBack();
 			}
 		}
 	}
@@ -217,17 +216,17 @@ void Scene2::LateUpdate()
 
 	auto Monster = MonMGR->GetMonsterVector();
 	for (auto Mvector : Monster) {
-		Vector3 monsterPos = Mvector->mObserver->GetPos();
-		Vector3 mDir = Mvector->mObserver->GetData()->GetForward();
+		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
+		Vector3 mDir = Mvector->Mon->GetForward();
 		for (auto Wcoll : mapGen->WallActorList) {
 			float ForwardAngle = Wcoll->GetForward().Dot(mDir);
 			float RightAngle = Wcoll->GetRight().Dot(mDir);
 			if (fabs(ForwardAngle) < fabs(RightAngle)) {
 
-				Mvector->mObserver->GetData()->MoveWorldPos(Wcoll->GetForward() * DELTA * 10);
+				Mvector->Mon->MoveWorldPos(Wcoll->GetForward() * DELTA * 10);
 			}
 			else {
-				Mvector->mObserver->GetData()->MoveWorldPos(Wcoll->GetRight() * DELTA * 10);
+				Mvector->Mon->MoveWorldPos(Wcoll->GetRight() * DELTA * 10);
 			}
 		}
 
@@ -250,56 +249,6 @@ void Scene2::LateUpdate()
 	}
 
 
-
-
-
-
-
-
-
-
-	//for (auto it : mapGen->WallPoint) {
-	//	if (it->Intersect(player->Cam)) {
-	//		it->visible = false;
-	//	}
-//	else {
-//		it->visible = true;
-//	}
-//}
-//{
-//	
-//}
-	//float maxDistance = 5.0f;
-//Ray CameraRay;
-//Vector3 hit;
-//CameraRay.direction = player->Cam->GetWorldPos() - player->GetWorldPos();
-//float dis = CameraRay.direction.Length();
-//CameraRay.position = player->GetWorldPos();
-//for (auto it : mapGen->WallActorList) {
-//	if (it->Intersect(CameraRay, hit)) {
-//		float distanceToHit = (hit - CameraRay.position).Length();
-//		if (distanceToHit <= maxDistance) {
-//			Vector3 minus = hit - player->GetWorldPos();
-//			if (minus.Length() < dis)
-//			{
-//				// 선형 보간을 위한 비율 계산
-//				float t = 0.1/* 어떤 비율로 움직일지 설정하세요, 보통은 시간에 따라 변하는 값일 수 있습니다. */;
-//				// 현재 카메라의 위치와 목표 위치 간의 선형 보간
-//				Vector3 newCameraPos = Vector3::Lerp(player->Cam->GetWorldPos(), hit, t);
-//				// 카메라의 위치를 업데이트
-//				//player->Cam->MoveWorldPos(-newCameraPos * DELTA);
-//				player->Cam->MoveWorldPos(-CameraRay.direction * DELTA);
-//			}
-//			break;
-//		}
-//		Vector3 pos = player->Cam->GetWorldPos() - player->GetWorldPos();
-//		
-//		else if(pos.maxDistance)
-//		{
-//			player->Cam->MoveWorldPos(CameraRay.direction * DELTA);
-//		}
-//	}
-//}
 	MonMGR->LateUpdate();
 }
 
@@ -335,7 +284,6 @@ void Scene2::Render()
 	skybox2->Render();
 
 	deferred->Render();
-	player->EffectRender();
 	player->Render();
 
 }

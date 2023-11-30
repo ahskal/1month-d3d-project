@@ -15,18 +15,17 @@ Player* Player::Create(string name)
 	return temp;
 }
 
-Player* Player::Create(Player* src)
-{
-	Player* temp = new Player(*src);
-	temp->type = ObType::Actor;
-	temp->state = State::IDLE;
-	temp->CopyChild(src);
-
-	return temp;
-}
 
 Player::Player()
 {
+	Laststate = State::IDLE;
+	state = State::IDLE;
+	MaxSp = 0;
+	Sp = 0;
+	Money = 0;
+	index = 0;
+	slash = nullptr;
+
 	MoveSpeed = 5;
 
 	Uneqip[0] = Ani_Move_Uneqip_Left;
@@ -211,10 +210,6 @@ void Player::LateUpdate()
 void Player::Render(shared_ptr<Shader> pShader)
 {
 	Actor::Render(pShader);
-}
-
-void Player::SpecialEffectsRender()
-{
 	slash->Render();
 }
 

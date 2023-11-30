@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Monster.h"
 #include "UI_Monster.h"
-#include "MonsterObserver.h"
 #include "MonsterData.h"
 
 MonsterData* MonsterData::Create(string name)
@@ -16,22 +15,14 @@ MonsterData::MonsterData()
 	Mon = Monster::Create();
 	Mon->LoadFile("Unit/Man2.xml");
 
-	mObserver = new MonsterObserver(Mon);
-	Mon->Attach(mObserver);
-
 	UI = UI_Monster::Create();
 	UI->LoadFile("UI/Hpbar.xml");
 	UI->parent = Mon;
 	UI->SetData(Mon);
-
-	// 추가 데이터 초기화
 }
 
 MonsterData::~MonsterData()
 {
-
-	delete mObserver;
-
 
 }
 

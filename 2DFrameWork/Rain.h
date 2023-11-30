@@ -36,6 +36,7 @@ struct RAIN_DESC
     float time;
     RAIN_DESC()
     {
+        padding = 0.0f;
         velocity = Vector3(0, -2, 0);
         range = Vector3(10, 10, 10);
         time = 0.0f;

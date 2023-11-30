@@ -7,6 +7,7 @@ public:
 private:
 	vector<class Observer*> observers;
 	string message;
+	Vector3 position;
 public:
 	Subject();
 	~Subject();
@@ -14,5 +15,8 @@ public:
 	void Attach(class Observer* observer);
 	void Detach(class Observer* observer);
 	void SetState(const string& message);
-	void NotifyObservers();
+	void NotifyMessageObservers();
+
+	void SetState(const Vector3& position);
+	void NotifyPosObservers();
 };

@@ -4,10 +4,10 @@
 
 class Observer
 {
-protected:
 public:
-    Observer();
-    virtual ~Observer();
-    virtual void Update(const std::string& message) = 0;
+	Observer();
+	virtual ~Observer();
+	virtual void Update(const std::string& message) = 0;
+	virtual void Update(const Vector3& position) = 0;
 };
 

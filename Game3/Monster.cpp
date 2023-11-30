@@ -2,37 +2,32 @@
 #include "Subject.h"
 #include "Monster.h"
 
+
 extern bool DEBUG_MODE;
 using namespace Mon;
 
 Monster* Monster::Create(string name)
 {
-	Monster* temp = new Monster;
+	Monster* temp = new Monster();
 	temp->LoadFile("Unit/Man2.xml");
 	temp->type = ObType::Actor;
 	temp->state = State::IDLE;
 	temp->name = name;
+	temp->observerName = name;
 	return temp;
 }
 
-Monster* Monster::Create(Monster* src)
-{
-	Monster* temp = new Monster(*src);
-	temp->type = ObType::Actor;
-	temp->LoadFile("Unit2.xml");
-	temp->CopyChild(src);
-	return temp;
-}
-
-Monster::Monster()
-{
-
+Monster::Monster(){
+	Length = 10;
+	moveDir = Vector3();
+	index = 0;
+	state = State::IDLE;
+	MoveSpeed = 3;
+	slash = nullptr;
 
 }
 
-Monster::~Monster()
-{
-}
+Monster::~Monster(){}
 
 void Monster::SetSpawn(Vector3 spawn)
 {
@@ -63,7 +58,6 @@ void Monster::Init()
 	anim->aniScale = 0.6f;
 	MoveSpeed = 3;
 
-	Length = 300;
 }
 
 void Monster::Update()
@@ -77,20 +71,10 @@ void Monster::Update()
 	Unit::Update();
 }
 
-void Monster::LateUpdate()
-{
-
-
-}
-
 void Monster::Render(shared_ptr<Shader> pShader)
 {
 	Unit::Render(pShader);
-
-}
-
-void Monster::SpecialEffectsRender()
-{
+	slash->Render();
 }
 
 void Monster::FSM()
@@ -102,22 +86,7 @@ void Monster::FSM()
 		}
 	}
 	else if (state == State::WALK) {
-
-		moveDir = target - GetWorldPos();
-		float dis = moveDir.Length();
-		if (dis < 3) {
-			state = State::ATTACK;
-			anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
-			return;
-		}
-		else if (dis > Length) {
-			state = State::IDLE;
-			anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
-			return;
-		}		
-		moveDir.Normalize();
-		rotation.y = atan2f(moveDir.x, moveDir.z);
-		MoveWorldPos(moveDir * DELTA * MoveSpeed);
+		Move();		
 	}
 	else if (state == State::ATTACK) {
 
@@ -137,16 +106,6 @@ void Monster::FSM()
 
 }
 
-void Monster::Move()
-{
-}
-
-void Monster::Hierarchy()
-{
-	RenderHierarchy();
-
-}
-
 bool Monster::IsInRadius()
 {
 	Vector3 dis = target - GetWorldPos();
@@ -154,4 +113,60 @@ bool Monster::IsInRadius()
 		return true;
 	}
 	return false;
+}
+
+void Monster::WolrdUpdate()
+{
+	GameObject::Update();
+}
+
+void Monster::GoBack()
+{
+	SetWorldPos(lastPos);
+	WolrdUpdate();
+}
+
+void Monster::Move()
+{
+	moveDir = target - GetWorldPos();
+	float dis = moveDir.Length();
+	if (dis < 3) {
+		state = State::ATTACK;
+		anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Attack_02, 0.1f);
+		return;
+	}
+	else if (dis > Length) {
+		state = State::IDLE;
+		anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
+		return;
+	}
+	moveDir.Normalize();
+	rotation.y = atan2f(moveDir.x, moveDir.z);
+	MoveWorldPos(moveDir * DELTA * MoveSpeed);
+}
+
+void Monster::Hierarchy()
+{
+	RenderHierarchy();
+}
+
+void Monster::Update(const std::string& message)
+{
+	if (DEBUG_MODE) {
+		float WTime = TIMER->GetWorldTime();
+		cout << "Observer " << observerName << endl;
+		cout << "[" << std::fixed << std::setprecision(2) << WTime << "]" << " messageCall : "
+			<< message << endl;
+	}
+}
+
+void Monster::Update(const Vector3& position)
+{
+	target = position;
+	if (DEBUG_MODE) {
+		float WTime = TIMER->GetWorldTime();
+		cout << "Observer " << observerName << endl;
+		cout << "[" << std::fixed << std::setprecision(2) << WTime << "]" << " messageCall : "
+			<< position.x << "," << position.y << "," << position.z << endl;
+	}	
 }
