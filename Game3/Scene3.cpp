@@ -86,21 +86,7 @@ void Scene3::Update()
 void Scene3::LateUpdate()
 {
 
-	Vector3 pPos = player->pObserver->GetPos();
-	
-	auto* col = player->pObserver->GetSword();
-	
-	auto Monster = MonMGR->GetMonsterVector();
-	for (auto Mvector : Monster) {
-		auto Mon = Mvector->Mon;
-		if (Mon->Intersect(col)) {
-			if (player->pObserver->GetData()->isHit == false) {
-				player->pObserver->GetData()->isHit = true;
-				Mon->Hp -= 50;
-				Mon->SetState("공격받음");
-			}
-		}
-	};
+
 	player->LateUpdate();
 	MonMGR->LateUpdate();
 }

@@ -84,7 +84,7 @@ DeferredOutput PS(PixelInput input)
 	output.diffuse.rgb *= 3.0f; // 0.5가 디폴트
 	//output.diffuse = saturate(output.diffuse);
     
-	//output.diffuse.rgb *= Kd.rgb;
+	output.diffuse.rgb *= Kd.rgb;
 	output.specular.rgb *= Ks.rgb;
 
 	// Normal 및 Emissive를 상수에서 동적으로 설정하도록 변경할 수 있습니다.

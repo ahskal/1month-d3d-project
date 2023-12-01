@@ -35,6 +35,12 @@ void MonsterManager::Update()
 
 void MonsterManager::LateUpdate()
 {
+	for (auto it : MonVec) {
+		if (it->Mon->Hp < 0 && not it->Mon->DeadAni) {
+			it->Mon->GetState();
+		}
+	}
+
 	//몬스터 삭제 반복문
 	MonVec.erase(
 		std::remove_if(
@@ -45,8 +51,8 @@ void MonsterManager::LateUpdate()
 				// 그렇지 않은 경우 유지하려면 false를 반환
 				bool Remove = Md->Mon->Hp <= 0;
 				if (Remove) {
-					Md->Mon->SetState("객체 삭제");
-					delete Md;
+					
+					//delete Md;
 				}
 				return Remove;
 			}
@@ -58,8 +64,7 @@ void MonsterManager::LateUpdate()
 void MonsterManager::Render(shared_ptr<Shader> pShader)
 {
 	for (auto it : MonVec) {
-		it->DeferredRender(pShader);
-		it->Render();
+		it->Render(pShader);
 	}
 }
 

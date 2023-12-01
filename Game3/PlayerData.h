@@ -4,9 +4,7 @@ class PlayerData
 {
 public:
 	static PlayerData* Create(string name = "PlayerData");
-private:
 	class Player* actor;
-public:
 	class UI_Player* UI;
 	class PlayerObserver* pObserver;
 	// 추가 데이터 필드들

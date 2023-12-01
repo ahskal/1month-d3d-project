@@ -70,8 +70,8 @@ void Player::Init()
 	slash->Top = Find("Start");
 	slash->Bottom = Find("End");
 
-	slash->interval = 0.004f;
-	slash->maxTrail = 50;
+	slash->interval = 0.0f;
+	slash->maxTrail = 25;
 	slash->material->diffuseMap = RESOURCE->textures.Load("trail.png");
 	slash->material->diffuse.w = 1.0f;
 
@@ -87,6 +87,7 @@ void Player::Init()
 
 void Player::Update()
 {
+	
 	FSM();
 
 	if (Sp <= MaxSp) {
@@ -100,6 +101,9 @@ void Player::Update()
 	//# Update;
 	if (not DEBUG_MODE)
 		CameraHold();
+	else{
+		slash->RenderDetail();
+	}
 
 	lastPos = GetWorldPos();
 	Actor::Update();
@@ -189,7 +193,6 @@ void Player::FSM()
 			slash->Stop();
 		}
 		if (anim->GetPlayTime() >= 0.98f) {
-			slash->Update();
 			state = State::IDLE;
 			if (Laststate == State::WALK) {
 				anim->ChangeAnimation(AnimationState::LOOP, Eqip[index], 0.1f);

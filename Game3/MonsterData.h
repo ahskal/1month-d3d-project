@@ -12,5 +12,4 @@ public:
 
 	void Update();
 	void Render(shared_ptr<Shader> pShader = nullptr);
-	void DeferredRender(shared_ptr<Shader> pShader = nullptr);
 };

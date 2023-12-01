@@ -14,17 +14,12 @@
 #include "Scene2.h"
 
 extern bool DEBUG_MODE;
+extern bool FREE_CAM;
 
 Scene2::Scene2()
 {
-
 	cam1 = Camera::Create();
 	cam1->LoadFile("Cam2.xml");
-
-	player = PlayerData::Create();
-	player->MainCamSet();
-	ResizeScreen();
-
 	skybox = Sky::Create();
 	skybox->LoadFile("Sky1.xml");
 	skybox2 = Sky::Create();
@@ -39,9 +34,11 @@ Scene2::Scene2()
 	// Create an instance of MapGenerator
 	mapGen = new MapGenerator(rows, cols, floors);
 
+	player = PlayerData::Create();
+	player->MainCamSet();
+	ResizeScreen();
+
 	deferred = new Deferred;
-	post = UI::Create();
-	post->LoadFile("Deferred.xml");
 
 	LIGHT->dirLight.color = Color(0, 0, 0);
 }
@@ -106,9 +103,6 @@ void Scene2::Init()
 	} while (count != 4);
 	float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
 	player->pObserver->GetData()->SetSpawn(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
-
-
-
 }
 
 void Scene2::Release()
@@ -117,31 +111,21 @@ void Scene2::Release()
 
 void Scene2::Update()
 {
-	//deferred->RenderDetail();
-
-	static bool isOnece = true;
-	if (isOnece) {
-
-		isOnece = false;
-	}
-
 	// # DEBUG #
 	LIGHT->RenderDetail();
-
 	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
-
+	if (DEBUG_MODE) {
+		deferred->RenderDetail();
+	}
 	// # DEBUG #
-
 
 	ImGui::Begin("Hierarchy", nullptr);
 	cam1->RenderHierarchy();
 	Tile->RenderHierarchy();
-
 	player->Hierarchy();
-
 	ImGui::End();
 
-	if (DEBUG_MODE) {
+	if (FREE_CAM) {
 		Camera::main->ControlMainCam();
 		Camera::main = cam1;
 		ResizeScreen();
@@ -154,6 +138,7 @@ void Scene2::Update()
 		ResizeScreen();
 	}
 
+	// map reset;
 	if (INPUT->KeyDown(VK_F5)) {
 		Tile->ReleaseMember();
 		Init();
@@ -187,11 +172,10 @@ void Scene2::Update()
 	skybox->Update();
 	skybox2->Update();
 	Tile->Update();
-	post->Update();
 
 	player->Update();
 
-	//MonMGR->Update();
+	MonMGR->Update();
 	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
 }
 
@@ -204,8 +188,8 @@ void Scene2::LateUpdate()
 		if (!mapGen->GetTileState(playerPos)) {
 			player->pObserver->GetData()->GoBack();
 		}
-		auto Monster = MonMGR->GetMonsterVector();
-		for (auto Mvector : Monster) {
+		vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+		for (MonsterData* Mvector : Monster) {
 			Vector3 monsterPos = Mvector->Mon->GetWorldPos();
 			if (!mapGen->GetTileState(monsterPos)) {
 				Mvector->Mon->GoBack();
@@ -214,8 +198,9 @@ void Scene2::LateUpdate()
 	}
 	isOnece = true;
 
-	auto Monster = MonMGR->GetMonsterVector();
-	for (auto Mvector : Monster) {
+	//vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	/*for (MonsterData* Mvector : Monster) {
+
 		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
 		Vector3 mDir = Mvector->Mon->GetForward();
 		for (auto Wcoll : mapGen->WallActorList) {
@@ -223,14 +208,12 @@ void Scene2::LateUpdate()
 			float RightAngle = Wcoll->GetRight().Dot(mDir);
 			if (fabs(ForwardAngle) < fabs(RightAngle)) {
 
-				Mvector->Mon->MoveWorldPos(Wcoll->GetForward() * DELTA * 10);
+				Mvector->Mon->MoveWorldPos(Wcoll->GetForward() * DELTA * 3);
 			}
 			else {
-				Mvector->Mon->MoveWorldPos(Wcoll->GetRight() * DELTA * 10);
+				Mvector->Mon->MoveWorldPos(Wcoll->GetRight() * DELTA * 3);
 			}
 		}
-
-
 	}
 	Vector3 pDir = player->pObserver->GetData()->GetForward();
 
@@ -240,14 +223,41 @@ void Scene2::LateUpdate()
 			float ForwardAngle = Wcoll->GetForward().Dot(pDir);
 			float RightAngle = Wcoll->GetRight().Dot(pDir);
 			if (fabs(ForwardAngle) < fabs(RightAngle)) {
-				player->pObserver->GetData()->MoveWorldPos(-Wcoll->GetForward() * DELTA * 6);
+				player->pObserver->GetData()->MoveWorldPos(Wcoll->GetForward() * DELTA * 2);
 			}
 			else {
-				player->pObserver->GetData()->MoveWorldPos(-Wcoll->GetRight() * DELTA * 6);
+				player->pObserver->GetData()->MoveWorldPos(Wcoll->GetRight() * DELTA * 2);
 			}
 		}
-	}
+	}*/
 
+	Vector3 pPos = player->actor->GetWorldPos();
+	GameObject* PlayerSword = player->actor->Find("sword");
+
+
+	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	for (MonsterData* Mvector : Monster) {
+		GameObject* MonsterSword = Mvector->Mon->Find("sword");
+
+		auto Mon = Mvector->Mon;
+		if (Mon->Intersect(PlayerSword)) {
+			Mon->Damage(50);
+		}
+		else if (player->actor->Intersect(MonsterSword)) {
+			player->actor->Damage(5);
+		}
+	};
+
+	//카메라 벽 충돌
+	Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
+	for (Actor* it : mapGen->WallActorList) {
+		if (it->Intersect(playerCam)) {
+			it->visible = false;
+		}
+		else {
+			it->visible = true;;
+		}
+	}
 
 	MonMGR->LateUpdate();
 }
@@ -260,29 +270,17 @@ void Scene2::PreRender()
 	deferred->SetTarget();
 	Tile->Render();
 
-	auto Monster = MonMGR->GetMonsterVector();
-	for (auto Mvector : Monster) {
-		Mvector->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-		Mvector->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
+	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	for (MonsterData* Mvector : Monster) {
+		Mvector->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	}
 	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 }
 
 void Scene2::Render()
 {
-	auto playerCam = player->pObserver->GetData()->Find("Camera");
-	for (auto it : mapGen->WallActorList) {
-		if (it->Intersect(playerCam)) {
-			it->visible = false;
-		}
-		else {
-			it->visible = true;;
-		}
-	}
-
-	skybox->Render();
-	skybox2->Render();
-
+	//skybox->Render();
+	//skybox2->Render();
 	deferred->Render();
 	player->Render();
 

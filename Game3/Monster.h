@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace Mon {
 	enum class State
 	{
@@ -90,7 +89,7 @@ namespace Mon {
 		Ani_Dead_04,
 	};
 }
-class Monster : public Subject, public Observer
+class Monster : public Unit, public Observer
 {
 public:
 	static Monster* Create(string name = "Monster");
@@ -103,16 +102,18 @@ private:
 	int AttackCount = 0;
 	SlashTrail* slash;
 	bool Once = true;
-	
+
 	Vector3 target;
 
 	float Length;
-	
+
 	int index;
 
 	Vector3 lastPos;
-public:
 	Vector3 moveDir;
+
+public:
+	bool DeadAni;
 
 	Monster();
 	~Monster();
@@ -131,6 +132,7 @@ public:
 
 	void GetTargerPos(Vector3& pos) { target = pos; }
 	Mon::State GetState() const { return state; }
+	void SetState(Mon::State state) { this->state = state; }
 
 	// 좌표 업데이트
 	void WolrdUpdate();

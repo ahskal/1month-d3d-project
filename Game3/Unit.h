@@ -12,10 +12,20 @@ public:
 	float Attack;
 	float Defense;
 
+	
 	//한번만 실행되는 변수
 	bool Once = true;
+
+	float hitCooltime;
+	bool hit;
 
 	void Update();
 	void Render(shared_ptr<Shader> pShader = nullptr) override;
 	virtual void	RenderDetail();
+
+	void Damage(int damage);
+	
+
+
+
 };

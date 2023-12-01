@@ -111,7 +111,7 @@ float4 PS(PixelInput input) : SV_TARGET
 	}
 	
 	Result.rgb += emissive;
-	Result.rgb += ambient;
+	Result.rgb += ambient/2;
 	
 	
 	return Result;

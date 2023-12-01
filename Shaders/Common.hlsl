@@ -75,7 +75,7 @@ cbuffer PS_DirLight : register(b2)
 }
 
 
-#define MAX_LIGHT 16
+#define MAX_LIGHT 64
 struct Light
 {
     //4

@@ -578,7 +578,12 @@
                                                 <Mesh File="Sword/sword.mesh"/>
                                                 <Shader File="4.Cube.hlsl"/>
                                                 <Material File="Sword/Blusialand_weapon_Mat.mtl"/>
-                                                <Transform>
+												<Collider ColliderType="2" Visible="true">
+													<Position X="0" Y="0" Z="-50.000011"/>
+													<Scale X="1" Y="1" Z="40"/>
+													<Rotation X="0" Y="0" Z="0"/>
+												</Collider>
+												<Transform>
                                                     <Position X="-10.000001" Y="-5.5000005" Z="0"/>
                                                     <Scale X="1" Y="1" Z="1"/>
                                                     <Rotation X="0" Y="0" Z="0"/>

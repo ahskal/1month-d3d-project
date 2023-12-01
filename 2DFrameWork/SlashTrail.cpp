@@ -3,14 +3,9 @@
 
 SlashTrail::SlashTrail()
 {
-   /* queue<int> a;
-    a[0];*/
-
-
     vertexType = VertexType::PT;
     primitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     byteWidth = sizeof(VertexPT);
-
 
     shader = RESOURCE->shaders.Load("6.Trail_Deferred.hlsl");
     isPlaying = false;

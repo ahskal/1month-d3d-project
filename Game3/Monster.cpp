@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Subject.h"
+#include "Unit.h"
 #include "Monster.h"
 
 
@@ -24,7 +24,7 @@ Monster::Monster(){
 	state = State::IDLE;
 	MoveSpeed = 3;
 	slash = nullptr;
-
+	DeadAni = false;
 }
 
 Monster::~Monster(){}
@@ -42,8 +42,8 @@ void Monster::Init()
 	slash->Top = Find("Start");
 	slash->Bottom = Find("End");
 
-	slash->interval = 0.004f;
-	slash->maxTrail = 50;
+	slash->interval = 0.0f;
+	slash->maxTrail = 25;
 	slash->material->diffuseMap = RESOURCE->textures.Load("trail.png");
 	slash->material->diffuse.w = 1.0f;
 
@@ -69,6 +69,7 @@ void Monster::Update()
 	FSM();
 	lastPos = GetWorldPos();
 	Unit::Update();
+	slash->Update();
 }
 
 void Monster::Render(shared_ptr<Shader> pShader)
@@ -89,7 +90,14 @@ void Monster::FSM()
 		Move();		
 	}
 	else if (state == State::ATTACK) {
-
+		if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
+		{
+			slash->Play();
+		}
+		if (slash->isPlaying == true and anim->GetPlayTime() >= 0.8f)
+		{
+			slash->Stop();
+		}
 		if (anim->GetPlayTime() >= 0.98f) {
 			state = State::IDLE;
 		}

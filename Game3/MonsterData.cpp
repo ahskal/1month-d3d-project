@@ -23,7 +23,8 @@ MonsterData::MonsterData()
 
 MonsterData::~MonsterData()
 {
-
+	delete UI;
+	delete Mon;
 }
 
 void MonsterData::Update()
@@ -40,10 +41,6 @@ void MonsterData::Update()
 
 void MonsterData::Render(shared_ptr<Shader> pShader)
 {
-	UI->Render(pShader);
-}
-
-void MonsterData::DeferredRender(shared_ptr<Shader> pShader)
-{
 	Mon->Render(pShader);
+	UI->Render();
 }

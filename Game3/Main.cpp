@@ -9,6 +9,7 @@
 
 
 bool DEBUG_MODE = false;
+bool FREE_CAM = false;;
 bool None_Scene = false;;
 
 Main::Main()
@@ -84,6 +85,10 @@ void Main::Update()
 		DEBUG_MODE = !DEBUG_MODE;
 	}
 	if (INPUT->KeyDown(VK_XBUTTON2)) {
+		FREE_CAM = !FREE_CAM;
+	}
+
+	if (INPUT->KeyDown(VK_MBUTTON)) {
 		PostQuitMessage(0);
 	}
 }
