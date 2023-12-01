@@ -73,26 +73,21 @@ DeferredOutput PS(PixelInput input)
 
 	float4 result = TextureD.Sample(SamplerD, input.Uv);
 	
-	
-	
 	//Diffuse 및 Specular 매핑 함수 호출
 	output.diffuse = DiffuseMapping(input.Uv);
 	
 	
 	output.specular = float4(SpecularMapping(input.Uv), saturate(Shininess / MAX_SHININESS));
 
-	output.diffuse.rgb *= 3.0f; // 0.5가 디폴트
-	//output.diffuse = saturate(output.diffuse);
-    
-	output.diffuse.rgb *= Kd.rgb;
-	output.specular.rgb *= Ks.rgb;
+    output.diffuse.rgb += Kd.rgb * 2.0f - 1.0f; // 0.5가 디폴트
+    output.diffuse = saturate(output.diffuse);
 
-	// Normal 및 Emissive를 상수에서 동적으로 설정하도록 변경할 수 있습니다.
-	// 적절한 텍스처 매핑이나 계산을 통해 값을 설정하세요.
-	output.normal = float4(0, 0, 0, 1); // 예: 기본값을 (0, 0, 1)로 설정
-	output.emissive = float4(0, 0, 0, 1);
-
-	output.ambient = float4(Ka.rgb * output.diffuse.rgb, 1);
+    output.diffuse.rgb *= Kd.rgb;
+    output.specular.rgb *= Ks.rgb;
+	
+    output.normal = float4(0, 0, 0, 1);
+    output.emissive = float4(0, 0, 0, 1);
+    output.ambient = float4(Ka.rgb * output.diffuse.rgb, 1);	
 
 	return output;
 }
