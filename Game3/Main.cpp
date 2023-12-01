@@ -7,10 +7,10 @@
 
 #include "Main.h"
 
-
 bool DEBUG_MODE = false;
-bool FREE_CAM = false;;
-bool None_Scene = false;;
+bool NONE_SCENE = false;
+bool TEXT_LOG   = false;
+bool FREE_CAM   = false;
 
 Main::Main()
 {
@@ -26,7 +26,7 @@ Main::~Main()
 
 void Main::Init()
 {
-	if (not None_Scene) {
+	if (not NONE_SCENE) {
 		LIGHT->dirLight.color = Color(0, 0, 0);
 		//SCENE->AddScene("SC1", new Scene1);
 		SCENE->AddScene("SC2", new Scene2);
@@ -36,14 +36,12 @@ void Main::Init()
 
 	Inventory inventory;
 
-	ITEM->AddItemInfo("½ºÄÌ·¹Åæ »À", 10.0f);
+	ITEM->AddItemInfo("»À", 10.0f);
 	ITEM->AddItemInfo("¾²·¹±â", 1.0f);
-	ITEM->AddItemInfo("¾²·¹±â", 1.0f);
 	ITEM->AddItemInfo("°¡Á×", 30.0f);
-	ITEM->AddItemInfo("°¡Á×", 30.0f);
-	ITEM->AddItemInfo("°¡Á×", 30.0f);
-	ITEM->AddItemInfo("µ¹", 100.0f);
-	ITEM->AddItemInfo("ÀÌ¸§ ¸ð¸¦ °¡·ç", 10.0f);
+	ITEM->AddItemInfo("µ¹", 10.0f);
+	ITEM->AddItemInfo("°íÃ¶", 100.0f);
+
 	ITEM->OpenList();
 
 	inventory.AddItem(ITEM->CreateItem("¾²·¹±â", new RootItemFactory));
@@ -67,7 +65,7 @@ void Main::Update()
 {
 
 
-	if (not None_Scene)
+	if (not NONE_SCENE)
 		SCENE->Update();
 	/*if (INPUT->KeyDown(VK_F1)) {
 		SCENE->ChangeScene("SC1");
@@ -81,10 +79,17 @@ void Main::Update()
 			SCENE->ChangeScene("SC3");
 	}*/
 
-	if (INPUT->KeyDown(VK_F8) or INPUT->KeyDown(VK_XBUTTON1)) {
+	if (INPUT->KeyDown(VK_F6)) {
 		DEBUG_MODE = !DEBUG_MODE;
 	}
-	if (INPUT->KeyDown(VK_XBUTTON2)) {
+	if (INPUT->KeyDown(VK_F7)) {
+		FREE_CAM = !FREE_CAM;
+	}
+	if (INPUT->KeyDown(VK_F8)) {
+		TEXT_LOG = !TEXT_LOG;
+	}
+	if (INPUT->KeyDown(VK_XBUTTON1)) {
+		DEBUG_MODE = !DEBUG_MODE;
 		FREE_CAM = !FREE_CAM;
 	}
 
@@ -95,25 +100,25 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-	if (not None_Scene)
+	if (not NONE_SCENE)
 		SCENE->LateUpdate();
 
 }
 void Main::PreRender()
 {
-	if (not None_Scene)
+	if (not NONE_SCENE)
 		SCENE->PreRender();
 }
 
 void Main::Render()
 {
-	if (not None_Scene)
+	if (not NONE_SCENE)
 		SCENE->Render();
 }
 
 void Main::ResizeScreen()
 {
-	if (not None_Scene)
+	if (not NONE_SCENE)
 		SCENE->ResizeScreen();
 }
 

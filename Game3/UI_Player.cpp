@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
 #include "UI_Player.h"
-extern bool DEBUG_MODE;
 
 UI_Player* UI_Player::Create(string name)
 {

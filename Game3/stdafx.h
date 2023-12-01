@@ -17,6 +17,3 @@
 
 #define MonMGR	MonsterManager::GetInstance()
 #define ITEM	ItemTable::GetInstance()
-
-extern bool DEBUG_MODE;
-extern bool FREE_CAM;

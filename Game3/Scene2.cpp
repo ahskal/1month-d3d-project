@@ -14,6 +14,8 @@
 #include "Scene2.h"
 
 extern bool DEBUG_MODE;
+extern bool NONE_SCENE;
+extern bool TEXT_LOG;
 extern bool FREE_CAM;
 
 Scene2::Scene2()
@@ -52,7 +54,7 @@ void Scene2::Init()
 	//맵 초기값 설정 및 생성
 	mapGen->generateInitialMap();
 	mapGen->checkConnectivity();
-	//mapGen->coutTile();
+	mapGen->coutTile();
 	mapGen->InstanceTile(Tile);
 	mapGen->finalizeMap(Tile);
 	mapGen->WallCreateMap(Tile);
@@ -123,6 +125,8 @@ void Scene2::Update()
 	cam1->RenderHierarchy();
 	Tile->RenderHierarchy();
 	player->Hierarchy();
+
+	MonMGR->Hierarchy();
 	ImGui::End();
 
 	if (FREE_CAM) {
@@ -165,6 +169,7 @@ void Scene2::Update()
 		} while (count != 1);
 		float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
 		MonMGR->CreateMonster(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
+		//MonMGR->CreateMonster(Vector3(10, 0, 10));
 	}
 
 	Camera::main->Update();
@@ -181,9 +186,10 @@ void Scene2::Update()
 
 void Scene2::LateUpdate()
 {
-	Vector3 playerPos = player->pObserver->GetPos();
-
+	
+	// 벽 충돌 ( 처음 틱에는 한번 건너뛴다 )
 	static bool isOnece = false;
+	Vector3 playerPos = player->pObserver->GetPos();
 	if (isOnece) {
 		if (!mapGen->GetTileState(playerPos)) {
 			player->pObserver->GetData()->GoBack();
@@ -198,9 +204,8 @@ void Scene2::LateUpdate()
 	}
 	isOnece = true;
 
-	//vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
-	/*for (MonsterData* Mvector : Monster) {
-
+	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	for (MonsterData* Mvector : Monster) {
 		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
 		Vector3 mDir = Mvector->Mon->GetForward();
 		for (auto Wcoll : mapGen->WallActorList) {
@@ -229,7 +234,7 @@ void Scene2::LateUpdate()
 				player->pObserver->GetData()->MoveWorldPos(Wcoll->GetRight() * DELTA * 2);
 			}
 		}
-	}*/
+	}
 
 	Vector3 pPos = player->actor->GetWorldPos();
 	GameObject* PlayerSword = player->actor->Find("sword");

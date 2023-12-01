@@ -44,3 +44,9 @@ void MonsterData::Render(shared_ptr<Shader> pShader)
 	Mon->Render(pShader);
 	UI->Render();
 }
+
+void MonsterData::Hierarchy()
+{
+	Mon->RenderHierarchy();
+	UI->RenderHierarchy();
+}

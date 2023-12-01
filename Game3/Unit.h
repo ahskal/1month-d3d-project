@@ -19,6 +19,8 @@ public:
 	float hitCooltime;
 	bool hit;
 
+	bool isAttack;
+
 	void Update();
 	void Render(shared_ptr<Shader> pShader = nullptr) override;
 	virtual void	RenderDetail();

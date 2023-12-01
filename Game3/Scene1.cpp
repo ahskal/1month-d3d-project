@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "Monster.h"
 #include "Scene1.h"
-extern bool DEBUG_MODE;
 
 Scene1::Scene1()
 {}

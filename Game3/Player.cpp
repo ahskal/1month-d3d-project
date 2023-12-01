@@ -3,6 +3,10 @@
 #include "Player.h"
 
 extern bool DEBUG_MODE;
+extern bool NONE_SCENE;
+extern bool TEXT_LOG;
+extern bool FREE_CAM;
+
 using namespace play;
 
 Player* Player::Create(string name)
@@ -106,7 +110,7 @@ void Player::Update()
 	}
 
 	lastPos = GetWorldPos();
-	Actor::Update();
+	Unit::Update();
 	slash->Update();
 
 }
@@ -125,14 +129,13 @@ void Player::FSM()
 			or INPUT->KeyPress('S') or INPUT->KeyPress('D')) {
 			state = State::WALK;
 		}
-
 		// 무기 장비 해체
 		if (INPUT->KeyDown(VK_LCONTROL)) {
 			anim->ChangeAnimation(AnimationState::ONCE_LAST, Ani_Equip, 0.1f);
 			state = State::UNEQIP;
 			shouldOnce = false;
+			Find("sword")->collider->visible = true;;
 		}
-
 		if (INPUT->KeyDown(VK_LBUTTON) && Sp > 0 && isEqip) {
 			Attacker();
 		}
@@ -212,7 +215,7 @@ void Player::LateUpdate()
 
 void Player::Render(shared_ptr<Shader> pShader)
 {
-	Actor::Render(pShader);
+	Unit::Render(pShader);
 	slash->Render();
 }
 
@@ -275,7 +278,7 @@ void Player::CameraHold()
 	Rot.x = (INPUT->position.y - ptMouse.y) * 0.001f;
 	Rot.y = (INPUT->position.x - ptMouse.x) * 0.001f;
 	rotation.y += Rot.y;
-	Find("Camera")->rotation.x += Rot.x;
+	//Find("Camera")->rotation.x += Rot.x;
 	ClientToScreen(App.GetHandle(), &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
 }

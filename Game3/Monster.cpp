@@ -4,6 +4,10 @@
 
 
 extern bool DEBUG_MODE;
+extern bool NONE_SCENE;
+extern bool TEXT_LOG;
+extern bool FREE_CAM;
+
 using namespace Mon;
 
 Monster* Monster::Create(string name)
@@ -160,7 +164,7 @@ void Monster::Hierarchy()
 
 void Monster::Update(const std::string& message)
 {
-	if (DEBUG_MODE) {
+	if (TEXT_LOG) {
 		float WTime = TIMER->GetWorldTime();
 		cout << "Observer " << observerName << endl;
 		cout << "[" << std::fixed << std::setprecision(2) << WTime << "]" << " messageCall : "
@@ -171,7 +175,7 @@ void Monster::Update(const std::string& message)
 void Monster::Update(const Vector3& position)
 {
 	target = position;
-	if (DEBUG_MODE) {
+	if (TEXT_LOG) {
 		float WTime = TIMER->GetWorldTime();
 		cout << "Observer " << observerName << endl;
 		cout << "[" << std::fixed << std::setprecision(2) << WTime << "]" << " messageCall : "

@@ -12,9 +12,6 @@
 
 #include "Scene3.h"
 
-
-extern bool DEBUG_MODE;
-
 Scene3::Scene3()
 {
 	grid = Grid::Create();

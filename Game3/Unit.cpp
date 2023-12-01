@@ -10,7 +10,7 @@ Unit* Unit::Create(string name)
 }
 
 Unit::Unit()
-	: Hp(0), MaxHp(0), Attack(0), Defense(0)
+	: Hp(0), MaxHp(0), Attack(0), Defense(0), hitCooltime(0.0f), hit(false), isAttack(false)
 {
 }
 
@@ -52,7 +52,7 @@ void Unit::Damage(int damage)
 	if (hitCooltime <= 0.0f)
 	{
 		Hp -= damage;
-		hitCooltime = 0.05f;
+		hitCooltime = 0.1f;
 		//cout << this->GetWorldPos().x<< this->GetWorldPos().y << endl;
 		//DAMAGE->AddText(this->GetWorldPos() + Vector2(50, 50), damage, color);
 		hit = true;

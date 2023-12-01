@@ -68,3 +68,10 @@ void MonsterManager::Render(shared_ptr<Shader> pShader)
 	}
 }
 
+void MonsterManager::Hierarchy()
+{
+	for (auto it : MonVec) {
+		it->Hierarchy();
+	}
+}
+

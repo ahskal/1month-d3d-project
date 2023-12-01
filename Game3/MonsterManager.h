@@ -14,6 +14,8 @@ public:
 	void LateUpdate();
 	void Render(shared_ptr<Shader> pShader = nullptr);
 
+	void Hierarchy();
+
 	vector<class MonsterData*> GetMonsterVector() const { return MonVec; }
 };
 

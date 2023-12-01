@@ -1,4 +1,4 @@
-<Root Name="Player" Visible="true" ObType="1" BoneIndex="0">
+<Root Name="PlayerData" Visible="true" ObType="1" BoneIndex="0">
     <Skeleton File="Unit/Man.skel" BoneIndexCount="64"/>
     <Animations AnimSize="54" File0="Unit/Walk_Eqip_Front0.anim" File1="Unit/Walk_Eqip_Back0.anim" File2="Unit/Walk_Eqip_Left0.anim" File3="Unit/Walk_Eqip_Right0.anim" File4="Unit/Walk_Eqip_Front_Right0.anim" File5="Unit/Walk_Eqip_Front_Left0.anim" File6="Unit/Walk_Eqip_Back_Left0.anim" File7="Unit/Walk_Eqip_Back_Right0.anim" File8="Unit/Walk_Uneqip_Front0.anim" File9="Unit/Walk_Uneqip_Back0.anim" File10="Unit/Walk_Uneqip_Left0.anim" File11="Unit/Walk_Uneqip_Right0.anim" File12="Unit/Walk_Uneqip_Front_Right0.anim" File13="Unit/Walk_Uneqip_Front_Left0.anim" File14="Unit/Walk_Uneqip_Back_Left0.anim" File15="Unit/Walk_Uneqip_Back_Right0.anim" File16="Unit/Run_Eqip0.anim" File17="Unit/Run_Uneqip0.anim" File18="Unit/Eqip_To_Uneqip0.anim" File19="Unit/Uneqip_Pickup0.anim" File20="Unit/Idle_Eqip_010.anim" File21="Unit/Idle_Uneqip0.anim" File22="Unit/Block0.anim" File23="Unit/Block_Loop0.anim" File24="Unit/Block_Guard0.anim" File25="Unit/Block_Damage0.anim" File26="Unit/Damage_010.anim" File27="Unit/Damage_020.anim" File28="Unit/Damage_Left_010.anim" File29="Unit/Damage_Left_020.anim" File30="Unit/Damage_Right_010.anim" File31="Unit/Damage_Right_020.anim" File32="Unit/Attack_010.anim" File33="Unit/Attack_020.anim" File34="Unit/Attack_030.anim" File35="Unit/Attack_040.anim" File36="Unit/Attack_050.anim" File37="Unit/Attack_060.anim" File38="Unit/Attack_070.anim" File39="Unit/Attack_080.anim" File40="Unit/Attack_090.anim" File41="Unit/Attack_100.anim" File42="Unit/Attack_110.anim" File43="Unit/Attack_120.anim" File44="Unit/Attack_130.anim" File45="Unit/Attack_140.anim" File46="Unit/Attack_150.anim" File47="Unit/Attack_160.anim" File48="Unit/Attack_170.anim" File49="Unit/Attack_180.anim" File50="Unit/Dead_010.anim" File51="Unit/Dead_020.anim" File52="Unit/Dead_030.anim" File53="Unit/Dead_040.anim"/>
     <Collider ColliderType="2" Visible="true">
@@ -7,9 +7,9 @@
         <Rotation X="0" Y="0" Z="0"/>
     </Collider>
     <Transform>
-        <Position X="-2.120759" Y="0" Z="-4.3320942"/>
+        <Position X="1.6061875" Y="0" Z="4.4763713"/>
         <Scale X="1" Y="1" Z="1"/>
-        <Rotation X="0" Y="0.033001285" Z="0"/>
+        <Rotation X="0" Y="7.5240216" Z="0"/>
     </Transform>
     <Children Size="2"/>
     <Child0 Name="Camera" Visible="true" ObType="2" BoneIndex="-1">
@@ -19,11 +19,11 @@
             <Rotation X="0" Y="0" Z="0"/>
         </Collider>
         <Transform>
-            <Position X="0" Y="4.5" Z="-3"/>
+            <Position X="0.013824" Y="3.9979446" Z="-2.9883428"/>
             <Scale X="1" Y="1" Z="1"/>
-            <Rotation X="0.523599" Y="0" Z="0"/>
+            <Rotation X="0.174532" Y="0" Z="0"/>
         </Transform>
-        <Camera Ortho="false" Fov="1.047192" Width="1278" Height="757" NearZ="0.1" FarZ="500" viewportX="0" viewportY="0" viewportW="1278" viewportH="757"/>
+        <Camera Ortho="false" Fov="1.047192" Width="1404" Height="755" NearZ="0.1" FarZ="500" viewportX="0" viewportY="0" viewportW="1404" viewportH="755"/>
         <Children Size="1"/>
         <Child0 Name="None" Visible="true" ObType="2" BoneIndex="0">
             <Transform>
@@ -600,12 +600,12 @@
                                             <Child5 Name="sword" Visible="true" ObType="0" BoneIndex="-1">
                                                 <Mesh File="Sword/sword.mesh"/>
                                                 <Shader File="4.Cube.hlsl"/>
-                                                <Material File="Sword/Blusialand_weapon_Mat.mtl"/>
                                                 <Collider ColliderType="2" Visible="true">
                                                     <Position X="0" Y="0" Z="-50.000011"/>
                                                     <Scale X="1" Y="1" Z="40"/>
                                                     <Rotation X="0" Y="0" Z="0"/>
                                                 </Collider>
+                                                <Material File="Sword/Blusialand_weapon_Mat.mtl"/>
                                                 <Transform>
                                                     <Position X="-10.000001" Y="-5.5000005" Z="0"/>
                                                     <Scale X="1" Y="1" Z="1"/>

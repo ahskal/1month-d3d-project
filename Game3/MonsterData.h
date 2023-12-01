@@ -12,4 +12,5 @@ public:
 
 	void Update();
 	void Render(shared_ptr<Shader> pShader = nullptr);
+	void Hierarchy();
 };

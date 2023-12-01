@@ -71,7 +71,8 @@ float4 PS(PixelInput input) : SV_TARGET
     int3 location3 = int3(input.Position.xy, 0);
 	
     float4 BaseColor = diffuseTexture.Load(location3);
-    float3 Normal = normalize(normalTexture.Load(location3).xyz * 2.0f - 1.0f);
+    float3 Normalmap = normalize(normalTexture.Load(location3).xyz);
+    float3 Normal = normalize(Normalmap * 2.0f - 1.0f);
     float4 Specular = specularTexture.Load(location3);
     float depth = depthTexture.Load(location3).x;
     float linearDepth = ConvertDepthToLinear(depth);
@@ -81,7 +82,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float3 emissive = emissiveTexture.Load(location3).xyz;
     float3 ambient = ambientTexture.Load(location3).xyz;
 	
-    if (Normal.x == 0.0f && Normal.y == 0.0f && Normal.z == 0.0f)
+    if (Normalmap.x == 0.0f && Normalmap.y == 0.0f && Normalmap.z == 0.0f)
         return BaseColor;
 	
 	float4 Result = float4(DeferredDirLighting(BaseColor.rgb, Specular,
@@ -111,7 +112,7 @@ float4 PS(PixelInput input) : SV_TARGET
 	}
 	
 	Result.rgb += emissive;
-	Result.rgb += ambient/2;
+	Result.rgb += ambient;
 	
 	
 	return Result;
