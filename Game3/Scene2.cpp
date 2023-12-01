@@ -54,57 +54,57 @@ void Scene2::Init()
 	//맵 초기값 설정 및 생성
 	mapGen->generateInitialMap();
 	mapGen->checkConnectivity();
-	mapGen->coutTile();
+	//mapGen->coutTile();
 	mapGen->InstanceTile(Tile);
-	mapGen->finalizeMap(Tile);
-	mapGen->WallCreateMap(Tile);
+	//mapGen->finalizeMap(Tile);
+	//mapGen->WallCreateMap(Tile);
 
-	int count;
-	for (int k = 0; k < mapGen->floors; ++k) {
-		int x;
-		int y;
-		do
-		{
-			x = RANDOM->Int(0, mapGen->rows - 1);
-			y = RANDOM->Int(0, mapGen->cols - 1);
-			count = 0;
-			for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
-				for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
-					// 현재 좌표 (i, j, k)의 타일을 검사
-					// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
-					if (mapGen->Tiles[i][j][k] == 1) {
-						count++;
-					}
-				}
-			}
-		} while (count != 4);
-		Actor* temp = Actor::Create();
-		temp->LoadFile("box.xml");
-		temp->name = "box" + to_string(k);
-		temp->SetLocalPosY(0);
-		Tile->Find(to_string(x) + "x" + to_string(y) + "x" + to_string(k))->AddChild(temp);
-	}
+	//int count;
+	//for (int k = 0; k < mapGen->floors; ++k) {
+	//	int x;
+	//	int y;
+	//	do
+	//	{
+	//		x = RANDOM->Int(0, mapGen->rows - 1);
+	//		y = RANDOM->Int(0, mapGen->cols - 1);
+	//		count = 0;
+	//		for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
+	//			for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
+	//				// 현재 좌표 (i, j, k)의 타일을 검사
+	//				// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
+	//				if (mapGen->Tiles[i][j][k] == 1) {
+	//					count++;
+	//				}
+	//			}
+	//		}
+	//	} while (count != 4);
+	//	Actor* temp = Actor::Create();
+	//	temp->LoadFile("box.xml");
+	//	temp->name = "box" + to_string(k);
+	//	temp->SetLocalPosY(0);
+	//	Tile->Find(to_string(x) + "x" + to_string(y) + "x" + to_string(k))->AddChild(temp);
+	//}
 
 
-	int x;
-	int y;
-	do
-	{
-		x = RANDOM->Int(0, mapGen->rows - 1);
-		y = RANDOM->Int(0, mapGen->cols - 1);
-		count = 0;
-		for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
-			for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
-				// 현재 좌표 (i, j, k)의 타일을 검사
-				// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
-				if (mapGen->Tiles[i][j][0] == 1) {
-					count++;
-				}
-			}
-		}
-	} while (count != 4);
-	float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
-	player->pObserver->GetData()->SetSpawn(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
+	//int x;
+	//int y;
+	//do
+	//{
+	//	x = RANDOM->Int(0, mapGen->rows - 1);
+	//	y = RANDOM->Int(0, mapGen->cols - 1);
+	//	count = 0;
+	//	for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
+	//		for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
+	//			// 현재 좌표 (i, j, k)의 타일을 검사
+	//			// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
+	//			if (mapGen->Tiles[i][j][0] == 1) {
+	//				count++;
+	//			}
+	//		}
+	//	}
+	//} while (count != 4);
+	//float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
+	//player->pObserver->GetData()->SetSpawn(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
 }
 
 void Scene2::Release()
@@ -149,27 +149,27 @@ void Scene2::Update()
 	}
 
 	if (INPUT->KeyDown('T')) {
-		int count;
-		int x;
-		int y;
-		do
-		{
-			x = RANDOM->Int(0, mapGen->rows - 1);
-			y = RANDOM->Int(0, mapGen->cols - 1);
-			count = 0;
-			for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
-				for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
-					// 현재 좌표 (i, j, k)의 타일을 검사
-					// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
-					if (mapGen->Tiles[i][j][0] == 1) {
-						count++;
-					}
-				}
-			}
-		} while (count != 1);
-		float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
-		MonMGR->CreateMonster(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
-		//MonMGR->CreateMonster(Vector3(10, 0, 10));
+		//int count;
+		//int x;
+		//int y;
+		//do
+		//{
+		//	x = RANDOM->Int(0, mapGen->rows - 1);
+		//	y = RANDOM->Int(0, mapGen->cols - 1);
+		//	count = 0;
+		//	for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
+		//		for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
+		//			// 현재 좌표 (i, j, k)의 타일을 검사
+		//			// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
+		//			if (mapGen->Tiles[i][j][0] == 1) {
+		//				count++;
+		//			}
+		//		}
+		//	}
+		//} while (count != 1);
+		//float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
+		//MonMGR->CreateMonster(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
+		MonMGR->CreateMonster(Vector3(10, 0, 10));
 	}
 
 	Camera::main->Update();
@@ -188,7 +188,7 @@ void Scene2::LateUpdate()
 {
 	
 	// 벽 충돌 ( 처음 틱에는 한번 건너뛴다 )
-	static bool isOnece = false;
+	/*static bool isOnece = false;
 	Vector3 playerPos = player->pObserver->GetPos();
 	if (isOnece) {
 		if (!mapGen->GetTileState(playerPos)) {
@@ -202,26 +202,9 @@ void Scene2::LateUpdate()
 			}
 		}
 	}
-	isOnece = true;
+	isOnece = true;*/
 
-	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
-	for (MonsterData* Mvector : Monster) {
-		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
-		Vector3 mDir = Mvector->Mon->GetForward();
-		for (auto Wcoll : mapGen->WallActorList) {
-			float ForwardAngle = Wcoll->GetForward().Dot(mDir);
-			float RightAngle = Wcoll->GetRight().Dot(mDir);
-			if (fabs(ForwardAngle) < fabs(RightAngle)) {
-
-				Mvector->Mon->MoveWorldPos(Wcoll->GetForward() * DELTA * 3);
-			}
-			else {
-				Mvector->Mon->MoveWorldPos(Wcoll->GetRight() * DELTA * 3);
-			}
-		}
-	}
-	Vector3 pDir = player->pObserver->GetData()->GetForward();
-
+	/*Vector3 pDir = player->pObserver->GetData()->GetForward();
 	for (auto Wcoll : mapGen->WallActorList) {
 
 		if (Wcoll->Intersect(player->pObserver->GetData())) {
@@ -236,10 +219,24 @@ void Scene2::LateUpdate()
 		}
 	}
 
+	
+	for (MonsterData* Mvector : Monster) {
+		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
+		Vector3 mDir = Mvector->Mon->GetForward();
+		for (auto Wcoll : mapGen->WallActorList) {
+			float ForwardAngle = Wcoll->GetForward().Dot(mDir);
+			float RightAngle = Wcoll->GetRight().Dot(mDir);
+			if (fabs(ForwardAngle) < fabs(RightAngle)) {
+
+				Mvector->Mon->MoveWorldPos(Wcoll->GetForward() * DELTA * 3);
+			}
+			else {
+				Mvector->Mon->MoveWorldPos(Wcoll->GetRight() * DELTA * 3);
+			}
+		}
+	}*/
 	Vector3 pPos = player->actor->GetWorldPos();
 	GameObject* PlayerSword = player->actor->Find("sword");
-
-
 	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
 	for (MonsterData* Mvector : Monster) {
 		GameObject* MonsterSword = Mvector->Mon->Find("sword");

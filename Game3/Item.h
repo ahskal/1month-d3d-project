@@ -6,6 +6,11 @@ enum class ItemType {
 	EndSize
 };
 
+enum class ItemState {
+	Drop,
+	Inven
+};
+
 class Item
 {
 private:
@@ -13,6 +18,9 @@ private:
 protected:
 	
 public:
+	class Actor* actor;
+	ItemState state;
+
 	std::string ItemName;
 	float Cost;
 	float size;
@@ -21,7 +29,10 @@ public:
 	Item(const std::string& itemName, float itemCost);
 	
 	virtual ~Item() = default;
-
 	void ShowItemInfo() const;
+
+	void Update();
+	void Render();
+
 };
 

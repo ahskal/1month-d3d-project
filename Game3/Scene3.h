@@ -11,6 +11,7 @@ private:
 
 	class PlayerData* player;
 
+	Item* item;
 
 public:
 	Scene3();

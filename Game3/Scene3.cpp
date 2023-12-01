@@ -5,12 +5,14 @@
 #include "UI_Player.h"
 #include "PlayerObserver.h"
 
-#include "Monster.h"
-#include "UI_Monster.h"
-#include "MonsterData.h"
-
+#include "Item.h"
 
 #include "Scene3.h"
+
+extern bool DEBUG_MODE;
+extern bool NONE_SCENE;
+extern bool TEXT_LOG;
+extern bool FREE_CAM;
 
 Scene3::Scene3()
 {
@@ -27,7 +29,7 @@ Scene3::Scene3()
 	player->MainCamSet();
 	ResizeScreen();
 
-	MonMGR->CreateMonster(Vector3(RANDOM->Int(-10, 10), 0, RANDOM->Int(-10, 10)));
+	item = new Item();
 }
 
 Scene3::~Scene3()
@@ -57,10 +59,7 @@ void Scene3::Update()
 	cam1->RenderHierarchy();
 	player->Hierarchy();
 
-	auto Monster = MonMGR->GetMonsterVector();
-	for (auto Mvector : Monster) {
-		Mvector->UI->RenderHierarchy();
-	}
+	item->actor->RenderHierarchy();
 
 	ImGui::End();
 
@@ -74,10 +73,7 @@ void Scene3::Update()
 
 	//Camera::main->ControlMainCam();
 
-	if (INPUT->KeyDown('T')) {
-		MonMGR->CreateMonster(Vector3(RANDOM->Int(-10, 10), 0, RANDOM->Int(-10, 10)));
-	}
-
+	item->Update();
 }
 
 void Scene3::LateUpdate()
@@ -96,12 +92,8 @@ void Scene3::PreRender()
 	deferred->SetTarget();
 
 	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-	auto Monster = MonMGR->GetMonsterVector();
-	for (auto Mvector : Monster) {
-		Mvector->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-		
-		Mvector->Render();
-	}
+	item->Render();
+
 }
 
 void Scene3::Render()
@@ -110,11 +102,6 @@ void Scene3::Render()
 	grid->Render();
 
 	player->Render();
-
-
-	auto Monster = MonMGR->GetMonsterVector();
-	for (auto Mvector : Monster) {
-	}
 }
 
 void Scene3::ResizeScreen()

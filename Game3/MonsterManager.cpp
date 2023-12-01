@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MonsterData.h"
 #include "Monster.h"
+#include "UI_Monster.h"
 #include "MonsterManager.h"
 
 MonsterManager::MonsterManager()
@@ -36,8 +37,17 @@ void MonsterManager::Update()
 void MonsterManager::LateUpdate()
 {
 	for (auto it : MonVec) {
-		if (it->Mon->Hp < 0 && not it->Mon->DeadAni) {
-			it->Mon->GetState();
+		if (it->Mon->Hp <= 0 && not it->Mon->isDead) {
+			it->Mon->SetState(Mon::State::DEADSTART);
+			it->Mon->isDead = true;
+			it->Mon->SlashOFF();
+			it->UI->VisibleOFF();
+			switch (RANDOM->Int(1, 4)) {
+			case 1: it->Mon->anim->ChangeAnimation(AnimationState::ONCE_LAST, Mon::Ani_Dead_01, 0.1f); break;
+			case 2: it->Mon->anim->ChangeAnimation(AnimationState::ONCE_LAST, Mon::Ani_Dead_02, 0.1f); break;
+			case 3: it->Mon->anim->ChangeAnimation(AnimationState::ONCE_LAST, Mon::Ani_Dead_03, 0.1f); break;
+			case 4: it->Mon->anim->ChangeAnimation(AnimationState::ONCE_LAST, Mon::Ani_Dead_04, 0.1f); break;
+			}
 		}
 	}
 
@@ -49,10 +59,9 @@ void MonsterManager::LateUpdate()
 			[&](MonsterData* Md) {
 				// 현재 체력이 0 이하인 경우 해당 몬스터를 제거하려면 true를 반환
 				// 그렇지 않은 경우 유지하려면 false를 반환
-				bool Remove = Md->Mon->Hp <= 0;
+				bool Remove = Md->Mon->GetState() == Mon::State::DEADEND;
 				if (Remove) {
-					
-					//delete Md;
+					delete Md;
 				}
 				return Remove;
 			}

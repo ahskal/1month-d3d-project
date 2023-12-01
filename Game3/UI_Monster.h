@@ -15,5 +15,6 @@ public:
 
 	Monster* GetData() const { return monster; }
 	void SetData(Monster* newData) { monster = newData; }
+	void VisibleOFF() { visible = false; }
 };
 

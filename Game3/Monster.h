@@ -11,7 +11,8 @@ namespace Mon {
 		DAMAGE,
 		GUARD,
 		PICKUP,
-		DEAD,
+		DEADSTART,
+		DEADEND,
 	};
 
 	enum AniState {
@@ -112,8 +113,10 @@ private:
 	Vector3 lastPos;
 	Vector3 moveDir;
 
+
 public:
 	bool DeadAni;
+	bool isDead;
 
 	Monster();
 	~Monster();
@@ -134,6 +137,7 @@ public:
 	Mon::State GetState() const { return state; }
 	void SetState(Mon::State state) { this->state = state; }
 
+	void SlashOFF() { slash->Stop(); }
 	// 좌표 업데이트
 	void WolrdUpdate();
 

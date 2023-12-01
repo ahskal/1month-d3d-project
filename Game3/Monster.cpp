@@ -21,7 +21,7 @@ Monster* Monster::Create(string name)
 	return temp;
 }
 
-Monster::Monster(){
+Monster::Monster() {
 	Length = 10;
 	moveDir = Vector3();
 	index = 0;
@@ -29,9 +29,10 @@ Monster::Monster(){
 	MoveSpeed = 3;
 	slash = nullptr;
 	DeadAni = false;
+	isDead = false;
 }
 
-Monster::~Monster(){}
+Monster::~Monster() {}
 
 void Monster::SetSpawn(Vector3 spawn)
 {
@@ -61,7 +62,6 @@ void Monster::Init()
 
 	anim->aniScale = 0.6f;
 	MoveSpeed = 3;
-
 }
 
 void Monster::Update()
@@ -84,36 +84,42 @@ void Monster::Render(shared_ptr<Shader> pShader)
 
 void Monster::FSM()
 {
-	if (state == State::IDLE) {
-		if (IsInRadius()) {
-			state = State::WALK;
-			anim->ChangeAnimation(AnimationState::LOOP, Ani_Move_Eqip_Front, 0.1f);
+	if (not isDead) {
+		if (state == State::IDLE) {
+			if (IsInRadius()) {
+				state = State::WALK;
+				anim->ChangeAnimation(AnimationState::LOOP, Ani_Move_Eqip_Front, 0.1f);
+			}
 		}
-	}
-	else if (state == State::WALK) {
-		Move();		
-	}
-	else if (state == State::ATTACK) {
-		if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
-		{
-			slash->Play();
+		else if (state == State::WALK) {
+			Move();
 		}
-		if (slash->isPlaying == true and anim->GetPlayTime() >= 0.8f)
-		{
-			slash->Stop();
+		else if (state == State::ATTACK) {
+			if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
+			{
+				slash->Play();
+			}
+			if (slash->isPlaying == true and anim->GetPlayTime() >= 0.8f)
+			{
+				slash->Stop();
+			}
+			if (anim->GetPlayTime() >= 0.98f) {
+				state = State::IDLE;
+			}
 		}
-		if (anim->GetPlayTime() >= 0.98f) {
-			state = State::IDLE;
-		}
-	}
-	else if (state == State::GUARD) {
+		else if (state == State::GUARD) {
 
-	}
-	else if (state == State::DAMAGE) {
+		}
+		else if (state == State::DAMAGE) {
 
+		}
 	}
-	else if (state == State::DEAD) {
-
+	else {
+		if (state == State::DEADSTART) {
+			if (anim->GetPlayTime() >= 0.98f) {
+				state = State::DEADEND;
+			}
+		}
 	}
 
 }
@@ -180,5 +186,5 @@ void Monster::Update(const Vector3& position)
 		cout << "Observer " << observerName << endl;
 		cout << "[" << std::fixed << std::setprecision(2) << WTime << "]" << " messageCall : "
 			<< position.x << "," << position.y << "," << position.z << endl;
-	}	
+	}
 }

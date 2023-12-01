@@ -66,6 +66,9 @@
     <ClInclude Include="RootItemFactory.h">
       <Filter>Object\Item\member</Filter>
     </ClInclude>
+    <ClInclude Include="FieldItem.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="RootItemFactory.cpp">
       <Filter>Object\Item\member</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldItem.cpp">
+      <Filter>Object\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

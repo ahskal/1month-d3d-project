@@ -20,8 +20,6 @@ static const float2 TEXCOORD[4] =
     float2(1.0f, 0.0f)
 };
 
-
-
 VertexInput VS(VertexInput input)
 {
    
