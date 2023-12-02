@@ -27,32 +27,34 @@ Main::~Main()
 void Main::Init()
 {
 	if (not NONE_SCENE) {
-		//LIGHT->dirLight.color = Color(0, 0, 0);
-		//SCENE->AddScene("SC1", new Scene1);
+		LIGHT->dirLight.color = Color(0, 0, 0);
+		SCENE->AddScene("SC1", new Scene1);
 		SCENE->AddScene("SC2", new Scene2);
 		SCENE->AddScene("SC3", new Scene3);
-		SCENE->ChangeScene("SC3");
+		SCENE->ChangeScene("SC2");
 	}
 
 	Inventory inventory;
 
-	ITEM->AddItemInfo("»À", 10.0f);
-	ITEM->AddItemInfo("¾²·¹±â", 1.0f);
-	ITEM->AddItemInfo("°¡Á×", 30.0f);
-	ITEM->AddItemInfo("µ¹", 10.0f);
-	ITEM->AddItemInfo("°íÃ¶", 100.0f);
+	ITEM->AddItemInfo("Gold", 100.0f);
+	ITEM->AddItemInfo("Stone", 10.0f);
 
-	ITEM->OpenList();
+	ITEM->AddItemInfo("Bone", 10.0f);
+	ITEM->AddItemInfo("Trash", 1.0f);
+	ITEM->AddItemInfo("Leather", 30.0f);
+	ITEM->AddItemInfo("Scrap", 100.0f);
 
-	inventory.AddItem(ITEM->CreateItem("¾²·¹±â", new RootItemFactory));
-	inventory.AddItem(ITEM->CreateItem("°¡Á×", new RootItemFactory));
-	inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
-	inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
-	inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
-
-	cout << "##############################################" << endl;
-
-	inventory.OpenList();
+	//ITEM->OpenList();
+	//
+	//inventory.AddItem(ITEM->CreateItem("¾²·¹±â", new RootItemFactory));
+	//inventory.AddItem(ITEM->CreateItem("°¡Á×", new RootItemFactory));
+	//inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
+	//inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
+	//inventory.AddItem(ITEM->CreateItem("µ¹", new RootItemFactory));
+	//
+	//cout << "##############################################" << endl;
+	//
+	//inventory.OpenList();
 
 }
 

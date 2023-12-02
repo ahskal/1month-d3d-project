@@ -36,9 +36,6 @@
     <ClInclude Include="PlayerData.h">
       <Filter>Object\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Scene1.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene2.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -60,14 +57,11 @@
     <ClInclude Include="ItemTable.h">
       <Filter>Object\Item\member</Filter>
     </ClInclude>
-    <ClInclude Include="RootItem.h">
-      <Filter>Object\Item\member</Filter>
-    </ClInclude>
-    <ClInclude Include="RootItemFactory.h">
-      <Filter>Object\Item\member</Filter>
-    </ClInclude>
     <ClInclude Include="FieldItem.h">
       <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene1.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -105,9 +99,6 @@
     <ClCompile Include="PlayerData.cpp">
       <Filter>Object\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Scene1.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scene2.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -129,14 +120,11 @@
     <ClCompile Include="ItemTable.cpp">
       <Filter>Object\Item\member</Filter>
     </ClCompile>
-    <ClCompile Include="RootItem.cpp">
-      <Filter>Object\Item\member</Filter>
-    </ClCompile>
-    <ClCompile Include="RootItemFactory.cpp">
-      <Filter>Object\Item\member</Filter>
-    </ClCompile>
     <ClCompile Include="FieldItem.cpp">
       <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene1.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

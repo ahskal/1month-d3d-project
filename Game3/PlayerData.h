@@ -8,6 +8,8 @@ public:
 	class UI_Player* UI;
 	class PlayerObserver* pObserver;
 	// 추가 데이터 필드들
+	class Inventory* inventory;
+
 
 	PlayerData();
 

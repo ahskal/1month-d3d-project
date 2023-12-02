@@ -18,7 +18,8 @@ private:
 protected:
 	
 public:
-	class Actor* actor;
+
+	Actor* actor;
 	ItemState state;
 
 	std::string ItemName;
@@ -27,12 +28,29 @@ public:
 
 	Item();
 	Item(const std::string& itemName, float itemCost);
+	~Item();
 	
-	virtual ~Item() = default;
 	void ShowItemInfo() const;
 
 	void Update();
-	void Render();
+	void Render(shared_ptr<Shader> pShader);
+};
 
+class RootItem : public Item
+{
+public:
+	RootItem() {
+		actor = Actor::Create();
+		actor->LoadFile("Item/Item.xml");
+	};
+};
+
+class MoneyItem : public Item
+{
+public:
+	MoneyItem() {
+		actor = Actor::Create();
+		actor->LoadFile("Item/GoldSpot.xml");
+	};
 };
 

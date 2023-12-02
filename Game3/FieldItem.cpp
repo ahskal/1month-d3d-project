@@ -11,10 +11,23 @@ void FieldItem::AddItem(const Item* newItem)
 		(*it)->size++; // 기존 아이템이 있으면 수량 증가
 	}
 	else {
-		Item* NewItme = new Item(*newItem);
-		NewItme->size++;
-		items.push_back(NewItme);
+		Item* NewItem = new Item(*newItem);
+		NewItem->size++;
+		items.push_back(NewItem);
 	}
+}
+
+void FieldItem::AddItem(const Item* newItem, Vector3 pos)
+{
+	Item* NewItem = new Item(*newItem);
+	NewItem->state = ItemState::Drop;
+	NewItem->actor->name += to_string(items.size());
+	for (auto it : NewItem->actor->children) {
+		it.second->name += to_string(items.size());
+	}
+	NewItem->actor->SetWorldPos(pos);
+	NewItem->size++;
+	items.push_back(NewItem);
 }
 
 void FieldItem::OpenList()
@@ -27,5 +40,26 @@ void FieldItem::OpenList()
 		else {
 			cout << inven->ItemName << "\t\t" << inven->Cost << "\t\t" << inven->size << endl;
 		}
+	}
+}
+
+void FieldItem::Update()
+{
+	for (auto inven : items) {
+		inven->Update();
+	}
+}
+
+void FieldItem::Hierarchy()
+{
+	for (auto inven : items) {
+		inven->actor->RenderHierarchy();
+	}
+}
+
+void FieldItem::Render(shared_ptr<Shader> pShader)
+{
+	for (auto inven : items) {
+		inven->Render(pShader);
 	}
 }

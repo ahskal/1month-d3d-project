@@ -53,7 +53,7 @@ public:
 
 };
 
-#define MAX_LIGHT 16
+#define MAX_LIGHT 32
 class LightManager : public Singleton<LightManager>
 {
 	ID3D11Buffer* dirLightBuffer;

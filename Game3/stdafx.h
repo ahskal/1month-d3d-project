@@ -7,13 +7,13 @@
 #include "Observer.h"
 
 #include "Item.h"
-#include "RootItem.h"
 
 #include "ItemFactory.h"
-#include "RootItemFactory.h"
 
 #include "MonsterManager.h"
 #include "ItemTable.h"
+#include "FieldItem.h"
 
 #define MonMGR	MonsterManager::GetInstance()
 #define ITEM	ItemTable::GetInstance()
+#define FIELD   FieldItem::GetInstance()

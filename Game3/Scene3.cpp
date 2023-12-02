@@ -29,7 +29,7 @@ Scene3::Scene3()
 	player->MainCamSet();
 	ResizeScreen();
 
-	item = new Item();
+	//item = new Item();
 }
 
 Scene3::~Scene3()
@@ -59,7 +59,7 @@ void Scene3::Update()
 	cam1->RenderHierarchy();
 	player->Hierarchy();
 
-	item->actor->RenderHierarchy();
+	//item->actor->RenderHierarchy();
 
 	ImGui::End();
 
@@ -73,7 +73,7 @@ void Scene3::Update()
 
 	//Camera::main->ControlMainCam();
 
-	item->Update();
+	//item->Update();
 }
 
 void Scene3::LateUpdate()
@@ -92,7 +92,7 @@ void Scene3::PreRender()
 	deferred->SetTarget();
 
 	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-	item->Render();
+	//item->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 
 }
 

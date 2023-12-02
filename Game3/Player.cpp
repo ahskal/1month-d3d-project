@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Subject.h"
 #include "Player.h"
+#include "Inventory.h"
 
 extern bool DEBUG_MODE;
 extern bool NONE_SCENE;
@@ -26,7 +27,6 @@ Player::Player()
 	state = State::IDLE;
 	MaxSp = 0;
 	Sp = 0;
-	Money = 0;
 	index = 0;
 	slash = nullptr;
 
@@ -53,6 +53,7 @@ Player::Player()
 	lastPos = Vector3();
 
 	isEqip = true;
+
 }
 
 Player::~Player()
@@ -112,7 +113,6 @@ void Player::Update()
 	lastPos = GetWorldPos();
 	Unit::Update();
 	slash->Update();
-
 }
 
 void Player::FSM()
@@ -217,6 +217,7 @@ void Player::Render(shared_ptr<Shader> pShader)
 {
 	Unit::Render(pShader);
 	slash->Render();
+
 }
 
 void Player::ChangeAni() {

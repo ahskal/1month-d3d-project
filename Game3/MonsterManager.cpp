@@ -61,6 +61,13 @@ void MonsterManager::LateUpdate()
 				// 그렇지 않은 경우 유지하려면 false를 반환
 				bool Remove = Md->Mon->GetState() == Mon::State::DEADEND;
 				if (Remove) {
+					int val = RANDOM->Int(1, 5);
+					auto M = ITEM->CreateItem("Gold", new MoneyItemFactory);
+					for (int i = 0; i < val; i++) {
+						Vector3 dropPos = Md->Mon->GetWorldPos() + Vector3(RANDOM->Int(-3, 0), 0, RANDOM->Int(-3, 0));
+						FIELD->AddItem(M, dropPos);
+					}
+
 					delete Md;
 				}
 				return Remove;

@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "UI_Player.h"
 #include "PlayerObserver.h"
+#include "Inventory.h"
 #include "PlayerData.h"
 
 PlayerData* PlayerData::Create(string name)
@@ -22,6 +23,8 @@ PlayerData::PlayerData()
 	UI = UI_Player::Create();
 	UI->LoadFile("UI/Main_Layout_1.xml");
 	UI->SetData(actor);
+
+	inventory = new Inventory();
 }
 
 void PlayerData::MainCamSet()
@@ -33,6 +36,7 @@ void PlayerData::Update()
 {
 	actor->Update();
 	UI->Update();
+	inventory->Update();
 }
 
 void PlayerData::LateUpdate()
@@ -49,6 +53,7 @@ void PlayerData::Hierarchy()
 void PlayerData::Render(shared_ptr<Shader> pShader)
 {
 	UI->Render(pShader);
+	inventory->Render(pShader);
 }
 
 void PlayerData::DeferredRender(shared_ptr<Shader> pShader)

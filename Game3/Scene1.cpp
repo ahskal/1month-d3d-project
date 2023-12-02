@@ -12,11 +12,6 @@ void Scene1::Init()
 	grid = Grid::Create();
 
 
-
-	player = Player::Create();
-
-	monster = Monster::Create();
-
 	water = Terrain::Create("water");
 	water->LoadFile("water.xml");
 	water->CreateStructuredBuffer();
@@ -72,26 +67,31 @@ float noise(Vector3 p, float time) {
 
 void Scene1::Update()
 {
-	//if (TIMER->GetTick(timer, 0.1f)) {
-	//	water->WaterPerlinNoise();
-	//}
+	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
+
+	if (TIMER->GetTick(timer, 0.1f)) {
+		//water->mesh->UpdateBuffer();
+		//water->WaterPerlinNoise();
+		
+	}
+
+	VertexTerrain* vertices = (VertexTerrain*)water->mesh->vertices;
+
+	float currentTime = TIMER->GetWorldTime(); // 현재 시간
+
+	for (int i = 0; i < water->garo; i++)
+	{
+		for (int j = 0; j < water->garo; j++)
+		{
+			Vector3 point(vertices[i * water->garo + j].position);
+			float result = noise(point, currentTime);
+			vertices[i * water->garo + j].position.y = result;
+		}
+	}
+
+	water->UpdateNormal();
 	//water->mesh->UpdateBuffer();
-
-	//VertexTerrain* vertices = (VertexTerrain*)water->mesh->vertices;
-
-	//float currentTime = TIMER->GetWorldTime(); // 현재 시간
-
-	//for (int i = 0; i < water->garo; i++)
-	//{
-	//	for (int j = 0; j < water->garo; j++)
-	//	{
-	//		Vector3 point(vertices[i * water->garo + j].position);
-	//		float result = noise(point, currentTime);
-	//		vertices[i * water->garo + j].position.y = result;
-	//	}
-	//}
-	//water->mesh->UpdateBuffer();
-	//water->UpdateNormal();
+	
 
 	// 결과 사용...
 
@@ -114,12 +114,9 @@ void Scene1::Update()
 	ImGui::Begin("Hierarchy");
 	grid->RenderHierarchy();
 	cam1->RenderHierarchy();
-	player->RenderHierarchy();
 
 	skybox->RenderHierarchy();
 	skybox2->RenderHierarchy();
-
-	monster->Hierarchy();
 
 	map->RenderHierarchy();
 	water->RenderHierarchy();
@@ -132,7 +129,6 @@ void Scene1::Update()
 
 
 	grid->Update();
-	player->Update();
 	cam1->Update();
 
 	map->Update();
@@ -141,7 +137,6 @@ void Scene1::Update()
 	skybox->Update();
 	skybox2->Update();
 
-	monster->Update();
 
 
 	//// Cube의 좌표에서 플레이어의 Y값 (C)
@@ -156,7 +151,7 @@ void Scene1::Update()
 
 void Scene1::LateUpdate()
 {
-	Ray top;
+	/*Ray top;
 	top.position = player->GetWorldPos() + Vector3(0, 100, 0);
 
 	top.direction = Vector3(0, -1, 0);
@@ -167,7 +162,7 @@ void Scene1::LateUpdate()
 	}
 
 
-	player->WolrdUpdate();
+	player->WolrdUpdate();*/
 
 }
 void Scene1::PreRender()
@@ -176,8 +171,8 @@ void Scene1::PreRender()
 	Camera::main->Set();
 	deferred->SetTarget();	
 	map->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
-	player->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-	monster->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	water->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
+
 
 }
 
@@ -185,16 +180,15 @@ void Scene1::Render()
 {
 	skybox->Render();
 	skybox2->Render();
-	//grid->Render();
+	grid->Render();
 	deferred->Render();
+	BLEND->Set(true);
+	BLEND->Set(false);
+
 	
-	//water->Render();
 
 
-	//BLEND->Set(true);
-	//player->Render();
-	//BLEND->Set(false);
-
+	
 
 }
 

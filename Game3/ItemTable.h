@@ -12,6 +12,5 @@ public:
 	Item* CreateItem(const std::string& name, ItemFactory* factory);
 
 	void OpenList();
-
 };
 

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "UI_Player.h"
 #include "PlayerObserver.h"
+#include "Inventory.h"
 
 #include "Monster.h"
 #include "UI_Monster.h"
@@ -41,8 +42,6 @@ Scene2::Scene2()
 	ResizeScreen();
 
 	deferred = new Deferred;
-
-	LIGHT->dirLight.color = Color(0, 0, 0);
 }
 
 Scene2::~Scene2()
@@ -56,7 +55,7 @@ void Scene2::Init()
 	mapGen->checkConnectivity();
 	//mapGen->coutTile();
 	mapGen->InstanceTile(Tile);
-	//mapGen->finalizeMap(Tile);
+	mapGen->finalizeMap(Tile);
 	//mapGen->WallCreateMap(Tile);
 
 	//int count;
@@ -105,6 +104,9 @@ void Scene2::Init()
 	//} while (count != 4);
 	//float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
 	//player->pObserver->GetData()->SetSpawn(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
+
+	//player->inventory->AddItem(ITEM->CreateItem("돌", new RootItemFactory));
+
 }
 
 void Scene2::Release()
@@ -127,6 +129,8 @@ void Scene2::Update()
 	player->Hierarchy();
 
 	MonMGR->Hierarchy();
+	FIELD->Hierarchy();
+
 	ImGui::End();
 
 	if (FREE_CAM) {
@@ -171,6 +175,9 @@ void Scene2::Update()
 		//MonMGR->CreateMonster(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
 		MonMGR->CreateMonster(Vector3(10, 0, 10));
 	}
+	if (INPUT->KeyDown('G')) {
+		player->inventory->OpenList();
+	}
 
 	Camera::main->Update();
 
@@ -182,11 +189,13 @@ void Scene2::Update()
 
 	MonMGR->Update();
 	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
+	FIELD->Update();
+
 }
 
 void Scene2::LateUpdate()
 {
-	
+
 	// 벽 충돌 ( 처음 틱에는 한번 건너뛴다 )
 	/*static bool isOnece = false;
 	Vector3 playerPos = player->pObserver->GetPos();
@@ -219,7 +228,7 @@ void Scene2::LateUpdate()
 		}
 	}
 
-	
+
 	for (MonsterData* Mvector : Monster) {
 		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
 		Vector3 mDir = Mvector->Mon->GetForward();
@@ -235,6 +244,9 @@ void Scene2::LateUpdate()
 			}
 		}
 	}*/
+
+
+
 	Vector3 pPos = player->actor->GetWorldPos();
 	GameObject* PlayerSword = player->actor->Find("sword");
 	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
@@ -243,12 +255,24 @@ void Scene2::LateUpdate()
 
 		auto Mon = Mvector->Mon;
 		if (Mon->Intersect(PlayerSword)) {
-			Mon->Damage(50);
+			Mon->Damage(200);
 		}
 		else if (player->actor->Intersect(MonsterSword)) {
 			player->actor->Damage(5);
 		}
 	};
+
+	for (auto it = FIELD->items.begin(); it != FIELD->items.end();) {
+		if (player->actor->Intersect((*it)->actor)) {
+			player->inventory->AddItem((*it));
+			it = FIELD->ItemList().erase(it); // 현재 아이템 삭제 후 다음 아이템을 가리키도록 반복자를 업데이트
+		}
+		else {
+			++it; // 아이템이 삭제되지 않았으면 다음 아이템으로 이동
+		}
+	}
+
+
 
 	//카메라 벽 충돌
 	Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
@@ -277,6 +301,8 @@ void Scene2::PreRender()
 		Mvector->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	}
 	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	FIELD->Render();
+
 }
 
 void Scene2::Render()
@@ -285,7 +311,6 @@ void Scene2::Render()
 	//skybox2->Render();
 	deferred->Render();
 	player->Render();
-
 }
 
 void Scene2::ResizeScreen()

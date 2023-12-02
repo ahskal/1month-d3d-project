@@ -17,8 +17,6 @@ private:
 	UI* post;       //4개의 렌더타겟을 받아 그려줄
 
 
-
-
 public:
 	Scene2();
 	~Scene2();
