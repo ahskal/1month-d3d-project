@@ -95,6 +95,7 @@ void Monster::FSM()
 			Move();
 		}
 		else if (state == State::ATTACK) {
+			isAttack = true;
 			if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
 			{
 				slash->Play();
@@ -104,6 +105,7 @@ void Monster::FSM()
 				slash->Stop();
 			}
 			if (anim->GetPlayTime() >= 0.98f) {
+				isAttack = false;
 				state = State::IDLE;
 			}
 		}

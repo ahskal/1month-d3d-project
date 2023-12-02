@@ -51,6 +51,8 @@ void Unit::Damage(int damage)
 {
 	if (hitCooltime <= 0.0f)
 	{
+		DAMAGEFONT->AddDamageText(damage, GetWorldPos());
+
 		Hp -= damage;
 		hitCooltime = 0.1f;
 		//cout << this->GetWorldPos().x<< this->GetWorldPos().y << endl;

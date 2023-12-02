@@ -151,8 +151,8 @@ float3 NormalMapping(float3 N, float3 T, float3 B, float2 Uv)
 {
 	T = normalize(T);
 	B = normalize(B);
-	N = normalize(N);
-    
+	N = normalize(N);    
+
     [flatten]
 	if (Ka.a)
 	{

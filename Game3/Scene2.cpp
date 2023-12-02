@@ -51,12 +51,15 @@ Scene2::~Scene2()
 void Scene2::Init()
 {
 	//맵 초기값 설정 및 생성
-	mapGen->generateInitialMap();
-	mapGen->checkConnectivity();
-	//mapGen->coutTile();
-	mapGen->InstanceTile(Tile);
-	mapGen->finalizeMap(Tile);
-	//mapGen->WallCreateMap(Tile);
+	mapGen->initializeMap();
+	//mapGen->updateMapTiles();
+	mapGen->validateMapConnectivity();
+	mapGen->printTileInfo();
+	mapGen->instantiateTile(Tile);
+	mapGen->finalizeMapConfiguration(Tile);
+	mapGen->createWallMap(Tile);
+
+	//mapGen->createLighting(Tile);
 
 	//int count;
 	//for (int k = 0; k < mapGen->floors; ++k) {
@@ -84,28 +87,11 @@ void Scene2::Init()
 	//	Tile->Find(to_string(x) + "x" + to_string(y) + "x" + to_string(k))->AddChild(temp);
 	//}
 
-
-	//int x;
-	//int y;
-	//do
-	//{
-	//	x = RANDOM->Int(0, mapGen->rows - 1);
-	//	y = RANDOM->Int(0, mapGen->cols - 1);
-	//	count = 0;
-	//	for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
-	//		for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
-	//			// 현재 좌표 (i, j, k)의 타일을 검사
-	//			// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
-	//			if (mapGen->Tiles[i][j][0] == 1) {
-	//				count++;
-	//			}
-	//		}
-	//	}
-	//} while (count != 4);
-	//float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
-	//player->pObserver->GetData()->SetSpawn(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
-
 	//player->inventory->AddItem(ITEM->CreateItem("돌", new RootItemFactory));
+
+
+	//player->actor->SetWorldPos(mapGen->GetRandomPos());
+
 
 }
 
@@ -128,8 +114,8 @@ void Scene2::Update()
 	Tile->RenderHierarchy();
 	player->Hierarchy();
 
-	MonMGR->Hierarchy();
-	FIELD->Hierarchy();
+	//MonMGR->Hierarchy();
+	//FIELD->Hierarchy();
 
 	ImGui::End();
 
@@ -190,7 +176,6 @@ void Scene2::Update()
 	MonMGR->Update();
 	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
 	FIELD->Update();
-
 }
 
 void Scene2::LateUpdate()
@@ -254,10 +239,10 @@ void Scene2::LateUpdate()
 		GameObject* MonsterSword = Mvector->Mon->Find("sword");
 
 		auto Mon = Mvector->Mon;
-		if (Mon->Intersect(PlayerSword)) {
+		if (Mon->Intersect(PlayerSword) && player->actor->isAttack) {
 			Mon->Damage(200);
 		}
-		else if (player->actor->Intersect(MonsterSword)) {
+		else if (player->actor->Intersect(MonsterSword) && Mon->isAttack) {
 			player->actor->Damage(5);
 		}
 	};
@@ -272,8 +257,6 @@ void Scene2::LateUpdate()
 		}
 	}
 
-
-
 	//카메라 벽 충돌
 	Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
 	for (Actor* it : mapGen->WallActorList) {
@@ -286,6 +269,7 @@ void Scene2::LateUpdate()
 	}
 
 	MonMGR->LateUpdate();
+	DAMAGEFONT->Update();
 }
 
 void Scene2::PreRender()
@@ -302,6 +286,7 @@ void Scene2::PreRender()
 	}
 	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	FIELD->Render();
+	DAMAGEFONT->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
 
 }
 
@@ -309,6 +294,7 @@ void Scene2::Render()
 {
 	//skybox->Render();
 	//skybox2->Render();
+
 	deferred->Render();
 	player->Render();
 }
@@ -322,3 +308,5 @@ void Scene2::ResizeScreen()
 	Camera::main->width = App.GetWidth();
 	Camera::main->height = App.GetHeight();
 }
+
+

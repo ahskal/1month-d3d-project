@@ -82,7 +82,6 @@ float4 PS(PixelInput input):SV_TARGET
 	BaseColor.rgb += Ka.rgb * BaseColor.rgb;
 	BaseColor.rgb += EmissiveMapping(BaseColor.rgb, input.Uv, input.Normal, input.wPosition.xyz);
 	
-	
 	BaseColor.rgb = saturate(BaseColor.rgb);
 	
 	BaseColor = AddShadow(BaseColor, input.wPosition);

@@ -13,7 +13,7 @@ void FieldItem::AddItem(const Item* newItem)
 	else {
 		Item* NewItem = new Item(*newItem);
 		NewItem->size++;
-		items.push_back(NewItem);
+		items.emplace_back(NewItem);
 	}
 }
 
@@ -27,7 +27,7 @@ void FieldItem::AddItem(const Item* newItem, Vector3 pos)
 	}
 	NewItem->actor->SetWorldPos(pos);
 	NewItem->size++;
-	items.push_back(NewItem);
+	items.emplace_back(NewItem);
 }
 
 void FieldItem::OpenList()

@@ -14,6 +14,10 @@
 #include "ItemTable.h"
 #include "FieldItem.h"
 
+#include "DamageText.h"
+#include "DamageFontManager.h"
+
 #define MonMGR	MonsterManager::GetInstance()
 #define ITEM	ItemTable::GetInstance()
 #define FIELD   FieldItem::GetInstance()
+#define DAMAGEFONT	DamageFontManager::GetInstance()

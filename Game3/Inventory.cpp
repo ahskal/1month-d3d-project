@@ -15,8 +15,6 @@ void Inventory::AddItem(const Item* newItem)
 	auto it = std::find_if(items.begin(), items.end(), [newItem](const Item* existingItem) {
 		return existingItem->ItemName == newItem->ItemName;
 		});
-	
-	
 
 	if (it != items.end()) {
 		(*it)->size += newItem->size; // 기존 아이템이 있으면 수량 증가
@@ -25,7 +23,6 @@ void Inventory::AddItem(const Item* newItem)
 		Item* NewItem = new Item(*newItem);
 		NewItem->state = ItemState::Inven;
 		NewItem->actor->name = newItem->ItemName;
-		NewItem->size++;
 		items.push_back(NewItem);
 	}
 }
@@ -47,7 +44,7 @@ void Inventory::Update()
 {
 	for (auto inven : items) {
 		inven->Update();
-		inven->actor->RenderHierarchy();
+		//inven->actor->RenderHierarchy();
 	}
 }
 

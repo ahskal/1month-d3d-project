@@ -63,6 +63,12 @@
     <ClInclude Include="Scene1.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="DamageText.h">
+      <Filter>Object\DamageFont</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageFontManager.h">
+      <Filter>Object\DamageFont</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -126,6 +132,12 @@
     <ClCompile Include="Scene1.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="DamageText.cpp">
+      <Filter>Object\DamageFont</Filter>
+    </ClCompile>
+    <ClCompile Include="DamageFontManager.cpp">
+      <Filter>Object\DamageFont</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Object">
@@ -154,6 +166,9 @@
     </Filter>
     <Filter Include="Object\Item\member">
       <UniqueIdentifier>{4a1638f6-bbec-434d-9ef5-6ba014311de0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\DamageFont">
+      <UniqueIdentifier>{f835231f-6d8f-453e-8569-872b31ab6226}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

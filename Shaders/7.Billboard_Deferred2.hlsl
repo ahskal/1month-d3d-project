@@ -63,7 +63,7 @@ void GS(point VertexInput input[1], inout TriangleStream<PixelInput> output)
         //월드에서 다시 ndc까지 변환
 		pixelInput.Position = mul(vertices[i], GSProj);
 		pixelInput.Uv = TEXCOORD[i];
-		output.Append(pixelInput);       
+		output.Append(pixelInput);
 	}
 }
 
@@ -87,7 +87,7 @@ DeferredOutput PS(PixelInput input)
 	
     output.normal = float4(0, 0, 0, 1);
     output.emissive = float4(0, 0, 0, 1);
-    output.ambient = float4(Ka.rgb * output.diffuse.rgb, 1) * 2;	
+    output.ambient = float4(Ka.rgb * output.diffuse.rgb, 1);	
 
 	return output;
 }

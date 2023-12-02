@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DamageFontManager.h" />
+    <ClInclude Include="DamageText.h" />
     <ClInclude Include="FieldItem.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
@@ -173,6 +175,8 @@
     <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DamageFontManager.cpp" />
+    <ClCompile Include="DamageText.cpp" />
     <ClCompile Include="FieldItem.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />

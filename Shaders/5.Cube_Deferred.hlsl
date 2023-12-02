@@ -64,8 +64,6 @@ DeferredOutput PS(PixelInput input)
 	
     output.diffuse = BaseColor;
 	
-	
-	
     output.specular = float4(1, 1, 1, saturate(Shininess / MAX_SHININESS));
     output.normal = float4(normalize(input.Normal) * 0.5f + 0.5f, 1);
     output.emissive = float4(EmissiveMapping(output.diffuse.xyz, input.Uv, input.Normal, input.wPosition.xyz), 1);

@@ -197,6 +197,7 @@ void Player::FSM()
 		}
 		if (anim->GetPlayTime() >= 0.98f) {
 			state = State::IDLE;
+			isAttack = false;
 			if (Laststate == State::WALK) {
 				anim->ChangeAnimation(AnimationState::LOOP, Eqip[index], 0.1f);
 				return;
@@ -286,7 +287,7 @@ void Player::CameraHold()
 
 void Player::Attacker()
 {
-	isHit = false;
+	isAttack = true;
 	Laststate = state;
 	state = State::ATTACK;
 	if (AttackCount == 0) {

@@ -17,7 +17,7 @@ void MonsterManager::CreateMonster(Vector3 pos)
 {
 	MonsterData* Mon = new MonsterData();
 	Mon->Mon->SetSpawn(pos);
-	MonVec.push_back(Mon);
+	MonVec.emplace_back(Mon);
 }
 
 void MonsterManager::GetTargetPos(Vector3 pos)
@@ -41,7 +41,6 @@ void MonsterManager::LateUpdate()
 			it->Mon->SetState(Mon::State::DEADSTART);
 			it->Mon->isDead = true;
 			it->Mon->SlashOFF();
-			it->UI->VisibleOFF();
 			switch (RANDOM->Int(1, 4)) {
 			case 1: it->Mon->anim->ChangeAnimation(AnimationState::ONCE_LAST, Mon::Ani_Dead_01, 0.1f); break;
 			case 2: it->Mon->anim->ChangeAnimation(AnimationState::ONCE_LAST, Mon::Ani_Dead_02, 0.1f); break;
@@ -63,10 +62,10 @@ void MonsterManager::LateUpdate()
 				if (Remove) {
 					int val = RANDOM->Int(1, 5);
 					auto M = ITEM->CreateItem("Gold", new MoneyItemFactory);
-					for (int i = 0; i < val; i++) {
-						Vector3 dropPos = Md->Mon->GetWorldPos() + Vector3(RANDOM->Int(-3, 0), 0, RANDOM->Int(-3, 0));
+					//for (int i = 0; i < val; i++) {
+						Vector3 dropPos = Md->Mon->GetWorldPos() + Vector3(RANDOM->Int(-1, 1), 0, RANDOM->Int(-1, 1));
 						FIELD->AddItem(M, dropPos);
-					}
+					//}
 
 					delete Md;
 				}

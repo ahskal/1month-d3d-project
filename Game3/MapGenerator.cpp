@@ -1,296 +1,272 @@
 #include "stdafx.h"
 #include "MapGenerator.h"
 
-void MapGenerator::set(int rows, int cols, int floors)
+void MapGenerator::initializeMap()
 {
-	this->rows = rows;
-	this->cols = cols;
-	this->floors = floors;
-	Tiles.resize(rows, std::vector<std::vector<int>>(cols, std::vector<int>(floors, 0)));
-	visited.resize(rows, std::vector<std::vector<bool>>(cols, std::vector<bool>(floors, false)));
-}
+	unordered_set<double>	noiseValues;
+	double					averageNoise = 0.0;
+	const double			noiseThreshold = -0.3;
+	const float				noiseResolution = 0.1;
+	// Generate map until the average noise is below the threshold
+	do
+	{
+		noiseValues.clear();
+		siv::PerlinNoise perlinNoise(RANDOM->Float(0, 10000));
+		for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+		{
+			for (int colIndex = 0; colIndex < cols; colIndex++)
+			{
+				double x = static_cast<double>(rowIndex) / noiseResolution;
+				double y = static_cast<double>(colIndex) / noiseResolution;
+				double z = 0.5f;
+				double noiseValue = perlinNoise.noise3D(x, y, z) * 10;
 
-void MapGenerator::generateInitialMap()
-{
-	unordered_set <double> table;
-	double avg = 0.0f;
-	float threshold = 10;
-	float thres = 0.1;
-
-	//펄린노이즈 난수값의 평균이 -0.3보다 작을때만 실행
-	do {
-		table.clear();
-		siv::PerlinNoise pn(RANDOM->Float(0, 100));
-		for (int k = 0; k < floors; k++) {
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					double x = (double)i / thres;
-					double y = (double)j / thres;
-					double z = (double)k + 0.5;
-					double temp = pn.noise3D(x, y, z) * 10;
-					table.insert(temp);
-					Tiles[i][j][k] = temp > -0.3f ? 1 : 0;
-				}
+				noiseValues.insert(noiseValue);
+				Tiles[rowIndex][colIndex] = (noiseValue > noiseThreshold) ? 1 : 0;
 			}
 		}
-		for (auto it = table.begin(); it != table.end(); it++) {
-			avg += *it;
+		// Calculate average noise
+		for (auto it = noiseValues.begin(); it != noiseValues.end(); it++)
+		{
+			averageNoise += *it;
 		}
-		avg /= table.size();
-	} while (avg < -0.3f);
+		averageNoise /= noiseValues.size();
+	} while (averageNoise < noiseThreshold);
+
+	// 가장자리 처리
+	for (int i = 0; i < rows; i++) {
+		Tiles[i][0] = 0;          // 왼쪽 가장자리
+		Tiles[i][cols - 1] = 0;   // 오른쪽 가장자리
+	}
+
+	for (int j = 0; j < cols; j++) {
+		Tiles[0][j] = 0;          // 위쪽 가장자리
+		Tiles[rows - 1][j] = 0;   // 아래쪽 가장자리
+	}
 }
 
-void MapGenerator::updateTiles()
+void MapGenerator::updateMapTiles()
 {
-	//빈공간 기준으로 만약 주변에 타일이 1이 7개 이상일경우 자신도 1로 바꿔주는 코드
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			for (int k = 0; k < floors; k++) {
-				// 0의 개수를 저장할 변수
-				int count = 0;
-				// 타일이라면 건너뛴다.
-				if (not Tiles[i][j][k]) {
-					for (int dx = -1; dx <= 1; ++dx) {
-						for (int dy = -1; dy <= 1; ++dy) {
-							// 주변 타일의 위치 계산
-							int ni = i + dx;
-							int nj = j + dy;
-							// 배열 범위를 벗어나는지 확인
-							if (ni >= 0 && ni < rows && nj >= 0 && nj < cols) {
-								// 주변 타일이 0인 경우 count 증가
-								if (Tiles[ni][nj][k] == 1) {
-									count++;
-								}
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			int count = 0;
+			if (not Tiles[i][j])
+			{
+				for (int dx = -1; dx <= 1; ++dx)
+				{
+					for (int dy = -1; dy <= 1; ++dy)
+					{
+						// 주변 타일의 위치 계산
+						int ni = i + dx;
+						int nj = j + dy;
+						// 배열 범위를 벗어나는지 확인
+						if (ni >= 0 && ni < rows && nj >= 0 && nj < cols)
+						{
+							// 주변 타일이 0인 경우 count 증가
+							if (Tiles[ni][nj] == 1)
+							{
+								count++;
 							}
 						}
 					}
-					// 조건에 따라 현재 타일 값 변경
-					if (count >= 7) {
-						Tiles[i][j][k] = 1;
-					}
-					else {
-						Tiles[i][j][k] = 0;
-					}
 				}
+			}
+			if (count >= 7) {
+				Tiles[i][j] = 1;
+			}
+			else {
+				Tiles[i][j] = 0;
 			}
 		}
 	}
 }
 
-vector<std::tuple<int, int, int>> MapGenerator::bfs(int startX, int startY, int startFloor)
+void MapGenerator::validateMapConnectivity()
 {
-	std::vector<std::tuple<int, int, int>> BigTiles;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			visited[i][j] = false;
+		}
+	}
+	const int minRequiredSize = (float)(rows * cols) / 2;
+	std::vector<std::pair<int, int>> bigTiles;
+	bigTiles.clear();
 
-	for (int k = 0; k < floors; k++) {
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				visited[i][j][k] = false;
+	// 큰 타일의 좌표를 저장하는 벡터	
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			if (Tiles[i][j] == 1 && !visited[i][j]) {
+				auto temp = bfs(i, j);
+				if (temp.size() > bigTiles.size()) {
+					bigTiles.clear();
+					bigTiles = temp;
+				}
 			}
 		}
 	}
-	std::queue<std::tuple<int, int, int>> q;
-	q.push(std::make_tuple(startX, startY, startFloor));
+	for (int x = 0; x < rows; x++) {
+		for (int y = 0; y < cols; y++) {
+			Tiles[x][y] = 0;  // 모든 타일을 0으로 초기화
+		}
+	}
+	for (const auto& tile : bigTiles) {
+		int x = std::get<0>(tile);
+		int y = std::get<1>(tile);
+		// 필요한 처리를 수행
+		Tiles[x][y] = 1;  // 예시: 2로 표시하는 동작
+	}
+}
+
+vector<std::pair<int, int>> MapGenerator::bfs(int startX, int startY)
+{
+	vector<std::pair<int, int>> BigTiles;
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			visited[i][j] = false;
+		}
+	}
+	std::queue<std::pair<int, int>> q;
+	q.push(std::make_pair(startX, startY));
 	auto current = q.front();
 	BigTiles.push_back(q.front());
-
-	visited[startX][startY][startFloor] = true;
-
-	while (!q.empty()) {
+	visited[startX][startY] = true;
+	while (!q.empty())
+	{
 		auto current = q.front();
 		q.pop();
 
 		int x = std::get<0>(current);
 		int y = std::get<1>(current);
-		int k = std::get<2>(current);
 
-		for (int l = 0; l < 4; ++l) {
+		for (int l = 0; l < 4; ++l)
+		{
 			int ni = x + dx[l];
 			int nj = y + dy[l];
 
 			// Check if the adjacent cell is within bounds, unvisited, and part of the area
-			if ((ni >= 0 && nj >= 0 && ni < rows && nj < cols) && !visited[ni][nj][k] && Tiles[ni][nj][k] == 1) {
-				q.push(std::make_tuple(ni, nj, k));
-				BigTiles.push_back(std::make_tuple(ni, nj, k));
-				visited[ni][nj][k] = true;
-				// grid[ni][nj][k] = 2;  // You can mark as visited if needed
+			if ((ni >= 0 && nj >= 0 && ni < rows && nj < cols) && !visited[ni][nj] && Tiles[ni][nj] == 1)
+			{
+				q.push(std::make_pair(ni, nj));
+				BigTiles.push_back(std::make_pair(ni, nj));
+				visited[ni][nj] = true;
 			}
 		}
 	}
 	return BigTiles;
 }
 
-void MapGenerator::checkConnectivity()
+void MapGenerator::printTileInfo()
 {
-	for (int k = 0; k < floors; k++) {
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				visited[i][j][k] = false;
-			}
-		}
-	}
-
-	std::vector<std::tuple<int, int, int>> bigTiles;  // 큰 타일의 좌표를 저장하는 벡터		
-
-	for (int k = 0; k < floors; k++) {
-		int max_size = 0;
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				if (Tiles[i][j][k] == 1 && !visited[i][j][k]) {
-					auto temp = bfs(i, j, k);
-					if (temp.size() > bigTiles.size()) {
-						bigTiles.clear();
-						bigTiles = temp;
-						max_size = bigTiles.size();
-					}
-					if (max_size > (rows * cols) / 2) {
-						break;
-					}
-				}
-			}
-		}
-		if ((float)max_size > (float)(rows * cols) / 2) {
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					Tiles[i][j][k] = 0;
-				}
-			}
-			for (const auto& tile : bigTiles) {
-				int x = std::get<0>(tile);
-				int y = std::get<1>(tile);
-				int z = std::get<2>(tile);
-				// 필요한 처리를 수행
-				Tiles[x][y][z] = 1;  // 예시: 2로 표시하는 동작
-			}
-		}
-	}
-}
-
-void MapGenerator::coutTile()
-{
-	for (int k = 0; k < floors; k++) {
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				string temp = Tiles[i][j][k] == 1 ? "■" : "□";
-				cout << temp << " ";
-			}
-			cout << endl;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			string temp = Tiles[i][j] == 1 ? "■" : "□";
+			cout << temp << " ";
 		}
 		cout << endl;
 	}
+	cout << endl;
 }
 
-void MapGenerator::InstanceTile(GameObject* act)
+void MapGenerator::instantiateTile(GameObject* act)
 {
 	float tileSize = 5.0f;
 	float tileWidth = tileSize * rows;
 	float tileHeight = tileSize * cols;
 	float centerX = -tileWidth / 2;
 	float centerZ = -tileHeight / 2;
-
-	float IndexWidth = rows * cols * floors;
+	float IndexWidth = rows * cols * 2;
 	Matrix* matrix = new Matrix[IndexWidth];
-
 	Actor* temp = Actor::Create();
-	temp->LoadFile("Tile1.xml");
+	temp->LoadFile("Object/Tile1.xml");
 	temp->name = "Floor_Instance";
 	temp->shader = RESOURCE->shaders.Load("4.Instance_Deferred.hlsl");
 	int count2 = 0;
-	for (int k = 0; k < floors; k++) {
+	for (int k = 0; k < 2; k++) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				Matrix temp = Matrix::CreateTranslation(Vector3(centerX + i * 5, k * 5, centerZ + j * 5 + 5));
-				matrix[count2] = temp;
-				matrix[count2] = temp.Transpose();
+				//matrix[count2] = temp;
+				matrix[count2] = temp.Transpose(); // 왜 여기서 두 번 할당하는지 확인 필요
 				count2++;
 			}
 		}
 	}
+
+	// matrix 배열을 메모리에 할당한 후 해제
 	temp->mesh->CreateInstanceBuffer(matrix, count2);
+	delete[] matrix;
+
 	act->AddChild(temp);
 }
 
-void MapGenerator::finalizeMap(GameObject* act)
+void MapGenerator::finalizeMapConfiguration(GameObject* act)
 {
-
 	float tileWidth = tileSize * rows;
 	float tileHeight = tileSize * cols;
 	float centerX = -tileWidth / 2;
 	float centerZ = -tileHeight / 2;
-
-	for (int k = 0; k < floors; k++) {
-		Actor* floor = Actor::Create();
-		floor->name = "floor" + to_string(k);
-		act->AddChild(floor);
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				if (Tiles[i][j][k] == 1) {
-					Actor* temp = Actor::Create();
-					//temp->LoadFile("Tile1.xml");
-					temp->name = to_string(i) + "x" + to_string(j) + "x" + to_string(k);
-					temp->SetLocalPosX(centerX + (tileSize * i));
-					temp->SetLocalPosZ(centerZ + (tileSize * j));
-					temp->SetWorldPosY(k * tileSize);
-					temp->scale.x;
-					temp->scale.z;
-					floor->AddChild(temp);
-				}
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			if (Tiles[i][j] == 0) {
+				Actor* temp = Actor::Create();
+				//temp->LoadFile("Object/Cube.xml");
+				temp->collider = new Collider(ColliderType::OBOX);
+				temp->collider->scale = Vector3(2.5f, 2.5f, 2.5f);
+				temp->collider->SetLocalPosY(2.5f);
+				temp->name = to_string(i) + "x" + to_string(j);
+				temp->SetLocalPosX(centerX + (tileSize * i) + 2.5f);
+				temp->SetLocalPosZ(centerZ + (tileSize * j) + 2.5f);
+				temp->scale.x;
+				temp->scale.z;
+				act->AddChild(temp);
+				WallActorList.push_back(temp);
 			}
 		}
 	}
 }
 
-void MapGenerator::WallCreateMap(Actor* act)
+void MapGenerator::createWallMap(Actor* act)
 {
-	// 각 타일 주변에 특정 조건을 만족할 때 벽 생성 (rows, cols 사이즈 기준)
-	for (int k = 0; k < floors; k++) {
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				// 현재 타일이 1인 경우에만 검사
-				if (Tiles[i][j][k] == 1) {
-					// 사방을 탐색하여 특정 조건을 만족하면 벽 생성
-					// 상하좌우 방향만 검사
-					for (int l = 0; l < 4; ++l) {
-						int ni = i + dx[l];
-						int nj = j + dy[l];
-						// 범위를 벗어나면 현재 타일에서도 벽을 그림
-						Actor* temp = Actor::Create();
-						temp->LoadFile("Wall1.xml");
-						temp->shader = RESOURCE->shaders.Load("4.Cube_Deferred.hlsl");
-						// 회전 각도 배열
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			auto actor = act->Find(to_string(i) + "x" + to_string(j));
+			if (Tiles[i][j] == 0)
+			{
+				for (int l = 0; l < 4; ++l)
+				{
+					int ni = i + dx[l];
+					int nj = j + dy[l];
+					Actor* temp = Actor::Create();
+					temp->LoadFile("Object/Wall1.xml");
+					temp->shader = RESOURCE->shaders.Load("4.Cube_Deferred.hlsl");
+					// 방향에 따른 생성 해주는 코드
+					if (ni < 0 || nj < 0 || ni >= rows || nj >= cols)
+					{
 						float rotationAngles[4] = { -90, 90, -180, 0 };
-						// 방향에 따른 생성 해주는 코드
 						temp->rotation.y = rotationAngles[l] * ToRadian;
-						if (ni < 0 || nj < 0 || ni >= rows || nj >= cols) {
-							if (l == 1) {
-								temp->SetLocalPosX(5);
-								temp->SetLocalPosZ(5);
-							}
-							else if (l == 2) {
-								temp->SetLocalPosX(5);
-							}
-							else if (l == 3) {
-								temp->SetLocalPosZ(5);
-							}
-							temp->name = "floor" + to_string(k) + "_" + to_string(i) + "y" + to_string(j) + "_" + to_string(l);
-							act->Find(to_string(i) + "x" + to_string(j) + "x" + to_string(k))->AddChild(temp);
-							WallActorList.push_back(temp);
-						}
-						else if (Tiles[ni][nj][k] != 1) {
-							if (l == 1) {
-								temp->SetLocalPosX(5);
-								temp->SetLocalPosZ(5);
-							}
-							else if (l == 2) {
-								temp->SetLocalPosX(5);
-							}
-							else if (l == 3) {
-								temp->SetLocalPosZ(5);
-							}
-							temp->name = "floor" + to_string(k) + "_" + to_string(i) + "y" + to_string(j) + "_" + to_string(l);
-							act->Find(to_string(i) + "x" + to_string(j) + "x" + to_string(k))->AddChild(temp);
-							WallActorList.push_back(temp);
-						}
-
+						if (l == 0)	temp->SetLocalPosX(-2.5);
+						else if (l == 1) temp->SetLocalPosX(2.5);
+						else if (l == 2) temp->SetLocalPosZ(-2.5);
+						else if (l == 3) temp->SetLocalPosZ(2.5);
+						temp->name = to_string(i) + "y" + to_string(j) + "_" + to_string(l);
+						actor->AddChild(temp);
+					}
+					else if (Tiles[ni][nj] != 0)
+					{
+						float rotationAngles[4] = { 90, -90, 0, -180 };
+						temp->rotation.y = rotationAngles[l] * ToRadian;
+						if (l == 0)	temp->SetLocalPosX(-2.5);
+						else if (l == 1) temp->SetLocalPosX(2.5);
+						else if (l == 2) temp->SetLocalPosZ(-2.5);
+						else if (l == 3) temp->SetLocalPosZ(2.5);
+						temp->name = to_string(i) + "y" + to_string(j) + "_" + to_string(l);
+						actor->AddChild(temp);
 					}
 				}
 			}
@@ -328,14 +304,56 @@ bool MapGenerator::WorldPosToTileIdx(Vector3 WPos, Int2& TileIdx)
 int MapGenerator::GetTileState(Vector3 WPos)
 {
 	Int2 idx;
-	int floor = WPos.y / 5.0f;
 	if (WorldPosToTileIdx(WPos, idx)) {
-		return GetTileState(idx, floor);
+		return GetTileState(idx);
 	}
 	return false;
 }
 
-bool MapGenerator::GetTileState(Int2 TileIdx, int floor)
+bool MapGenerator::GetTileState(Int2 TileIdx)
 {
-	return Tiles[TileIdx.x][TileIdx.y][floor];
+	return Tiles[TileIdx.x][TileIdx.y];
+}
+
+void MapGenerator::createLighting(Actor* act)
+{
+	for (int i = 0; i < 20; i++) {
+		Light* light = Light::Create("Light" + to_string(i), 1);
+		light->rotation.x = 45 * ToRadian;
+		light->light->radius = 15;
+		light->light->outer = 80;
+		light->SetWorldPos(GetRandomPos());
+		light->SetWorldPosY(5);
+
+		act->AddChild(light);
+	}
+}
+
+Vector3 MapGenerator::GetRandomPos()
+{
+	int count;
+	int x;
+	int y;
+	float mapSize = ((rows * tileSize) / 2);
+	do
+	{
+		count = 0;
+		x = RANDOM->Int(0, rows - 1);
+		y = RANDOM->Int(0, cols - 1);
+
+		// 주어진 위치 (x, y)의 타일이 갈 수 있는 타일이면 count를 증가
+		for (int i = max(0, x - 1); i <= min(rows - 1, x + 1); ++i)
+		{
+			for (int j = max(0, y - 1); j <= min(cols - 1, y + 1); ++j)
+			{
+				if (Tiles[i][j] != 0)
+				{
+					count++;
+				}
+			}
+		}
+	} while (count != 1);
+
+	// 올바른 위치 반환
+	return Vector3(-mapSize + x * 5 - 2.5f, 0, -mapSize + y * 5 - 2.5f);
 }
