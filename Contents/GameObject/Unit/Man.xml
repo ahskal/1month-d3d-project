@@ -63,7 +63,7 @@
                 <Child0 Name="SceneMeshObject1" Visible="true" ObType="0" BoneIndex="-1">
                     <Mesh File="BlueIsland_Man/SceneMeshObject1.mesh"/>
                     <Shader File="4.Cube.hlsl"/>
-                    <Material File="BlueIsland_Man/Blueisland_Character_Mat2.mtl"/>
+                    <Material File="Unit/Unit_00.mtl"/>
                     <Transform>
                         <Position X="0" Y="0" Z="0"/>
                         <Scale X="1" Y="1" Z="1"/>
@@ -380,9 +380,9 @@
                                                 </Child0>
                                             </Child4>
                                             <Child5 Name="shield" Visible="true" ObType="0" BoneIndex="-1">
-                                                <Mesh File="Shield/shield.mesh"/>
+                                                <Mesh File="weapon/shield.mesh"/>
                                                 <Shader File="4.Cube.hlsl"/>
-                                                <Material File="Shield/Blusialand_weapon_Mat.mtl"/>
+                                                <Material File="weapon/Blusialand_weapon_Mat.mtl"/>
                                                 <Transform>
                                                     <Position X="0" Y="0" Z="0"/>
                                                     <Scale X="1" Y="1" Z="1"/>
@@ -598,14 +598,14 @@
                                                 </Child0>
                                             </Child4>
                                             <Child5 Name="sword" Visible="true" ObType="0" BoneIndex="-1">
-                                                <Mesh File="Sword/sword.mesh"/>
+                                                <Mesh File="weapon/sword.mesh"/>
                                                 <Shader File="4.Cube.hlsl"/>
                                                 <Collider ColliderType="2" Visible="true">
                                                     <Position X="0" Y="0" Z="-50.000011"/>
                                                     <Scale X="1" Y="1" Z="40"/>
                                                     <Rotation X="0" Y="0" Z="0"/>
                                                 </Collider>
-                                                <Material File="Sword/Blusialand_weapon_Mat.mtl"/>
+                                                <Material File="weapon/Blusialand_weapon_Mat.mtl"/>
                                                 <Transform>
                                                     <Position X="-10.000001" Y="-5.5000005" Z="0"/>
                                                     <Scale X="1" Y="1" Z="1"/>

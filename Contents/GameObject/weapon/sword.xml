@@ -1,5 +1,5 @@
 <Root Name="sword" Visible="true" ObType="0">
-	<Mesh File="weapon/sword.mesh"/>
+	<Mesh File="Sword/sword.mesh"/>
 	<Shader File="4.Cube.hlsl"/>
 	<Material File="weapon/Blusialand_weapon_Mat.mtl"/>
 	<Transform>

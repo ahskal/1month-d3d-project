@@ -39,11 +39,11 @@ DamageText::~DamageText()
 
 void DamageText::Update()
 {
-	ImGui::Begin("UI Hierarchy");
-	{
-		damageText->RenderHierarchy();
-	}
-	ImGui::End();
+	//ImGui::Begin("UI Hierarchy");
+	//{
+	//	damageText->RenderHierarchy();
+	//}
+	//ImGui::End();
 	
 	// 라이프타임 증가
 	lifeTime += DELTA;
@@ -51,7 +51,7 @@ void DamageText::Update()
 	// 부모노드가 있으면 부모노드의 위치 + 플레이어->라이트방향으로이동
 	if (parentNode)
 	{
-		Vector3 position = parentNode->GetWorldPos() + Camera::main->GetRight() * 0.2f;
+		Vector3 position = parentNode->GetWorldPos() + Camera::main->GetRight() * 0.7f;
 		damageText->SetWorldPos(position);
 	}
 	// 부모노드가 없으면 위로 이동

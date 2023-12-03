@@ -16,7 +16,7 @@ class Item
 private:
 	friend class ItemTable;
 protected:
-	
+
 public:
 
 	Actor* actor;
@@ -28,8 +28,8 @@ public:
 
 	Item();
 	Item(const std::string& itemName, float itemCost);
-	~Item();
-	
+	virtual ~Item();
+
 	void ShowItemInfo() const;
 
 	void Update();
@@ -43,6 +43,7 @@ public:
 		actor = Actor::Create();
 		actor->LoadFile("Item/Item.xml");
 	};
+	virtual ~RootItem() {};
 };
 
 class MoneyItem : public Item
@@ -52,5 +53,6 @@ public:
 		actor = Actor::Create();
 		actor->LoadFile("Item/GoldSpot.xml");
 	};
+	virtual ~MoneyItem() {};
 };
 

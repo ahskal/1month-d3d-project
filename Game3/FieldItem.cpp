@@ -17,17 +17,12 @@ void FieldItem::AddItem(const Item* newItem)
 	}
 }
 
-void FieldItem::AddItem(const Item* newItem, Vector3 pos)
+void FieldItem::AddItem(Item* newItem, Vector3 pos)
 {
-	Item* NewItem = new Item(*newItem);
-	NewItem->state = ItemState::Drop;
-	NewItem->actor->name += to_string(items.size());
-	for (auto it : NewItem->actor->children) {
-		it.second->name += to_string(items.size());
-	}
-	NewItem->actor->SetWorldPos(pos);
-	NewItem->size++;
-	items.emplace_back(NewItem);
+	newItem->state = ItemState::Drop;
+	newItem->actor->SetWorldPos(pos);
+	newItem->size++;
+	items.emplace_back(newItem);
 }
 
 void FieldItem::OpenList()

@@ -4,26 +4,37 @@
 Inventory::Inventory()
 {
 	items.resize(0);
+	Gold = 0;
 }
 
 Inventory::~Inventory()
 {
 }
 
-void Inventory::AddItem(const Item* newItem)
+void Inventory::AddItem(Item* newItem)
 {
 	auto it = std::find_if(items.begin(), items.end(), [newItem](const Item* existingItem) {
 		return existingItem->ItemName == newItem->ItemName;
 		});
 
+
 	if (it != items.end()) {
 		(*it)->size += newItem->size; // 기존 아이템이 있으면 수량 증가
 	}
 	else {
+		// newItem이 moneyItem의 파생 클래스인지 확인
 		Item* NewItem = new Item(*newItem);
-		NewItem->state = ItemState::Inven;
-		NewItem->actor->name = newItem->ItemName;
-		items.push_back(NewItem);
+		MoneyItem* moneyItemPtr = dynamic_cast<MoneyItem*>(newItem);
+		if (moneyItemPtr) {
+			Gold += moneyItemPtr->Cost;
+			cout << " ++ " << endl;
+		}
+		else {
+			// newItem이 moneyItem의 파생 클래스가 아닌 경우의 처리
+			NewItem->state = ItemState::Inven;
+			NewItem->actor->name = newItem->ItemName;
+			items.push_back(NewItem);
+		}
 	}
 }
 
@@ -42,6 +53,7 @@ void Inventory::OpenList()
 
 void Inventory::Update()
 {
+	ImGui::Text("Gold : %.2f", Gold);
 	for (auto inven : items) {
 		inven->Update();
 		//inven->actor->RenderHierarchy();

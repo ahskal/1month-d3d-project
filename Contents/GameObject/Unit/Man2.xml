@@ -357,9 +357,9 @@
                                                 </Child0>
                                             </Child4>
                                             <Child5 Name="shield" Visible="true" ObType="0" BoneIndex="-1">
-                                                <Mesh File="Shield/shield.mesh"/>
+                                                <Mesh File="weapon/shield.mesh"/>
                                                 <Shader File="4.Cube.hlsl"/>
-                                                <Material File="Shield/Blusialand_weapon_Mat.mtl"/>
+                                                <Material File="weapon/Blusialand_weapon_Mat.mtl"/>
                                                 <Transform>
                                                     <Position X="0" Y="0" Z="0"/>
                                                     <Scale X="1" Y="1" Z="1"/>
@@ -575,9 +575,9 @@
                                                 </Child0>
                                             </Child4>
                                             <Child5 Name="sword" Visible="true" ObType="0" BoneIndex="-1">
-                                                <Mesh File="Sword/sword.mesh"/>
+                                                <Mesh File="weapon/sword.mesh"/>
                                                 <Shader File="4.Cube.hlsl"/>
-                                                <Material File="Sword/Blusialand_weapon_Mat.mtl"/>
+                                                <Material File="weapon/Blusialand_weapon_Mat.mtl"/>
 												<Collider ColliderType="2" Visible="true">
 													<Position X="0" Y="0" Z="-50.000011"/>
 													<Scale X="1" Y="1" Z="40"/>

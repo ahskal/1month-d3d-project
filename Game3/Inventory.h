@@ -6,8 +6,9 @@ public:
 	Inventory();
 	~Inventory();
 	std::vector<Item*> items;
-	float Money;
+	float Gold;
 
+	void AddItem(Item* newItem);
 	void AddItem(const Item* newItem);
 	
 	// 기타 인벤토리 관련 메소드...

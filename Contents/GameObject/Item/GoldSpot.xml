@@ -1,7 +1,4 @@
 <Root Name="Actor" Visible="true" ObType="1">
-    <Mesh File="Icosphere/Icosphere.mesh"/>
-    <Shader File="4.Cube_Deferred.hlsl"/>
-    <Material File="Icosphere/GoldBall.mtl"/>
 	<Collider ColliderType="2" Visible="false">
 		<Position X="0" Y="0" Z="0"/>
 		<Scale X="1" Y="1" Z="1"/>
@@ -12,5 +9,16 @@
         <Scale X="1" Y="1" Z="1"/>
         <Rotation X="0" Y="0" Z="0"/>
     </Transform>
-    <Children Size="0"/>
+    <Children Size="1"/>
+	<Child0 Name="Icosphere" Visible="true" ObType="1">
+		<Mesh File="Object/Icosphere.mesh"/>
+		<Shader File="4.Cube_Deferred.hlsl"/>
+		<Material File="Object/IcosphereGold.mtl"/>
+		<Transform>
+			<Position X="0" Y="0" Z="0"/>
+			<Scale X="0.3" Y="0.3" Z="0.3"/>
+			<Rotation X="0" Y="0" Z="0"/>
+		</Transform>
+		<Children Size="0"/>
+	</Child0>
 </Root>

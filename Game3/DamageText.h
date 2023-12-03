@@ -1,5 +1,5 @@
 #pragma once
-#define		TIME_LIMIT		2.0f 	// 알림이 사라질 시간
+#define		TIME_LIMIT		4.0f 	// 알림이 사라질 시간
 class DamageText
 {
 private:

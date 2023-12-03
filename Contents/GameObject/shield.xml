@@ -1,7 +1,7 @@
 <Root Name="shield" Visible="true" ObType="0">
-	<Mesh File="Shield/shield.mesh"/>
+	<Mesh File="weapon/shield.mesh"/>
 	<Shader File="4.Cube.hlsl"/>
-	<Material File="Shield/Blusialand_weapon_Mat.mtl"/>
+	<Material File="weapon/Blusialand_weapon_Mat.mtl"/>
 	<Transform>
 		<Position X="0" Y="0" Z="0"/>
 		<Scale X="1" Y="1" Z="1"/>

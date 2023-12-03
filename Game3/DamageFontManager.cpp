@@ -28,7 +28,6 @@ void DamageFontManager::Update()
 		else iter++;
 	}
 
-
 	for (auto it : damageTexts)
 	{
 		it->Update();

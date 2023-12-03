@@ -39,6 +39,7 @@ void MonsterManager::LateUpdate()
 	for (auto it : MonVec) {
 		if (it->Mon->Hp <= 0 && not it->Mon->isDead) {
 			it->Mon->SetState(Mon::State::DEADSTART);
+			it->Mon->isAttack = false;
 			it->Mon->isDead = true;
 			it->Mon->SlashOFF();
 			switch (RANDOM->Int(1, 4)) {
@@ -61,11 +62,10 @@ void MonsterManager::LateUpdate()
 				bool Remove = Md->Mon->GetState() == Mon::State::DEADEND;
 				if (Remove) {
 					int val = RANDOM->Int(1, 5);
-					auto M = ITEM->CreateItem("Gold", new MoneyItemFactory);
-					//for (int i = 0; i < val; i++) {
-						Vector3 dropPos = Md->Mon->GetWorldPos() + Vector3(RANDOM->Int(-1, 1), 0, RANDOM->Int(-1, 1));
-						FIELD->AddItem(M, dropPos);
-					//}
+					for (int i = 0; i < val; i++) {
+						Vector3 dropPos = Md->Mon->GetWorldPos() + Vector3(RANDOM->Float(-1, 1), 0, RANDOM->Float(-1, 1));
+						FIELD->AddItem(ITEM->CreateItem("Gold", new MoneyItemFactory), dropPos);
+					}
 
 					delete Md;
 				}
