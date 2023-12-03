@@ -367,7 +367,7 @@ void Actor::RenderDetail()
 	GameObject::RenderDetail();
 	if (ImGui::BeginTabBar("MyTabBar2"))
 	{
-		if (root == this)
+		//if (root == this)
 		{
 			if (ImGui::BeginTabItem("Actor"))
 			{

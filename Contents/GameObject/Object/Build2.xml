@@ -1,0 +1,441 @@
+<Root Name="Actor" Visible="true" ObType="1">
+    <Transform>
+        <Position X="-130" Y="-0.5" Z="170"/>
+        <Scale X="1" Y="1" Z="1"/>
+        <Rotation X="0" Y="0" Z="0"/>
+    </Transform>
+    <Children Size="5"/>
+    <Child0 Name="DevHouse1" Visible="true" ObType="1">
+        <Transform>
+            <Position X="-12.7" Y="1.4" Z="3.55"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="-0.44941989" Z="0"/>
+        </Transform>
+        <Children Size="1"/>
+        <Child0 Name="RootNode" Visible="true" ObType="0">
+            <Transform>
+                <Position X="0" Y="0" Z="0"/>
+                <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+                <Rotation X="0" Y="0" Z="-0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="DevHouse1" Visible="true" ObType="0">
+                <Shader File="4.Cube.hlsl"/>
+                <Transform>
+                    <Position X="-100" Y="50" Z="0"/>
+                    <Scale X="1" Y="0.98015648" Z="1"/>
+                    <Rotation X="0" Y="0" Z="-0"/>
+                </Transform>
+                <Children Size="1"/>
+                <Child0 Name="house" Visible="true" ObType="0">
+                    <Shader File="4.Cube.hlsl"/>
+                    <Transform>
+                        <Position X="19.740326" Y="-59.257523" Z="22.25238"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="-0"/>
+                    </Transform>
+                    <Children Size="1"/>
+                    <Child0 Name="wood_stair" Visible="true" ObType="0">
+                        <Shader File="4.Cube.hlsl"/>
+                        <Transform>
+                            <Position X="324.99997" Y="-1.7399606e-06" Z="100"/>
+                            <Scale X="1" Y="1" Z="1"/>
+                            <Rotation X="-0" Y="-1.570796" Z="0"/>
+                        </Transform>
+                        <Children Size="1"/>
+                        <Child0 Name="New_28" Visible="true" ObType="0">
+                            <Shader File="4.Cube.hlsl"/>
+                            <Transform>
+                                <Position X="0" Y="0" Z="0"/>
+                                <Scale X="1" Y="1" Z="1"/>
+                                <Rotation X="0" Y="0" Z="-0"/>
+                            </Transform>
+                            <Children Size="1"/>
+                            <Child0 Name="_Combined_Mesh__high__42" Visible="true" ObType="0">
+                                <Mesh File="DevHouse1/_Combined_Mesh__high__42.mesh"/>
+                                <Shader File="4.Cube.hlsl"/>
+                                <Material File="DevHouse1/woodwall.mtl"/>
+                                <Transform>
+                                    <Position X="2.71698" Y="-1.0753196e-05" Z="-2634.9978"/>
+                                    <Scale X="1" Y="1" Z="1"/>
+                                    <Rotation X="8.431779e-08" Y="-1.5717963" Z="3.7050022e-08"/>
+                                </Transform>
+                                <Children Size="5"/>
+                                <Child0 Name="_Combined_Mesh__high__42.001MeshObject1" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject1.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/woodwall_lowlod.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child0>
+                                <Child1 Name="_Combined_Mesh__high__42.001MeshObject2" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject2.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/straw_roof.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child1>
+                                <Child2 Name="_Combined_Mesh__high__42.001MeshObject3" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject3.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/straw_roof_alpha.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child2>
+                                <Child3 Name="_Combined_Mesh__high__42.001MeshObject4" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject4.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/VinesBranch_mat.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child3>
+                                <Child4 Name="_Combined_Mesh__high__42.001MeshObject5" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject5.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/Vines_Mat.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child4>
+                            </Child0>
+                        </Child0>
+                    </Child0>
+                </Child0>
+            </Child0>
+        </Child0>
+    </Child0>
+    <Child1 Name="DevHouse2" Visible="true" ObType="1">
+        <Transform>
+            <Position X="-15.2" Y="6.4499998" Z="21.25"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="0.77754003" Z="0"/>
+        </Transform>
+        <Children Size="1"/>
+        <Child0 Name="RootNode" Visible="true" ObType="0">
+            <Transform>
+                <Position X="0" Y="0" Z="0"/>
+                <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+                <Rotation X="0" Y="0" Z="-0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="plank_58" Visible="true" ObType="0">
+                <Mesh File="DevHouse2/plank_58.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="DevHouse2/woodwall.mtl"/>
+                <Transform>
+                    <Position X="75" Y="1.7079787e-05" Z="0"/>
+                    <Scale X="0.3000001" Y="0.50000018" Z="2.000001"/>
+                    <Rotation X="-1.5707963" Y="1.5707959" Z="0"/>
+                </Transform>
+                <Children Size="3"/>
+                <Child0 Name="plank_58.001MeshObject1" Visible="false" ObType="0">
+                    <Mesh File="DevHouse2/plank_58.001MeshObject1.mesh"/>
+                    <Shader File="4.Cube.hlsl"/>
+                    <Material File="DevHouse2/woodwall_lowlod.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="0"/>
+                    </Transform>
+                    <Children Size="0"/>
+                </Child0>
+                <Child1 Name="plank_58.001MeshObject2" Visible="true" ObType="0">
+                    <Mesh File="DevHouse2/plank_58.001MeshObject2.mesh"/>
+                    <Shader File="4.Cube.hlsl"/>
+                    <Material File="DevHouse2/straw_roof.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="0"/>
+                    </Transform>
+                    <Children Size="0"/>
+                </Child1>
+                <Child2 Name="plank_58.001MeshObject3" Visible="true" ObType="0">
+                    <Mesh File="DevHouse2/plank_58.001MeshObject3.mesh"/>
+                    <Shader File="4.Cube.hlsl"/>
+                    <Material File="DevHouse2/straw_roof_alpha.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="0"/>
+                    </Transform>
+                    <Children Size="0"/>
+                </Child2>
+            </Child0>
+        </Child0>
+    </Child1>
+    <Child2 Name="fire_pit" Visible="true" ObType="1">
+        <Transform>
+            <Position X="0" Y="1.9" Z="12.85"/>
+            <Scale X="3" Y="3" Z="3"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Transform>
+        <Children Size="2"/>
+        <Child0 Name="Light" Visible="true" ObType="6">
+            <Shader File="1.Collider.hlsl"/>
+            <Transform>
+                <Position X="0" Y="0" Z="0"/>
+                <Scale X="26.457001" Y="26.457001" Z="26.457001"/>
+                <Rotation X="0" Y="0" Z="0"/>
+            </Transform>
+            <Light colorR="0.85294116" colorG="0.56702876" colorB="0.2048731" directionX="0" directionY="0" directionZ="79.371002" inner="84" outer="44" isActive="1" lightType="0" positionX="-130" positionY="1.4" positionZ="182.85001" radius="26.457001" num="1"/>
+            <Children Size="0"/>
+        </Child0>
+        <Child1 Name="RootNode" Visible="true" ObType="0">
+            <Transform>
+                <Position X="0" Y="0" Z="0"/>
+                <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+                <Rotation X="0" Y="0" Z="-0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="fire_pit" Visible="true" ObType="0">
+                <Shader File="4.Cube.hlsl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="-0"/>
+                </Transform>
+                <Children Size="1"/>
+                <Child0 Name="_enabled_high" Visible="true" ObType="0">
+                    <Shader File="4.Cube.hlsl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="-0"/>
+                    </Transform>
+                    <Children Size="1"/>
+                    <Child0 Name="Quad__1_" Visible="true" ObType="0">
+                        <Mesh File="fire_pit/Quad__1_.mesh"/>
+                        <Shader File="4.Cube.hlsl"/>
+                        <Material File="fire_pit/fireplace_ash.mtl"/>
+                        <Transform>
+                            <Position X="0" Y="-10" Z="0"/>
+                            <Scale X="0.8556" Y="0.85560012" Z="0.42780006"/>
+                            <Rotation X="-1.5707963" Y="-0" Z="0"/>
+                        </Transform>
+                        <Children Size="2"/>
+                        <Child0 Name="Quad.001MeshObject1" Visible="true" ObType="0">
+                            <Mesh File="fire_pit/Quad.001MeshObject1.mesh"/>
+                            <Shader File="4.Cube.hlsl"/>
+                            <Material File="fire_pit/stone.mtl"/>
+                            <Transform>
+                                <Position X="0" Y="0" Z="23.375406"/>
+                                <Scale X="1" Y="1" Z="1"/>
+                                <Rotation X="0" Y="0" Z="0"/>
+                            </Transform>
+                            <Children Size="0"/>
+                        </Child0>
+                        <Child1 Name="Quad.001MeshObject2" Visible="true" ObType="0">
+                            <Mesh File="fire_pit/Quad.001MeshObject2.mesh"/>
+                            <Shader File="4.Cube.hlsl"/>
+                            <Material File="fire_pit/fire_log.mtl"/>
+                            <Transform>
+                                <Position X="0" Y="0" Z="23.375406"/>
+                                <Scale X="1" Y="1" Z="1"/>
+                                <Rotation X="0" Y="0" Z="0"/>
+                            </Transform>
+                            <Children Size="0"/>
+                        </Child1>
+                    </Child0>
+                </Child0>
+            </Child0>
+        </Child1>
+    </Child2>
+    <Child3 Name="DevHouse1" Visible="true" ObType="1">
+        <Transform>
+            <Position X="-14.5" Y="2.4000001" Z="11.4"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="0" Z="0"/>
+        </Transform>
+        <Children Size="1"/>
+        <Child0 Name="RootNode" Visible="true" ObType="0">
+            <Transform>
+                <Position X="0" Y="0" Z="0"/>
+                <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+                <Rotation X="0" Y="0" Z="-0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="DevHouse1" Visible="true" ObType="0">
+                <Shader File="4.Cube.hlsl"/>
+                <Transform>
+                    <Position X="-100" Y="50" Z="0"/>
+                    <Scale X="1" Y="0.98015648" Z="1"/>
+                    <Rotation X="0" Y="0" Z="-0"/>
+                </Transform>
+                <Children Size="1"/>
+                <Child0 Name="house" Visible="true" ObType="0">
+                    <Shader File="4.Cube.hlsl"/>
+                    <Transform>
+                        <Position X="19.740326" Y="-59.257523" Z="22.25238"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="-0"/>
+                    </Transform>
+                    <Children Size="1"/>
+                    <Child0 Name="wood_stair" Visible="true" ObType="0">
+                        <Shader File="4.Cube.hlsl"/>
+                        <Transform>
+                            <Position X="324.99997" Y="-1.7399606e-06" Z="100"/>
+                            <Scale X="1" Y="1" Z="1"/>
+                            <Rotation X="-0" Y="-1.570796" Z="0"/>
+                        </Transform>
+                        <Children Size="1"/>
+                        <Child0 Name="New_28" Visible="true" ObType="0">
+                            <Shader File="4.Cube.hlsl"/>
+                            <Transform>
+                                <Position X="0" Y="0" Z="0"/>
+                                <Scale X="1" Y="1" Z="1"/>
+                                <Rotation X="0" Y="0" Z="-0"/>
+                            </Transform>
+                            <Children Size="1"/>
+                            <Child0 Name="_Combined_Mesh__high__42" Visible="true" ObType="0">
+                                <Mesh File="DevHouse1/_Combined_Mesh__high__42.mesh"/>
+                                <Shader File="4.Cube.hlsl"/>
+                                <Material File="DevHouse1/woodwall.mtl"/>
+                                <Transform>
+                                    <Position X="2.71698" Y="-1.0753196e-05" Z="-2634.9978"/>
+                                    <Scale X="1" Y="1" Z="1"/>
+                                    <Rotation X="8.431779e-08" Y="-1.5717963" Z="3.7050022e-08"/>
+                                </Transform>
+                                <Children Size="5"/>
+                                <Child0 Name="_Combined_Mesh__high__42.001MeshObject1" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject1.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/woodwall_lowlod.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child0>
+                                <Child1 Name="_Combined_Mesh__high__42.001MeshObject2" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject2.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/straw_roof.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child1>
+                                <Child2 Name="_Combined_Mesh__high__42.001MeshObject3" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject3.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/straw_roof_alpha.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child2>
+                                <Child3 Name="_Combined_Mesh__high__42.001MeshObject4" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject4.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/VinesBranch_mat.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child3>
+                                <Child4 Name="_Combined_Mesh__high__42.001MeshObject5" Visible="true" ObType="0">
+                                    <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject5.mesh"/>
+                                    <Shader File="4.Cube.hlsl"/>
+                                    <Material File="DevHouse1/Vines_Mat.mtl"/>
+                                    <Transform>
+                                        <Position X="0" Y="0" Z="0"/>
+                                        <Scale X="1" Y="1" Z="1"/>
+                                        <Rotation X="0" Y="0" Z="0"/>
+                                    </Transform>
+                                    <Children Size="0"/>
+                                </Child4>
+                            </Child0>
+                        </Child0>
+                    </Child0>
+                </Child0>
+            </Child0>
+        </Child0>
+    </Child3>
+    <Child4 Name="DevHouse2" Visible="true" ObType="1">
+        <Transform>
+            <Position X="-7.4499998" Y="6.8499999" Z="29.25"/>
+            <Scale X="1" Y="1" Z="1"/>
+            <Rotation X="0" Y="0.83077228" Z="0"/>
+        </Transform>
+        <Children Size="1"/>
+        <Child0 Name="RootNode" Visible="true" ObType="0">
+            <Transform>
+                <Position X="0" Y="0" Z="0"/>
+                <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+                <Rotation X="0" Y="0" Z="-0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="plank_58" Visible="true" ObType="0">
+                <Mesh File="DevHouse2/plank_58.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="DevHouse2/woodwall.mtl"/>
+                <Transform>
+                    <Position X="75" Y="1.7079787e-05" Z="0"/>
+                    <Scale X="0.3000001" Y="0.50000018" Z="2.000001"/>
+                    <Rotation X="-1.5707963" Y="1.5707959" Z="0"/>
+                </Transform>
+                <Children Size="3"/>
+                <Child0 Name="plank_58.001MeshObject1" Visible="false" ObType="0">
+                    <Mesh File="DevHouse2/plank_58.001MeshObject1.mesh"/>
+                    <Shader File="4.Cube.hlsl"/>
+                    <Material File="DevHouse2/woodwall_lowlod.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="0"/>
+                    </Transform>
+                    <Children Size="0"/>
+                </Child0>
+                <Child1 Name="plank_58.001MeshObject2" Visible="true" ObType="0">
+                    <Mesh File="DevHouse2/plank_58.001MeshObject2.mesh"/>
+                    <Shader File="4.Cube.hlsl"/>
+                    <Material File="DevHouse2/straw_roof.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="0"/>
+                    </Transform>
+                    <Children Size="0"/>
+                </Child1>
+                <Child2 Name="plank_58.001MeshObject3" Visible="true" ObType="0">
+                    <Mesh File="DevHouse2/plank_58.001MeshObject3.mesh"/>
+                    <Shader File="4.Cube.hlsl"/>
+                    <Material File="DevHouse2/straw_roof_alpha.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="0" Z="0"/>
+                        <Scale X="1" Y="1" Z="1"/>
+                        <Rotation X="0" Y="0" Z="0"/>
+                    </Transform>
+                    <Children Size="0"/>
+                </Child2>
+            </Child0>
+        </Child0>
+    </Child4>
+</Root>

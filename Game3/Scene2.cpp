@@ -29,7 +29,7 @@ Scene2::Scene2()
 	cam1->LoadFile("Cam2.xml");
 
 	Tile = Actor::Create();
-	
+
 	Tile->name = "Tile";
 	int rows = 20;
 	int cols = 20;
@@ -39,12 +39,18 @@ Scene2::Scene2()
 	mapGen = new MapGenerator(rows, cols, floors);
 	deferred = new Deferred;
 
-	act = Actor::Create(); 
+	act = Actor::Create();
 
 }
 
 Scene2::~Scene2()
 {
+	MONSTER->vectorMemberClear();
+	delete mapGen;
+	act->Release();
+	cam1->Release();
+	Tile->Release();
+	delete deferred;
 }
 
 void Scene2::Init()
@@ -59,7 +65,7 @@ void Scene2::Init()
 	mapGen->createWallMap(Tile);
 	mapGen->createLighting(Tile);
 	mapGen->createPotal(Tile);
-	
+
 	Vector3 pos = mapGen->TileRandomPos();
 	PLAYER->actor->SetWorldPos(pos);
 }
@@ -121,6 +127,7 @@ void Scene2::Update()
 
 	FIELD->Update();
 	DAMAGEFONT->Update();
+
 	act->Update();
 }
 
@@ -223,12 +230,9 @@ void Scene2::LateUpdate()
 	if (PLAYER->actor->Intersect(potal) or INPUT->KeyDown('0')) {
 		PLAYER->actor->SetWorldPos(Vector3());
 		SCENE->ChangeScene("SC3");
-		MONSTER->vectorMemberClear();
 		SCENE->DeleteScene("SC2");
 		return;
 	}
-
-
 
 	Vector3 pPos = PLAYER->actor->GetWorldPos();
 	GameObject* PLAYERSword = PLAYER->actor->Find("sword");
@@ -238,10 +242,10 @@ void Scene2::LateUpdate()
 
 		auto Mon = Mvector->Mon;
 		if (Mon->Intersect(PLAYERSword) && PLAYER->actor->isAttack) {
-			Mon->Damage(200);
+			Mon->Damage(PLAYER->actor->Attack);
 		}
 		else if (PLAYER->actor->Intersect(MonsterSword) && Mon->isAttack) {
-			PLAYER->actor->Damage(5);
+			PLAYER->actor->Damage(Mon->Attack);
 		}
 	};
 

@@ -3,10 +3,10 @@
     <Shader File="5.Cube.hlsl"/>
     <Material File="ground.mtl"/>
     <Transform>
-        <Position X="0" Y="0" Z="0"/>
-        <Scale X="1" Y="1" Z="1"/>
+        <Position X="0" Y="-2.4000001" Z="0"/>
+        <Scale X="2" Y="1" Z="2"/>
         <Rotation X="0" Y="0" Z="0"/>
     </Transform>
-    <Terrain garo="257" size="66049" uvScale="1"/>
+    <Terrain garo="100" size="10000" uvScale="1"/>
     <Children Size="0"/>
 </Root>

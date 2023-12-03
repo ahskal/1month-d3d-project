@@ -3,18 +3,17 @@ class Scene1 : public Scene
 {
 private:
 	Camera* cam1;
-	Grid* grid;
-
 	Terrain* map;
 	Terrain* water;
 
 	Sky* skybox;
-	Sky* skybox2;
 
 	float timer;
 
-	Deferred* deferred;   //4∞≥¿« ∑ª¥ı≈∏∞Ÿ  
-	UI* post;       //4∞≥¿« ∑ª¥ı≈∏∞Ÿ¿ª πﬁæ∆ ±◊∑¡¡Ÿ
+	Deferred* deferred;
+
+	Actor* Build;
+	Actor* house;
 
 public:
 	Scene1();

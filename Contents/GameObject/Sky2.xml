@@ -6,6 +6,6 @@
         <Scale X="1" Y="1" Z="1"/>
         <Rotation X="0" Y="0" Z="0"/>
     </Transform>
-    <Sky file="cloud.dds"/>
+    <Sky file="Texture1.dds"/>
     <Children Size="0"/>
 </Root>

@@ -1,0 +1,67 @@
+<Root Name="fire_pit" Visible="true" ObType="1">
+    <Transform>
+        <Position X="0" Y="0" Z="0"/>
+        <Scale X="1" Y="1" Z="1"/>
+        <Rotation X="0" Y="0" Z="0"/>
+    </Transform>
+    <Children Size="1"/>
+    <Child0 Name="fire_1" Visible="true" ObType="0">
+        <Transform>
+            <Position X="0" Y="0" Z="0"/>
+            <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+            <Rotation X="0" Y="0" Z="-0"/>
+        </Transform>
+        <Children Size="1"/>
+        <Child0 Name="fire_1_1" Visible="true" ObType="0">
+            <Shader File="4.Cube.hlsl"/>
+            <Transform>
+                <Position X="0" Y="0" Z="0"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="0" Y="0" Z="-0"/>
+            </Transform>
+            <Children Size="1"/>
+            <Child0 Name="fire_1_2" Visible="true" ObType="0">
+                <Shader File="4.Cube.hlsl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="-0"/>
+                </Transform>
+                <Children Size="1"/>
+                <Child0 Name="fire_1_3" Visible="true" ObType="0">
+                    <Mesh File="fire_pit/Quad__1_.mesh"/>
+                    <Shader File="4.Cube.hlsl"/>
+                    <Material File="fire_pit/fireplace_ash.mtl"/>
+                    <Transform>
+                        <Position X="0" Y="-10" Z="0"/>
+                        <Scale X="0.8556" Y="0.85560012" Z="0.42780006"/>
+                        <Rotation X="-1.5707963" Y="-0" Z="0"/>
+                    </Transform>
+                    <Children Size="2"/>
+                    <Child0 Name="fire_1_4" Visible="true" ObType="0">
+                        <Mesh File="fire_pit/Quad.001MeshObject1.mesh"/>
+                        <Shader File="4.Cube.hlsl"/>
+                        <Material File="fire_pit/stone.mtl"/>
+                        <Transform>
+                            <Position X="0" Y="0" Z="23.375406"/>
+                            <Scale X="1" Y="1" Z="1"/>
+                            <Rotation X="0" Y="0" Z="0"/>
+                        </Transform>
+                        <Children Size="0"/>
+                    </Child0>
+                    <Child1 Name="fire_1_5" Visible="true" ObType="0">
+                        <Mesh File="fire_pit/Quad.001MeshObject2.mesh"/>
+                        <Shader File="4.Cube.hlsl"/>
+                        <Material File="fire_pit/fire_log.mtl"/>
+                        <Transform>
+                            <Position X="0" Y="0" Z="23.37540w6"/>
+                            <Scale X="1" Y="1" Z="1"/>
+                            <Rotation X="0" Y="0" Z="0"/>
+                        </Transform>
+                        <Children Size="0"/>
+                    </Child1>
+                </Child0>
+            </Child0>
+        </Child0>
+    </Child0>
+</Root>

@@ -6,10 +6,10 @@ Sky* Sky::Create(string name)
 	Sky* temp = new Sky();
 	temp->name = name;
 	temp->type = ObType::Sky;
-	/*temp->mesh = RESOURCE->meshes.Load("0.Cube.mesh");
+	temp->mesh = RESOURCE->meshes.Load("0.Cube.mesh");
 	temp->shader = RESOURCE->shaders.Load("0.Sky.hlsl");
 	temp->texCube = make_shared<Texture>();
-	temp->texCube->LoadFile("sky.dds");*/
+	temp->texCube->LoadFile("sky.dds");
 	return temp;
 }
 

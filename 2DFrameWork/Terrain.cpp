@@ -556,7 +556,6 @@ void Terrain::TreeCreateIntersect()
 			Vector3 hit;
 
 			if (Utility::RayIntersectMap(heightChecker, this, hit)) {
-				
 				if (hasTree) {
 					Actor* Tree = Actor::Create();
 					Tree->LoadFile("Beech.xml");

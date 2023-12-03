@@ -1,0 +1,88 @@
+<Root Name="DevHouse" Visible="true" ObType="1">
+    <Collider ColliderType="2" Visible="true">
+        <Position X="0" Y="2.5" Z="0"/>
+        <Scale X="3" Y="3" Z="3"/>
+        <Rotation X="0" Y="0" Z="0"/>
+    </Collider>
+    <Transform>
+        <Position X="0" Y="0" Z="0"/>
+        <Scale X="1" Y="1" Z="1"/>
+        <Rotation X="0" Y="0" Z="0"/>
+    </Transform>
+    <Children Size="1"/>
+    <Child0 Name="Dev_1_1" Visible="true" ObType="0">
+        <Shader File="4.Cube.hlsl"/>
+        <Transform>
+            <Position X="1" Y="0" Z="-3"/>
+            <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+            <Rotation X="0" Y="0" Z="-0"/>
+        </Transform>
+        <Children Size="1"/>
+        <Child0 Name="Dev_1_2" Visible="true" ObType="0">
+            <Mesh File="DevHouse1/_Combined_Mesh__high__42.mesh"/>
+            <Shader File="4.Cube.hlsl"/>
+            <Material File="DevHouse1/woodwall.mtl"/>
+            <Transform>
+                <Position X="2.71698" Y="-1.0753196e-05" Z="-2634.9978"/>
+                <Scale X="1" Y="1" Z="1"/>
+                <Rotation X="8.431779e-08" Y="-1.5717963" Z="3.7050022e-08"/>
+            </Transform>
+            <Children Size="5"/>
+            <Child0 Name="Dev_1_3" Visible="true" ObType="0">
+                <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject1.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="DevHouse1/woodwall_lowlod.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child0>
+            <Child1 Name="Dev_1_4" Visible="true" ObType="0">
+                <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject2.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="DevHouse1/straw_roof.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child1>
+            <Child2 Name="Dev_1_5" Visible="true" ObType="0">
+                <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject3.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="DevHouse1/straw_roof_alpha.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child2>
+            <Child3 Name="Dev_1_6" Visible="true" ObType="0">
+                <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject4.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="DevHouse1/VinesBranch_mat.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child3>
+            <Child4 Name="Dev_1_7" Visible="true" ObType="0">
+                <Mesh File="DevHouse1/_Combined_Mesh__high__42.001MeshObject5.mesh"/>
+                <Shader File="4.Cube.hlsl"/>
+                <Material File="DevHouse1/Vines_Mat.mtl"/>
+                <Transform>
+                    <Position X="0" Y="0" Z="0"/>
+                    <Scale X="1" Y="1" Z="1"/>
+                    <Rotation X="0" Y="0" Z="0"/>
+                </Transform>
+                <Children Size="0"/>
+            </Child4>
+        </Child0>
+    </Child0>
+</Root>

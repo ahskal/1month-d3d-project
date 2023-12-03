@@ -84,9 +84,9 @@ void Player::Init()
 	slash->material->diffuse.y = 0.0f;
 	slash->material->diffuse.z = 1.0f;
 
-	MaxHp = Hp = 200;
-	MaxSp = Sp = 150;
-	Attack = 10;
+	MaxHp = Hp = 100;
+	MaxSp = Sp = 50;
+	Attack = 20;
 	Defense = 5;
 }
 
@@ -106,9 +106,6 @@ void Player::Update()
 	//# Update;
 	if (not DEBUG_MODE)
 		CameraHold();
-	else {
-		slash->RenderDetail();
-	}
 
 	lastPos = GetWorldPos();
 	Unit::Update();

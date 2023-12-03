@@ -33,6 +33,7 @@ Monster::Monster() {
 }
 
 Monster::~Monster() {
+	PLAYER->actor->Detach(this);
 	delete slash;
 }
 
@@ -44,6 +45,8 @@ void Monster::SetSpawn(Vector3 spawn)
 
 void Monster::Init()
 {
+	PLAYER->actor->Attach(this);
+
 	anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
 	slash = new SlashTrail();
 	slash->Top = Find("Start");

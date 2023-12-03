@@ -36,7 +36,6 @@ void Main::Update()
     Camera::main->Update();
 
     LIGHT->RenderDetail();
-
     ImGui::Begin("Hierarchy");
     grid->RenderHierarchy();
     cam1->RenderHierarchy();
@@ -45,7 +44,7 @@ void Main::Update()
 
     ImGui::Begin("AssetImporter");
     if (GUI->FileImGui("BonelessChicken", "BonelessChicken",
-        ".fbx,.obj,.x,.dae,.FBX", "../Assets"))
+        ".fbx,.obj,.x,.dae", "../Assets"))
     {
         Modelfile = ImGuiFileDialog::Instance()->GetCurrentFileName();
         string path = "../Assets/" + Modelfile;
@@ -79,7 +78,7 @@ void Main::Update()
     }
 
     if (GUI->FileImGui("BoneChicken", "BoneChicken",
-        ".fbx,.obj,.x,.dae,.FBX", "../Assets"))
+        ".fbx,.obj,.x,.dae", "../Assets"))
     {
         Modelfile = ImGuiFileDialog::Instance()->GetCurrentFileName();
         string path = "../Assets/" + Modelfile;
@@ -136,7 +135,7 @@ void Main::Update()
     }
 
     if (GUI->FileImGui("AnimationImporter", "AnimationImporter",
-        ".FBX,.fbx,.obj,.x", "../Assets"))
+        ".fbx,.obj,.x", "../Assets"))
     {
         Animfile = ImGuiFileDialog::Instance()->GetCurrentFileName();
         string path = "../Assets/" + Animfile;
@@ -282,14 +281,14 @@ void Main::PreRender()
 
 void Main::Render()
 {
-    Camera::main->Set();
-    BLEND->Set(false);
     LIGHT->Set();
-
+    Camera::main->Set();
     grid->Render();
+
     BLEND->Set(true);
-    temp->Render();
+    temp->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
     BLEND->Set(false);
+   
 }
 
 void Main::ResizeScreen()

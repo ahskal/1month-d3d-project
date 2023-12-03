@@ -3,47 +3,50 @@
 #include "Monster.h"
 #include "Scene1.h"
 
+extern bool DEBUG_MODE;
+extern bool NONE_SCENE;
+extern bool TEXT_LOG;
+extern bool FREE_CAM;
+
 Scene1::Scene1()
 {}
 Scene1::~Scene1()
 {}
 void Scene1::Init()
 {
-	grid = Grid::Create();
-
-
 	water = Terrain::Create("water");
 	water->LoadFile("water.xml");
 	water->CreateStructuredBuffer();
-	water->WaterPerlinNoise();
 
 	map = Terrain::Create("ground");
 	map->LoadFile("ground.xml");
 	map->CreateStructuredBuffer();
-	map->GroundPerlinNoise();
 
 	skybox = Sky::Create();
-	skybox->LoadFile("Sky1.xml");
-	skybox2 = Sky::Create();
-	skybox2->LoadFile("Sky2.xml");
+	skybox->LoadFile("Sky2.xml");
 
 	cam1 = Camera::Create();
 	cam1->LoadFile("Cam.xml");
 
 	deferred = new Deferred;
-	post = UI::Create();
-	post->LoadFile("Deferred.xml");
 
+	Build = Actor::Create();
+	Build->LoadFile("Object/Build.xml");
+
+	house = Actor::Create();
+	house->LoadFile("Object/DevHouse.xml");
 
 	Camera::main = cam1;
-	timer = 0;
+	PLAYER->MainCamSet();
 	ResizeScreen();
+
+	FREE_CAM = true;
+	DEBUG_MODE = true;
 }
 
 void Scene1::Release()
 {
 }
-
 
 float noise(Vector3 p, float time) {
 
@@ -52,8 +55,8 @@ float noise(Vector3 p, float time) {
 	float scale = 0.1f; // 스케일 값을 조정하여 물결의 크기를 변경할 수 있습니다.
 
 	// 시간에 따른 변화를 위해 p의 x 또는 y에 time을 더함
-	p.x += time;
-	p.y += time;
+	p.x += time * 3;
+	p.y += time * 3;
 
 	// 물결의 움직임을 표현하기 위해 여러 레이어의 노이즈를 조합
 	float layer1 = pn.noise3D(p.x * scale, p.y * scale, p.z * scale);
@@ -67,16 +70,7 @@ float noise(Vector3 p, float time) {
 
 void Scene1::Update()
 {
-	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
-
-	if (TIMER->GetTick(timer, 0.1f)) {
-		//water->mesh->UpdateBuffer();
-		//water->WaterPerlinNoise();
-		
-	}
-
 	VertexTerrain* vertices = (VertexTerrain*)water->mesh->vertices;
-
 	float currentTime = TIMER->GetWorldTime(); // 현재 시간
 
 	for (int i = 0; i < water->garo; i++)
@@ -88,116 +82,106 @@ void Scene1::Update()
 			vertices[i * water->garo + j].position.y = result;
 		}
 	}
+	if (TIMER->GetTick(timer, 0.1f)) {
+		water->UpdateNormal();
+	}
 
-	water->UpdateNormal();
-	//water->mesh->UpdateBuffer();
-	
+	if (FREE_CAM) {
+		Camera::main->ControlMainCam();
+		Camera::main = cam1;
+		ResizeScreen();
+	}
+	else {
+		PLAYER->MainCamSet();
+		ResizeScreen();
+	}
 
-	// 결과 사용...
-
-	LIGHT->RenderDetail();
-	deferred->RenderDetail();
-
-
+	//
+	//deferred->RenderDetail();
 	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
+	LIGHT->RenderDetail();
 
-	if (ImGui::Button("CreateTree"))
-	{
-		map->TreeCreateIntersect();
+	static int num = 0;
+	if (ImGui::Button("Create House1")) {
+		Actor* A = Actor::Create();
+		A->LoadFile("Object/DevHouse.xml");
+		A->name += to_string(num);
+		Build->AddChild(A);
+		num++;
 	}
-
-	if (INPUT->KeyDown(VK_F5)) {
-		map->GroundPerlinNoise();
-	}
-
 
 	ImGui::Begin("Hierarchy");
-	grid->RenderHierarchy();
 	cam1->RenderHierarchy();
 
 	skybox->RenderHierarchy();
-	skybox2->RenderHierarchy();
+	Build->RenderHierarchy();
 
 	map->RenderHierarchy();
 	water->RenderHierarchy();
+
+
+	house->RenderHierarchy();
 	ImGui::End();
 
-	cam1->ControlMainCam();
 
+	Build->Update();
+	house->Update();
 
-	post->Update();
-
-
-	grid->Update();
 	cam1->Update();
-
 	map->Update();
 	water->Update();
-
 	skybox->Update();
-	skybox2->Update();
-
-
-
-	//// Cube의 좌표에서 플레이어의 Y값 (C)
-	//float offsetY = playerPos.y - cubePos.y;
-	//// 플레이어와 큐브의 좌표 차이를 나타내는 벡터 (C - A)
-	//Vector3 dir = playerPos - cubePos;
-	//// Y 축 주위의 각도 (ABC)
-	//monster->Cube->rotation.y = atan2f(dir.x, dir.z);
-	//// X 축 주위의 각도 (CAB) = asinf(dir.y)와 같다.
-	//monster->Cube->rotation.x = -atan2f(off
+	PLAYER->Update();
+	Camera::main->Update();
 }
 
 void Scene1::LateUpdate()
 {
-	/*Ray top;
-	top.position = player->GetWorldPos() + Vector3(0, 100, 0);
-
-	top.direction = Vector3(0, -1, 0);
+	Ray ray;
+	ray.position = PLAYER->actor->GetWorldPos() + Vector3(0, 10, 0);
+	ray.direction = Vector3(0, -1, 0);
 	Vector3 hit;
-	if (Utility::RayIntersectMap(top, map, hit))
-	{
-		player->SetWorldPosY(hit.y);
+	if (Utility::RayIntersectLocalMap(ray, map, hit)) {
+		PLAYER->actor->SetWorldPosY(hit.y);
 	}
 
 
-	player->WolrdUpdate();*/
+
+
 
 }
 void Scene1::PreRender()
 {
 	LIGHT->Set();
 	Camera::main->Set();
-	deferred->SetTarget();	
+	deferred->SetTarget();
 	map->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
 	water->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
-
+	PLAYER->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	Build->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	house->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 
 }
 
 void Scene1::Render()
 {
 	skybox->Render();
-	skybox2->Render();
-	grid->Render();
 	deferred->Render();
-	BLEND->Set(true);
-	BLEND->Set(false);
-
-	
+	PLAYER->Render();
 
 
-	
+
+
+
 
 }
 
 void Scene1::ResizeScreen()
 {
-	cam1->viewport.x = 0.0f;
-	cam1->viewport.y = 0.0f;
-	cam1->viewport.width = App.GetWidth();
-	cam1->viewport.height = App.GetHeight();
-	cam1->width = App.GetWidth();
-	cam1->height = App.GetHeight();
+	Camera::main->viewport.x = 0.0f;
+	Camera::main->viewport.y = 0.0f;
+	Camera::main->viewport.width = App.GetWidth();
+	Camera::main->viewport.height = App.GetHeight();
+	Camera::main->width = App.GetWidth();
+	Camera::main->height = App.GetHeight();
 }

@@ -7,9 +7,6 @@ private:
 	class MapGenerator *mapGen;
 	Actor* Tile;
 	Camera* cam1;
-
-	UI* post;       //4개의 렌더타겟을 받아 그려줄
-
 	Actor* act;
 
 

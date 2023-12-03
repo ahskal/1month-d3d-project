@@ -4,9 +4,9 @@
     <Material File="water.mtl"/>
     <Transform>
         <Position X="0" Y="-20" Z="0"/>
-        <Scale X="1" Y="1" Z="1"/>
+        <Scale X="6" Y="1" Z="6"/>
         <Rotation X="0" Y="0" Z="0"/>
     </Transform>
-    <Terrain garo="257" size="66049" uvScale="1"/>
+    <Terrain garo="100" size="10000" uvScale="1"/>
     <Children Size="0"/>
 </Root>

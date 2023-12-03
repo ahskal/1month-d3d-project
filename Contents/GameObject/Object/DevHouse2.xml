@@ -1,0 +1,60 @@
+<Root Name="DevHouse2" Visible="true" ObType="1">
+	<Transform>
+		<Position X="0" Y="0" Z="0"/>
+		<Scale X="1" Y="1" Z="1"/>
+		<Rotation X="0" Y="0" Z="0"/>
+	</Transform>
+	<Children Size="1"/>
+	<Child0 Name="RootNode" Visible="true" ObType="0">
+		<Transform>
+			<Position X="0" Y="0" Z="0"/>
+			<Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+			<Rotation X="0" Y="0" Z="-0"/>
+		</Transform>
+		<Children Size="1"/>
+		<Child0 Name="plank_58" Visible="true" ObType="0">
+			<Mesh File="DevHouse2/plank_58.mesh"/>
+			<Shader File="4.Cube.hlsl"/>
+			<Material File="DevHouse2/woodwall.mtl"/>
+			<Transform>
+				<Position X="75" Y="1.7079787e-05" Z="0"/>
+				<Scale X="0.3000001" Y="0.50000018" Z="2.000001"/>
+				<Rotation X="-1.5707963" Y="1.5707959" Z="0"/>
+			</Transform>
+			<Children Size="3"/>
+			<Child0 Name="plank_58.001MeshObject1" Visible="truse" ObType="0">
+				<Mesh File="DevHouse2/plank_58.001MeshObject1.mesh"/>
+				<Shader File="4.Cube.hlsl"/>
+				<Material File="DevHouse2/woodwall_lowlod.mtl"/>
+				<Transform>
+					<Position X="0" Y="0" Z="0"/>
+					<Scale X="1" Y="1" Z="1"/>
+					<Rotation X="0" Y="0" Z="0"/>
+				</Transform>
+				<Children Size="0"/>
+			</Child0>
+			<Child1 Name="plank_58.001MeshObject2" Visible="true" ObType="0">
+				<Mesh File="DevHouse2/plank_58.001MeshObject2.mesh"/>
+				<Shader File="4.Cube.hlsl"/>
+				<Material File="DevHouse2/straw_roof.mtl"/>
+				<Transform>
+					<Position X="0" Y="0" Z="0"/>
+					<Scale X="1" Y="1" Z="1"/>
+					<Rotation X="0" Y="0" Z="0"/>
+				</Transform>
+				<Children Size="0"/>
+			</Child1>
+			<Child2 Name="plank_58.001MeshObject3" Visible="true" ObType="0">
+				<Mesh File="DevHouse2/plank_58.001MeshObject3.mesh"/>
+				<Shader File="4.Cube.hlsl"/>
+				<Material File="DevHouse2/straw_roof_alpha.mtl"/>
+				<Transform>
+					<Position X="0" Y="0" Z="0"/>
+					<Scale X="1" Y="1" Z="1"/>
+					<Rotation X="0" Y="0" Z="0"/>
+				</Transform>
+				<Children Size="0"/>
+			</Child2>
+		</Child0>		
+	</Child0>
+</Root>

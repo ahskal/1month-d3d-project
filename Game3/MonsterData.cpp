@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Monster.h"
 #include "UI_Monster.h"
+#include "Subject.h"
 #include "MonsterData.h"
 
 MonsterData* MonsterData::Create(string name)

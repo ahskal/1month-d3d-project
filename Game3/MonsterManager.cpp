@@ -18,7 +18,6 @@ void MonsterManager::CreateMonster(Vector3 pos)
 	MonsterData* Mon = new MonsterData();
 	Mon->Mon->SetSpawn(pos);
 	MonVec.emplace_back(Mon);
-
 }
 
 void MonsterManager::GetTargetPos(Vector3 pos)
