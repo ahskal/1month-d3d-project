@@ -111,10 +111,10 @@ private:
 	int index;
 
 	Vector3 lastPos;
-	Vector3 moveDir;
 
 
 public:
+	Vector3 moveDir;
 	bool DeadAni;
 	bool isDead;
 

@@ -113,6 +113,7 @@ void Player::Update()
 	lastPos = GetWorldPos();
 	Unit::Update();
 	slash->Update();
+	SetState(GetWorldPos());
 }
 
 void Player::FSM()

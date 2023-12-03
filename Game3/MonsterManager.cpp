@@ -18,6 +18,7 @@ void MonsterManager::CreateMonster(Vector3 pos)
 	MonsterData* Mon = new MonsterData();
 	Mon->Mon->SetSpawn(pos);
 	MonVec.emplace_back(Mon);
+
 }
 
 void MonsterManager::GetTargetPos(Vector3 pos)
@@ -88,5 +89,13 @@ void MonsterManager::Hierarchy()
 	for (auto it : MonVec) {
 		it->Hierarchy();
 	}
+}
+
+void MonsterManager::vectorMemberClear()
+{
+	for (auto& monster : MonVec) {
+		delete monster; 
+	}
+	MonVec.clear();
 }
 

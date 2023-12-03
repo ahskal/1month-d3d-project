@@ -28,8 +28,6 @@ WPARAM Window::Run(Scene* main)
 		}
 		else
 		{
-
-
 			TIMER->Chronometry(App.fixFrame);
 			INPUT->Update();
 			GUI->Update();
@@ -42,9 +40,7 @@ WPARAM Window::Run(Scene* main)
 			DWRITE->GetDC()->BeginDraw();
 			D3D->Clear(App.background);
 			{
-
 				main->Render();
-				
 				DEPTH->Set(false);
 				GameObject::RenderAxis();
 				DEPTH->Set(true);

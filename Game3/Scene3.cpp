@@ -14,40 +14,11 @@ extern bool NONE_SCENE;
 extern bool TEXT_LOG;
 extern bool FREE_CAM;
 
-extern int CreateCount;
-mutex value_mutex;
-
-
 Scene3::Scene3()
 {
-	//grid = Grid::Create();
-	value_mutex.lock();
-	Sleep(100);
-	CreateCount++;
-	value_mutex.unlock();
-	//cam1 = Camera::Create();
-	//cam1->LoadFile("Cam2.xml");
-
 	deferred = new Deferred;
 	post = UI::Create();
 	post->LoadFile("Deferred.xml");
-
-	value_mutex.lock();
-	Sleep(100);
-	CreateCount++;
-	value_mutex.unlock();
-
-
-	player = PlayerData::Create();
-	player->MainCamSet();
-	ResizeScreen();
-
-	value_mutex.lock();
-	Sleep(1000);
-	CreateCount++;
-	value_mutex.unlock();
-
-	ChangeScene = true;
 }
 
 Scene3::~Scene3()
@@ -63,48 +34,29 @@ void Scene3::Release() {}
 
 void Scene3::Update()
 {
-	static bool isOnece = false;
-
-	if (isOnece) {
-		ChangeScene = false;
-	}
-	isOnece = true;
-
-
-	ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
-
-	if (DEBUG_MODE) {
-		ImGui::Text("MonsterVector Size : %d ", MonMGR->GetMonsterVector().size());
-		deferred->RenderDetail();
-	}
 
 	LIGHT->RenderDetail();
 
 	ImGui::Begin("Hierarchy", nullptr);
-	//grid->RenderHierarchy();
-	//cam1->RenderHierarchy();
-	player->Hierarchy();
 
-	//item->actor->RenderHierarchy();
+	PLAYER->Hierarchy();
+
+
 
 	ImGui::End();
 
 	post->Update();
-	//grid->Update();
-	//
 
-	if (not ChangeScene) {
-		player->Update();
 
-	}
+	PLAYER->Update();
 	Camera::main->Update();
 }
 
 void Scene3::LateUpdate()
 {
+	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
 
-
-	player->LateUpdate();
+	PLAYER->LateUpdate();
 }
 
 void Scene3::PreRender()
@@ -114,17 +66,15 @@ void Scene3::PreRender()
 
 	deferred->SetTarget();
 
-	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-	//item->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	PLAYER->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 
 }
 
 void Scene3::Render()
 {
 	deferred->Render();
-	//grid->Render();
 
-	player->Render();
+	PLAYER->Render();
 }
 
 void Scene3::ResizeScreen()

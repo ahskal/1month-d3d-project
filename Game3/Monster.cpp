@@ -32,7 +32,9 @@ Monster::Monster() {
 	isDead = false;
 }
 
-Monster::~Monster() {}
+Monster::~Monster() {
+	delete slash;
+}
 
 void Monster::SetSpawn(Vector3 spawn)
 {
@@ -62,6 +64,7 @@ void Monster::Init()
 
 	anim->aniScale = 0.6f;
 	MoveSpeed = 3;
+	
 }
 
 void Monster::Update()

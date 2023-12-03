@@ -3,22 +3,17 @@
 class Scene2 : public Scene
 {
 private:
+	Deferred* deferred;   //4∞≥¿« ∑ª¥ı≈∏∞Ÿ  
+	class MapGenerator *mapGen;
+	Actor* Tile;
 	Camera* cam1;
 
-	class PlayerData* player;
-	class MapGenerator *mapGen;
-
-	Sky* skybox;
-	Sky* skybox2;
-
-	Actor* Tile;
-
-	Deferred* deferred;   //4∞≥¿« ∑ª¥ı≈∏∞Ÿ  
 	UI* post;       //4∞≥¿« ∑ª¥ı≈∏∞Ÿ¿ª πﬁæ∆ ±◊∑¡¡Ÿ
 
 	Actor* act;
+
+
 	
-	thread* t1;
 
 public:
 	Scene2();

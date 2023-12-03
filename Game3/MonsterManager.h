@@ -17,5 +17,6 @@ public:
 	void Hierarchy();
 
 	vector<class MonsterData*> GetMonsterVector() const { return MonVec; }
+	void vectorMemberClear();
 };
 
