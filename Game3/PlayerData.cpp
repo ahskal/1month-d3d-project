@@ -5,13 +5,6 @@
 #include "Inventory.h"
 #include "PlayerData.h"
 
-PlayerData* PlayerData::Create(string name)
-{
-	PlayerData* temp = new PlayerData();
-	temp->actor->name = name;
-	return temp;
-}
-
 PlayerData::PlayerData()
 {
 	actor = Player::Create();

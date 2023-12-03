@@ -19,6 +19,15 @@ Player* Player::Create(string name)
 	temp->name = name;
 	return temp;
 }
+Player* Player::Create(Player* copy)
+{
+	Player* temp = new Player(*copy);
+	temp->CopyChild(copy);
+	temp->type = copy->type;
+	temp->state = copy->state;
+	temp->name = copy->name;
+	return temp;
+}
 
 
 Player::Player()

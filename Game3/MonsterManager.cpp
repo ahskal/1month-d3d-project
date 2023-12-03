@@ -90,3 +90,11 @@ void MonsterManager::Hierarchy()
 	}
 }
 
+void MonsterManager::vectorMemberClear()
+{
+	for (auto& monster : MonVec) {
+		delete monster; // 동적으로 할당된 메모리를 해제
+	}
+	MonVec.clear();
+}
+

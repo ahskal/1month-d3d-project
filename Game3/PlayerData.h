@@ -1,9 +1,8 @@
 #pragma once
 
-class PlayerData
+class PlayerData : public Singleton<PlayerData>
 {
 public:
-	static PlayerData* Create(string name = "PlayerData");
 	class Player* actor;
 	class UI_Player* UI;
 	class PlayerObserver* pObserver;
@@ -26,9 +25,5 @@ public:
 
 	// µðÆÛµå ·»´õ¸µÀ» À§ÇÑ °´Ã¼ ·»´õ¸µ
 	void DeferredRender(shared_ptr<Shader> pShader = nullptr);
-
-
-
-
 };
 
