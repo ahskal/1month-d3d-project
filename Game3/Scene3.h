@@ -2,14 +2,21 @@
 
 class Scene3 : public Scene
 {
-private:	
-	Deferred* deferred; //4°³ÀÇ ·»´õÅ¸°Ù  
-	UI* post;			//4°³ÀÇ ·»´õÅ¸°ÙÀ» ¹Þ¾Æ ±×·ÁÁÙ
+private:
+	//Camera* cam1;
+	//Grid* grid;
+	
+	Deferred* deferred;   //4°³ÀÇ ·»´õÅ¸°Ù  
+	UI* post;       //4°³ÀÇ ·»´õÅ¸°ÙÀ» ¹Þ¾Æ ±×·ÁÁÙ
 
+	class PlayerData* player;
+
+	//Item* item;
+
+	bool ChangeScene; 
 
 
 public:
-
 	Scene3();
 	~Scene3();
 

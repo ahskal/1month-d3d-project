@@ -94,7 +94,6 @@ public:
 	friend class Scene2;
 
 	static Player* Create(string name = "Player");
-	static Player* Create(Player* copy);
 private:
 	// 플레이어 FSM
 	play::State state;

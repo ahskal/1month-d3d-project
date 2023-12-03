@@ -20,6 +20,16 @@ extern bool NONE_SCENE;
 extern bool TEXT_LOG;
 extern bool FREE_CAM;
 
+int CreateCount = 0;
+bool updateNot;
+
+void Func1()
+{
+	Scene3* sc3 = new Scene3();
+	SCENE->AddScene("SC3", sc3);
+}
+
+
 Scene2::Scene2()
 {
 	cam1 = Camera::Create();
@@ -39,7 +49,8 @@ Scene2::Scene2()
 	// Create an instance of MapGenerator
 	mapGen = new MapGenerator(rows, cols, floors);
 
-	PLAYER->MainCamSet();
+	player = PlayerData::Create();
+	player->MainCamSet();
 	ResizeScreen();
 
 	deferred = new Deferred;
@@ -50,12 +61,6 @@ Scene2::Scene2()
 
 Scene2::~Scene2()
 {
-	skybox2->Release();
-	skybox->Release();
-	cam1->Release();
-	Tile->Release();
-	delete mapGen;
-	MONSTER->vectorMemberClear();
 }
 
 void Scene2::Init()
@@ -70,9 +75,37 @@ void Scene2::Init()
 	mapGen->createWallMap(Tile);
 	mapGen->createLighting(Tile);
 	mapGen->createPotal(Tile);
+
+	//int count;
+	//for (int k = 0; k < mapGen->floors; ++k) {
+	//	int x;
+	//	int y;
+	//	do
+	//	{
+	//		x = RANDOM->Int(0, mapGen->rows - 1);
+	//		y = RANDOM->Int(0, mapGen->cols - 1);
+	//		count = 0;
+	//		for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
+	//			for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
+	//				// 현재 좌표 (i, j, k)의 타일을 검사
+	//				// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
+	//				if (mapGen->Tiles[i][j][k] == 1) {
+	//					count++;
+	//				}
+	//			}
+	//		}
+	//	} while (count != 4);
+	//	Actor* temp = Actor::Create();
+	//	temp->LoadFile("box.xml");
+	//	temp->name = "box" + to_string(k);
+	//	temp->SetLocalPosY(0);
+	//	Tile->Find(to_string(x) + "x" + to_string(y) + "x" + to_string(k))->AddChild(temp);
+	//}
+
 	
+
 	Vector3 pos = mapGen->TileRandomPos();
-	PLAYER->actor->SetWorldPos(pos);
+	player->actor->SetWorldPos(pos);
 
 
 }
@@ -94,7 +127,7 @@ void Scene2::Update()
 	ImGui::Begin("Hierarchy", nullptr);
 	cam1->RenderHierarchy();
 	Tile->RenderHierarchy();
-	PLAYER->Hierarchy();
+	player->Hierarchy();
 	act->RenderHierarchy();
 	//MonMGR->Hierarchy();
 	//FIELD->Hierarchy();
@@ -110,7 +143,7 @@ void Scene2::Update()
 		}
 	}
 	else {
-		PLAYER->MainCamSet();
+		player->MainCamSet();
 		ResizeScreen();
 	}
 
@@ -119,10 +152,10 @@ void Scene2::Update()
 
 	if (INPUT->KeyDown('T')) {
 		Vector3 pos = mapGen->TileRandomPos();
-		MONSTER->CreateMonster(pos);
+		MonMGR->CreateMonster(pos);
 	}
 	if (INPUT->KeyDown('G')) {
-		PLAYER->inventory->OpenList();
+		player->inventory->OpenList();
 	}
 
 	Camera::main->Update();
@@ -131,10 +164,10 @@ void Scene2::Update()
 	skybox2->Update();
 	Tile->Update();
 
-	PLAYER->Update();
+	player->Update();
 
-	MONSTER->Update();
-	MONSTER->GetTargetPos(PLAYER->pObserver->GetData()->GetWorldPos());
+	MonMGR->Update();
+	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
 	FIELD->Update();
 	DAMAGEFONT->Update();
 	act->Update();
@@ -153,12 +186,12 @@ void Scene2::LateUpdate()
 	//}
 	{
 		const float SLIDING_SPEED = DELTA * 10;
-		Vector3 pDir = PLAYER->actor->GetForward();
+		Vector3 pDir = player->actor->GetForward();
 		for (auto Wcoll : mapGen->WallActorList) {
 			if (INPUT->KeyPress('S')) {
-				Vector3 pDir = -PLAYER->actor->GetForward();
+				Vector3 pDir = -player->actor->GetForward();
 			}
-			if (Wcoll->Intersect(PLAYER->pObserver->GetData())) {
+			if (Wcoll->Intersect(player->pObserver->GetData())) {
 				float ForwardAngle = Wcoll->GetForward().Dot(pDir);
 				float RightAngle = Wcoll->GetRight().Dot(pDir);
 				Vector3 slideDirection;
@@ -184,7 +217,7 @@ void Scene2::LateUpdate()
 				}
 				// Normalize the slide direction
 				slideDirection.Normalize();
-				PLAYER->pObserver->GetData()->MoveWorldPos(slideDirection * SLIDING_SPEED);
+				player->pObserver->GetData()->MoveWorldPos(slideDirection * SLIDING_SPEED);
 			}
 		}
 		//vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
@@ -221,7 +254,7 @@ void Scene2::LateUpdate()
 		//}
 
 		//카메라 벽 충돌
-		Camera* playerCam = static_cast<Camera*>(PLAYER->pObserver->GetData()->Find("Camera"));
+		Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
 		for (Actor* it : mapGen->WallActorList) {
 			if (it->Intersect(playerCam)) {
 				it->visible = false;
@@ -235,31 +268,45 @@ void Scene2::LateUpdate()
 
 	// 포탈 충돌
 	auto potal = Tile->Find("IcospherePotal");
-	if (PLAYER->actor->Intersect(potal) or INPUT->KeyDown('0')) {
-		PLAYER->actor->SetWorldPos(Vector3());
-		SCENE->ChangeScene("SC3");
-		SCENE->DeleteScene("SC2");
-			return;
+	if (player->actor->Intersect(potal) or INPUT->KeyDown('0')) {
+
+		t1 = new thread(Func1);
+
+		
 	}
 
-	Vector3 pPos = PLAYER->actor->GetWorldPos();
-	GameObject* PlayerSword = PLAYER->actor->Find("sword");
-	vector<MonsterData*> Monster = MONSTER->GetMonsterVector();
+	if (CreateCount == 3) {
+		player->actor->SetWorldPos(Vector3());
+		reinterpret_cast<Scene2*>(SCENE->GetScene("SC3"))->player = player;
+		t1->join();
+		delete t1;
+		SCENE->ChangeScene("SC3");
+		return;
+	}
+	if (CreateCount == 4){
+		player->MainCamSet();
+	}
+
+
+
+	Vector3 pPos = player->actor->GetWorldPos();
+	GameObject* PlayerSword = player->actor->Find("sword");
+	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
 	for (MonsterData* Mvector : Monster) {
 		GameObject* MonsterSword = Mvector->Mon->Find("sword");
 
 		auto Mon = Mvector->Mon;
-		if (Mon->Intersect(PlayerSword) && PLAYER->actor->isAttack) {
+		if (Mon->Intersect(PlayerSword) && player->actor->isAttack) {
 			Mon->Damage(200);
 		}
-		else if (PLAYER->actor->Intersect(MonsterSword) && Mon->isAttack) {
-			PLAYER->actor->Damage(5);
+		else if (player->actor->Intersect(MonsterSword) && Mon->isAttack) {
+			player->actor->Damage(5);
 		}
 	};
 
 	for (auto it = FIELD->items.begin(); it != FIELD->items.end();) {
-		if (PLAYER->actor->Intersect((*it)->actor)) {
-			PLAYER->inventory->AddItem((*it));
+		if (player->actor->Intersect((*it)->actor)) {
+			player->inventory->AddItem((*it));
 			it = FIELD->ItemList().erase(it); // 현재 아이템 삭제 후 다음 아이템을 가리키도록 반복자를 업데이트
 		}
 		else {
@@ -267,7 +314,7 @@ void Scene2::LateUpdate()
 		}
 	}
 
-	MONSTER->LateUpdate();
+	MonMGR->LateUpdate();
 
 
 }
@@ -280,11 +327,11 @@ void Scene2::PreRender()
 	deferred->SetTarget();
 	Tile->Render();
 
-	vector<MonsterData*> Monster = MONSTER->GetMonsterVector();
+	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
 	for (MonsterData* Mvector : Monster) {
 		Mvector->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	}
-	PLAYER->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	FIELD->Render();
 	DAMAGEFONT->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
 	act->Render();
@@ -297,7 +344,7 @@ void Scene2::Render()
 	//skybox2->Render();
 
 	deferred->Render();
-	PLAYER->Render();
+	player->Render();
 }
 
 void Scene2::ResizeScreen()

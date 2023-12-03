@@ -17,11 +17,7 @@
 #include "DamageText.h"
 #include "DamageFontManager.h"
 
-#include "PlayerData.h"
-
+#define MonMGR	MonsterManager::GetInstance()
 #define ITEM	ItemTable::GetInstance()
 #define FIELD   FieldItem::GetInstance()
 #define DAMAGEFONT	DamageFontManager::GetInstance()
-
-#define MONSTER	MonsterManager::GetInstance()
-#define PLAYER PlayerData::GetInstance()

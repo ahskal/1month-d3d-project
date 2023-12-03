@@ -5,6 +5,7 @@ class Scene2 : public Scene
 private:
 	Camera* cam1;
 
+	class PlayerData* player;
 	class MapGenerator *mapGen;
 
 	Sky* skybox;

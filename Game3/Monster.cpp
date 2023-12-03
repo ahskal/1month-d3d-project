@@ -32,11 +32,7 @@ Monster::Monster() {
 	isDead = false;
 }
 
-Monster::~Monster() {
-
-	delete slash;
-
-}
+Monster::~Monster() {}
 
 void Monster::SetSpawn(Vector3 spawn)
 {
