@@ -28,15 +28,16 @@ public:
 	void instantiateTile(GameObject* act);
 	void finalizeMapConfiguration(GameObject* act);
 	void createWallMap(Actor* act);
+	void createLighting(Actor* act);
+
+	Vector3 TileRandomPos();
+
+	void createPotal(Actor* act);
 
 	bool WorldPosToTileIdx(Vector3 WPos, Int2& TileIdx);
 	int GetTileState(Vector3 WPos);
 	bool GetTileState(Int2 TileIdx);
 
-
-	void createLighting(Actor* act);
-
-	bool GetRandomPos(Int2 TileIdx);
 
 };
 

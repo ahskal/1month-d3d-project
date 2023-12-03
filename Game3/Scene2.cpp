@@ -13,11 +13,22 @@
 #include "MapGenerator.h"
 
 #include "Scene2.h"
+#include "Scene3.h"
 
 extern bool DEBUG_MODE;
 extern bool NONE_SCENE;
 extern bool TEXT_LOG;
 extern bool FREE_CAM;
+
+int CreateCount = 0;
+bool updateNot;
+
+void Func1()
+{
+	Scene3* sc3 = new Scene3();
+	SCENE->AddScene("SC3", sc3);
+}
+
 
 Scene2::Scene2()
 {
@@ -29,6 +40,7 @@ Scene2::Scene2()
 	skybox2->LoadFile("Sky2.xml");
 
 	Tile = Actor::Create();
+	
 	Tile->name = "Tile";
 	int rows = 20;
 	int cols = 20;
@@ -42,6 +54,9 @@ Scene2::Scene2()
 	ResizeScreen();
 
 	deferred = new Deferred;
+
+	act = Actor::Create();
+
 }
 
 Scene2::~Scene2()
@@ -59,6 +74,7 @@ void Scene2::Init()
 	mapGen->finalizeMapConfiguration(Tile);
 	mapGen->createWallMap(Tile);
 	mapGen->createLighting(Tile);
+	mapGen->createPotal(Tile);
 
 	//int count;
 	//for (int k = 0; k < mapGen->floors; ++k) {
@@ -86,19 +102,12 @@ void Scene2::Init()
 	//	Tile->Find(to_string(x) + "x" + to_string(y) + "x" + to_string(k))->AddChild(temp);
 	//}
 
-	int x = RANDOM->Int(2, 17);
-	int y = RANDOM->Int(2, 17);
-	if (mapGen->GetRandomPos(Int2(x, y))) {
-		int tileWidth = mapGen->tileSize * mapGen->rows;
-		int tileheight = mapGen->tileSize * mapGen->cols;
-		int halfTileWidth = mapGen->tileSize * mapGen->rows / 2;
+	
 
-		Vector3 pos = Vector3(x * mapGen->tileSize - halfTileWidth / 2 + 2.5f, 0, y * mapGen->tileSize - halfTileWidth / 2 + 2.5f);
-		player->actor->SetWorldPos(pos);
-	}
-	else {
-		player->actor->SetWorldPos(Vector3());
-	}
+	Vector3 pos = mapGen->TileRandomPos();
+	player->actor->SetWorldPos(pos);
+
+
 }
 
 void Scene2::Release()
@@ -119,7 +128,7 @@ void Scene2::Update()
 	cam1->RenderHierarchy();
 	Tile->RenderHierarchy();
 	player->Hierarchy();
-
+	act->RenderHierarchy();
 	//MonMGR->Hierarchy();
 	//FIELD->Hierarchy();
 
@@ -142,27 +151,8 @@ void Scene2::Update()
 
 
 	if (INPUT->KeyDown('T')) {
-		//int count;
-		//int x;
-		//int y;
-		//do
-		//{
-		//	x = RANDOM->Int(0, mapGen->rows - 1);
-		//	y = RANDOM->Int(0, mapGen->cols - 1);
-		//	count = 0;
-		//	for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
-		//		for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
-		//			// 현재 좌표 (i, j, k)의 타일을 검사
-		//			// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
-		//			if (mapGen->Tiles[i][j][0] == 1) {
-		//				count++;
-		//			}
-		//		}
-		//	}
-		//} while (count != 1);
-		//float mapSize = ((mapGen->rows * mapGen->tileSize) / 2);
-		//MonMGR->CreateMonster(Vector3(-mapSize + x * 5, 0, -mapSize + y * 5));
-		MonMGR->CreateMonster(Vector3(10, 0, 10));
+		Vector3 pos = mapGen->TileRandomPos();
+		MonMGR->CreateMonster(pos);
 	}
 	if (INPUT->KeyDown('G')) {
 		player->inventory->OpenList();
@@ -180,38 +170,27 @@ void Scene2::Update()
 	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
 	FIELD->Update();
 	DAMAGEFONT->Update();
-
+	act->Update();
 }
 
 void Scene2::LateUpdate()
 {
-	static bool isOnece = false;
-	if (INPUT->KeyDown(VK_F5)) {
-		Tile->ReleaseMember();
-		
-		isOnece = false;
-	}
-	if (INPUT->KeyDown(VK_F4)) {
-		Init();
-	}
-	// 벽 충돌 ( 처음 틱에는 한번 건너뛴다 )
-	//Vector3 playerPos = player->pObserver->GetPos();	
-	//	if (!mapGen->GetTileState(playerPos)) {
-	//		player->pObserver->GetData()->GoBack();
-	//	}
-	//	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
-	//	for (MonsterData* Mvector : Monster) {
-	//		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
-	//		if (!mapGen->GetTileState(monsterPos)) {
-	//			Mvector->Mon->GoBack();
-	//		}
-	//	}
+	//static bool isOnece = false;
+	//if (INPUT->KeyDown(VK_F5)) {
+	//	Tile->ReleaseMember();
+
+	//	isOnece = false;
 	//}
-	if (isOnece) 
+	//if (INPUT->KeyDown(VK_F4)) {
+	//	Init();
+	//}
 	{
 		const float SLIDING_SPEED = DELTA * 10;
 		Vector3 pDir = player->actor->GetForward();
 		for (auto Wcoll : mapGen->WallActorList) {
+			if (INPUT->KeyPress('S')) {
+				Vector3 pDir = -player->actor->GetForward();
+			}
 			if (Wcoll->Intersect(player->pObserver->GetData())) {
 				float ForwardAngle = Wcoll->GetForward().Dot(pDir);
 				float RightAngle = Wcoll->GetRight().Dot(pDir);
@@ -241,38 +220,38 @@ void Scene2::LateUpdate()
 				player->pObserver->GetData()->MoveWorldPos(slideDirection * SLIDING_SPEED);
 			}
 		}
-		vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
-		for (MonsterData* Mvector : Monster) {
-			Vector3 monsterPos = Mvector->Mon->GetWorldPos();
-			Vector3 mDir = Mvector->Mon->GetForward();
-			for (auto Wcoll : mapGen->WallActorList) {
-				float ForwardAngle = Wcoll->GetForward().Dot(mDir);
-				float RightAngle = Wcoll->GetRight().Dot(mDir);
-				Vector3 slideDirection;
-				if (ForwardAngle > 0 && RightAngle > 0)
-				{
-					slideDirection -= Wcoll->GetForward();
-					slideDirection -= Wcoll->GetRight();
-				}
-				else if (ForwardAngle > 0 && RightAngle < 0)
-				{
-					slideDirection -= Wcoll->GetForward();
-					slideDirection += Wcoll->GetRight();
-				}
-				else if (ForwardAngle < 0 && RightAngle > 0)
-				{
-					slideDirection += Wcoll->GetForward();
-					slideDirection -= Wcoll->GetRight();
-				}
-				else if (ForwardAngle < 0 && RightAngle < 0)
-				{
-					slideDirection += Wcoll->GetForward();
-					slideDirection += Wcoll->GetRight();
-				}
-				slideDirection.Normalize();
-				Mvector->Mon->MoveWorldPos(slideDirection * SLIDING_SPEED);
-			}
-		}
+		//vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+		//for (MonsterData* Mvector : Monster) {
+		//	Vector3 monsterPos = Mvector->Mon->GetWorldPos();
+		//	Vector3 mDir = Mvector->Mon->GetForward();
+		//	for (auto Wcoll : mapGen->WallActorList) {
+		//		float ForwardAngle = Wcoll->GetForward().Dot(mDir);
+		//		float RightAngle = Wcoll->GetRight().Dot(mDir);
+		//		Vector3 slideDirection;
+		//		if (ForwardAngle > 0 && RightAngle > 0)
+		//		{
+		//			slideDirection -= Wcoll->GetForward();
+		//			slideDirection -= Wcoll->GetRight();
+		//		}
+		//		else if (ForwardAngle > 0 && RightAngle < 0)
+		//		{
+		//			slideDirection -= Wcoll->GetForward();
+		//			slideDirection += Wcoll->GetRight();
+		//		}
+		//		else if (ForwardAngle < 0 && RightAngle > 0)
+		//		{
+		//			slideDirection += Wcoll->GetForward();
+		//			slideDirection -= Wcoll->GetRight();
+		//		}
+		//		else if (ForwardAngle < 0 && RightAngle < 0)
+		//		{
+		//			slideDirection += Wcoll->GetForward();
+		//			slideDirection += Wcoll->GetRight();
+		//		}
+		//		slideDirection.Normalize();
+		//		Mvector->Mon->MoveWorldPos(slideDirection * 1);
+		//	}
+		//}
 
 		//카메라 벽 충돌
 		Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
@@ -287,6 +266,26 @@ void Scene2::LateUpdate()
 
 	}
 
+	// 포탈 충돌
+	auto potal = Tile->Find("IcospherePotal");
+	if (player->actor->Intersect(potal) or INPUT->KeyDown('0')) {
+
+		t1 = new thread(Func1);
+
+		
+	}
+
+	if (CreateCount == 3) {
+		player->actor->SetWorldPos(Vector3());
+		reinterpret_cast<Scene2*>(SCENE->GetScene("SC3"))->player = player;
+		t1->join();
+		delete t1;
+		SCENE->ChangeScene("SC3");
+		return;
+	}
+	if (CreateCount == 4){
+		player->MainCamSet();
+	}
 
 
 
@@ -335,6 +334,7 @@ void Scene2::PreRender()
 	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	FIELD->Render();
 	DAMAGEFONT->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
+	act->Render();
 
 }
 

@@ -3,15 +3,18 @@
 class Scene3 : public Scene
 {
 private:
-	Camera* cam1;
-	Grid* grid;
+	//Camera* cam1;
+	//Grid* grid;
 	
 	Deferred* deferred;   //4∞≥¿« ∑ª¥ı≈∏∞Ÿ  
 	UI* post;       //4∞≥¿« ∑ª¥ı≈∏∞Ÿ¿ª πﬁæ∆ ±◊∑¡¡Ÿ
 
 	class PlayerData* player;
 
-	Item* item;
+	//Item* item;
+
+	bool ChangeScene; 
+
 
 public:
 	Scene3();

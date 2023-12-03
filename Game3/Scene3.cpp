@@ -14,22 +14,40 @@ extern bool NONE_SCENE;
 extern bool TEXT_LOG;
 extern bool FREE_CAM;
 
+extern int CreateCount;
+mutex value_mutex;
+
+
 Scene3::Scene3()
 {
-	grid = Grid::Create();
-
-	cam1 = Camera::Create();
-	cam1->LoadFile("Cam2.xml");
+	//grid = Grid::Create();
+	value_mutex.lock();
+	Sleep(100);
+	CreateCount++;
+	value_mutex.unlock();
+	//cam1 = Camera::Create();
+	//cam1->LoadFile("Cam2.xml");
 
 	deferred = new Deferred;
 	post = UI::Create();
 	post->LoadFile("Deferred.xml");
 
+	value_mutex.lock();
+	Sleep(100);
+	CreateCount++;
+	value_mutex.unlock();
+
+
 	player = PlayerData::Create();
 	player->MainCamSet();
 	ResizeScreen();
 
-	//item = new Item();
+	value_mutex.lock();
+	Sleep(1000);
+	CreateCount++;
+	value_mutex.unlock();
+
+	ChangeScene = true;
 }
 
 Scene3::~Scene3()
@@ -45,6 +63,14 @@ void Scene3::Release() {}
 
 void Scene3::Update()
 {
+	static bool isOnece = false;
+
+	if (isOnece) {
+		ChangeScene = false;
+	}
+	isOnece = true;
+
+
 	ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
 
 	if (DEBUG_MODE) {
@@ -55,8 +81,8 @@ void Scene3::Update()
 	LIGHT->RenderDetail();
 
 	ImGui::Begin("Hierarchy", nullptr);
-	grid->RenderHierarchy();
-	cam1->RenderHierarchy();
+	//grid->RenderHierarchy();
+	//cam1->RenderHierarchy();
 	player->Hierarchy();
 
 	//item->actor->RenderHierarchy();
@@ -64,16 +90,14 @@ void Scene3::Update()
 	ImGui::End();
 
 	post->Update();
-	grid->Update();
+	//grid->Update();
+	//
 
-	player->Update();
+	if (not ChangeScene) {
+		player->Update();
+
+	}
 	Camera::main->Update();
-	MonMGR->Update();
-	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
-
-	//Camera::main->ControlMainCam();
-
-	//item->Update();
 }
 
 void Scene3::LateUpdate()
@@ -81,7 +105,6 @@ void Scene3::LateUpdate()
 
 
 	player->LateUpdate();
-	MonMGR->LateUpdate();
 }
 
 void Scene3::PreRender()
@@ -99,7 +122,7 @@ void Scene3::PreRender()
 void Scene3::Render()
 {
 	deferred->Render();
-	grid->Render();
+	//grid->Render();
 
 	player->Render();
 }

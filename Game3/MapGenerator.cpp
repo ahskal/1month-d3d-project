@@ -195,7 +195,6 @@ void MapGenerator::instantiateTile(GameObject* act)
 			}
 		}
 	}
-
 	// matrix 배열을 메모리에 할당한 후 해제
 	temp->mesh->CreateInstanceBuffer(matrix, count2);
 	delete[] matrix;
@@ -343,7 +342,31 @@ void MapGenerator::createLighting(Actor* act)
 		}
 	}
 }
-bool MapGenerator::GetRandomPos(Int2 TileIdx)
+
+Vector3 MapGenerator::TileRandomPos()
 {
-	return Tiles[TileIdx.x][TileIdx.y] == 1;
+	vector<std::pair<int, int>> Temp;
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 20; j++) {
+			if (Tiles[i][j] == 1)
+			{
+				Temp.push_back(make_pair(i, j));
+			}
+		}
+	}
+	int Num = RANDOM->Int(0, Temp.size() - 1);
+	return Vector3((Temp[Num].first - 10) * 5, 0, (Temp[Num].second - 10) * 5) + Vector3(2.5f, 0, 2.5f);
+}
+
+void MapGenerator::createPotal(Actor* act)
+{
+	Actor* potal = Actor::Create();
+	potal->LoadFile("Object/IcospherePotal.xml");
+	potal->SetWorldPos(TileRandomPos());
+	Light* light = Light::Create();
+	light->light->radius = 9;
+	light->light->color = Color(0, 0, 4);
+	light->SetWorldPosY(2.5f);
+	potal->AddChild(light);
+	act->AddChild(potal);
 }

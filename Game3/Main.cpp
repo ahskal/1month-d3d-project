@@ -28,9 +28,9 @@ void Main::Init()
 {
 	if (not NONE_SCENE) {
 		LIGHT->dirLight.color = Color(0, 0, 0);
-		SCENE->AddScene("SC1", new Scene1);
+		//SCENE->AddScene("SC1", new Scene1);
 		SCENE->AddScene("SC2", new Scene2);
-		SCENE->AddScene("SC3", new Scene3);
+		//SCENE->AddScene("SC3", new Scene3);
 		SCENE->ChangeScene("SC2");
 	}
 
