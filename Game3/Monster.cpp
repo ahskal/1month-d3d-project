@@ -96,9 +96,17 @@ void Monster::FSM()
 		}
 		else if (state == State::ATTACK) {
 			isAttack = true;
-			if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
-			{
-				slash->Play();
+			if (AttackCount == 0) {
+				if (slash->isPlaying == false and anim->GetPlayTime() >= 0.3054f)
+				{
+					slash->Play();
+				}
+			}
+			else {
+				if (slash->isPlaying == false and anim->GetPlayTime() >= 0.2f)
+				{
+					slash->Play();
+				}
 			}
 			if (slash->isPlaying == true and anim->GetPlayTime() >= 0.8f)
 			{

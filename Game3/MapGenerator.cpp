@@ -209,6 +209,10 @@ void MapGenerator::finalizeMapConfiguration(GameObject* act)
 	float tileHeight = tileSize * cols;
 	float centerX = -tileWidth / 2;
 	float centerZ = -tileHeight / 2;
+
+	Actor* Tile = Actor::Create();
+	Tile->name = "Tile";
+	act->AddChild(Tile);
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			if (Tiles[i][j] == 0) {
@@ -222,7 +226,7 @@ void MapGenerator::finalizeMapConfiguration(GameObject* act)
 				temp->SetLocalPosZ(centerZ + (tileSize * j) + 2.5f);
 				temp->scale.x;
 				temp->scale.z;
-				act->AddChild(temp);
+				Tile->AddChild(temp);
 				WallActorList.push_back(temp);
 			}
 		}
@@ -317,43 +321,29 @@ bool MapGenerator::GetTileState(Int2 TileIdx)
 
 void MapGenerator::createLighting(Actor* act)
 {
-	for (int i = 0; i < 20; i++) {
-		Light* light = Light::Create("Light" + to_string(i), 1);
-		light->rotation.x = 45 * ToRadian;
-		light->light->radius = 15;
-		light->light->outer = 80;
-		light->SetWorldPos(GetRandomPos());
-		light->SetWorldPosY(5);
+	int count = 0;
+	const int Range = 5;
 
-		act->AddChild(light);
+	for (int i = 0; i < Range; i++) {
+		for (int j = 0; j < Range; j++) {
+			Light* light = Light::Create("Light" + std::to_string(count), 1);
+			light->rotation.x = 45 * ToRadian;
+			light->light->radius = 15;
+			light->light->outer = 90;
+			light->light->inner = 0;
+			// Calculate world position based on tile coordinates
+			float posX = ((i * 4) - (rows - 4) / 2) * tileSize;
+			float posY = 5;  // Assuming a fixed Y position
+			float posZ = ((j * 4) - (rows - 4) / 2) * tileSize;
+			Vector3 pos = Vector3(posX, posY, posZ);
+
+			light->SetWorldPos(pos);
+			act->AddChild(light);
+			count++;
+		}
 	}
 }
-
-Vector3 MapGenerator::GetRandomPos()
+bool MapGenerator::GetRandomPos(Int2 TileIdx)
 {
-	int count;
-	int x;
-	int y;
-	float mapSize = ((rows * tileSize) / 2);
-	do
-	{
-		count = 0;
-		x = RANDOM->Int(0, rows - 1);
-		y = RANDOM->Int(0, cols - 1);
-
-		// 주어진 위치 (x, y)의 타일이 갈 수 있는 타일이면 count를 증가
-		for (int i = max(0, x - 1); i <= min(rows - 1, x + 1); ++i)
-		{
-			for (int j = max(0, y - 1); j <= min(cols - 1, y + 1); ++j)
-			{
-				if (Tiles[i][j] != 0)
-				{
-					count++;
-				}
-			}
-		}
-	} while (count != 1);
-
-	// 올바른 위치 반환
-	return Vector3(-mapSize + x * 5 - 2.5f, 0, -mapSize + y * 5 - 2.5f);
+	return Tiles[TileIdx.x][TileIdx.y] == 1;
 }

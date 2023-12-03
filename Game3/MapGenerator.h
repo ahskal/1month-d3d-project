@@ -36,7 +36,7 @@ public:
 
 	void createLighting(Actor* act);
 
-	Vector3 GetRandomPos();
+	bool GetRandomPos(Int2 TileIdx);
 
 };
 

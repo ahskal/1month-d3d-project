@@ -92,7 +92,7 @@ void Player::Init()
 
 void Player::Update()
 {
-	
+
 	FSM();
 
 	if (Sp <= MaxSp) {
@@ -106,7 +106,7 @@ void Player::Update()
 	//# Update;
 	if (not DEBUG_MODE)
 		CameraHold();
-	else{
+	else {
 		slash->RenderDetail();
 	}
 
@@ -157,7 +157,7 @@ void Player::FSM()
 			if (!isEqip) {
 				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEqip, 0.1f);
 			}
-			
+
 		}
 	}
 
@@ -187,14 +187,24 @@ void Player::FSM()
 	}
 	// ATTACK
 	else if (state == State::ATTACK) {
-		if (slash->isPlaying == false and anim->GetPlayTime() >= 0.1f)
-		{
-			slash->Play();
+
+		if (AttackCount == 0) {
+			if (slash->isPlaying == false and anim->GetPlayTime() >= 0.3054f)
+			{
+				slash->Play();
+			}
+		}
+		else {
+			if (slash->isPlaying == false and anim->GetPlayTime() >= 0.2f)
+			{
+				slash->Play();
+			}
 		}
 		if (slash->isPlaying == true and anim->GetPlayTime() >= 0.8f)
 		{
 			slash->Stop();
 		}
+
 		if (anim->GetPlayTime() >= 0.98f) {
 			state = State::IDLE;
 			isAttack = false;
@@ -233,7 +243,7 @@ void Player::ChangeAni() {
 
 	int index = round((atan2f(dotAngle, dotAngle2) + PI) / (45.f * ToRadian));
 	index = (index == 8) ? 0 : index;
-	
+
 	//ImGui::Text("index %d", index);
 	//ImGui::Text("this->index %d", this->index);
 

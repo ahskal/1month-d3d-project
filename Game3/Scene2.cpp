@@ -54,12 +54,11 @@ void Scene2::Init()
 	mapGen->initializeMap();
 	//mapGen->updateMapTiles();
 	mapGen->validateMapConnectivity();
-	mapGen->printTileInfo();
+	//mapGen->printTileInfo();
 	mapGen->instantiateTile(Tile);
 	mapGen->finalizeMapConfiguration(Tile);
 	mapGen->createWallMap(Tile);
-
-	//mapGen->createLighting(Tile);
+	mapGen->createLighting(Tile);
 
 	//int count;
 	//for (int k = 0; k < mapGen->floors; ++k) {
@@ -87,12 +86,19 @@ void Scene2::Init()
 	//	Tile->Find(to_string(x) + "x" + to_string(y) + "x" + to_string(k))->AddChild(temp);
 	//}
 
-	//player->inventory->AddItem(ITEM->CreateItem("돌", new RootItemFactory));
+	int x = RANDOM->Int(2, 17);
+	int y = RANDOM->Int(2, 17);
+	if (mapGen->GetRandomPos(Int2(x, y))) {
+		int tileWidth = mapGen->tileSize * mapGen->rows;
+		int tileheight = mapGen->tileSize * mapGen->cols;
+		int halfTileWidth = mapGen->tileSize * mapGen->rows / 2;
 
-
-	//player->actor->SetWorldPos(mapGen->GetRandomPos());
-
-
+		Vector3 pos = Vector3(x * mapGen->tileSize - halfTileWidth / 2 + 2.5f, 0, y * mapGen->tileSize - halfTileWidth / 2 + 2.5f);
+		player->actor->SetWorldPos(pos);
+	}
+	else {
+		player->actor->SetWorldPos(Vector3());
+	}
 }
 
 void Scene2::Release()
@@ -133,10 +139,7 @@ void Scene2::Update()
 	}
 
 	// map reset;
-	if (INPUT->KeyDown(VK_F5)) {
-		Tile->ReleaseMember();
-		Init();
-	}
+
 
 	if (INPUT->KeyDown('T')) {
 		//int count;
@@ -176,59 +179,114 @@ void Scene2::Update()
 	MonMGR->Update();
 	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
 	FIELD->Update();
+	DAMAGEFONT->Update();
+
 }
 
 void Scene2::LateUpdate()
 {
-
+	static bool isOnece = false;
+	if (INPUT->KeyDown(VK_F5)) {
+		Tile->ReleaseMember();
+		
+		isOnece = false;
+	}
+	if (INPUT->KeyDown(VK_F4)) {
+		Init();
+	}
 	// 벽 충돌 ( 처음 틱에는 한번 건너뛴다 )
-	/*static bool isOnece = false;
-	Vector3 playerPos = player->pObserver->GetPos();
-	if (isOnece) {
-		if (!mapGen->GetTileState(playerPos)) {
-			player->pObserver->GetData()->GoBack();
+	//Vector3 playerPos = player->pObserver->GetPos();	
+	//	if (!mapGen->GetTileState(playerPos)) {
+	//		player->pObserver->GetData()->GoBack();
+	//	}
+	//	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	//	for (MonsterData* Mvector : Monster) {
+	//		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
+	//		if (!mapGen->GetTileState(monsterPos)) {
+	//			Mvector->Mon->GoBack();
+	//		}
+	//	}
+	//}
+	if (isOnece) 
+	{
+		const float SLIDING_SPEED = DELTA * 10;
+		Vector3 pDir = player->actor->GetForward();
+		for (auto Wcoll : mapGen->WallActorList) {
+			if (Wcoll->Intersect(player->pObserver->GetData())) {
+				float ForwardAngle = Wcoll->GetForward().Dot(pDir);
+				float RightAngle = Wcoll->GetRight().Dot(pDir);
+				Vector3 slideDirection;
+				if (ForwardAngle > 0 && RightAngle > 0)
+				{
+					slideDirection -= Wcoll->GetForward();
+					slideDirection -= Wcoll->GetRight();
+				}
+				else if (ForwardAngle > 0 && RightAngle < 0)
+				{
+					slideDirection -= Wcoll->GetForward();
+					slideDirection += Wcoll->GetRight();
+				}
+				else if (ForwardAngle < 0 && RightAngle > 0)
+				{
+					slideDirection += Wcoll->GetForward();
+					slideDirection -= Wcoll->GetRight();
+				}
+				else if (ForwardAngle < 0 && RightAngle < 0)
+				{
+					slideDirection += Wcoll->GetForward();
+					slideDirection += Wcoll->GetRight();
+				}
+				// Normalize the slide direction
+				slideDirection.Normalize();
+				player->pObserver->GetData()->MoveWorldPos(slideDirection * SLIDING_SPEED);
+			}
 		}
 		vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
 		for (MonsterData* Mvector : Monster) {
 			Vector3 monsterPos = Mvector->Mon->GetWorldPos();
-			if (!mapGen->GetTileState(monsterPos)) {
-				Mvector->Mon->GoBack();
+			Vector3 mDir = Mvector->Mon->GetForward();
+			for (auto Wcoll : mapGen->WallActorList) {
+				float ForwardAngle = Wcoll->GetForward().Dot(mDir);
+				float RightAngle = Wcoll->GetRight().Dot(mDir);
+				Vector3 slideDirection;
+				if (ForwardAngle > 0 && RightAngle > 0)
+				{
+					slideDirection -= Wcoll->GetForward();
+					slideDirection -= Wcoll->GetRight();
+				}
+				else if (ForwardAngle > 0 && RightAngle < 0)
+				{
+					slideDirection -= Wcoll->GetForward();
+					slideDirection += Wcoll->GetRight();
+				}
+				else if (ForwardAngle < 0 && RightAngle > 0)
+				{
+					slideDirection += Wcoll->GetForward();
+					slideDirection -= Wcoll->GetRight();
+				}
+				else if (ForwardAngle < 0 && RightAngle < 0)
+				{
+					slideDirection += Wcoll->GetForward();
+					slideDirection += Wcoll->GetRight();
+				}
+				slideDirection.Normalize();
+				Mvector->Mon->MoveWorldPos(slideDirection * SLIDING_SPEED);
 			}
 		}
-	}
-	isOnece = true;*/
 
-	/*Vector3 pDir = player->pObserver->GetData()->GetForward();
-	for (auto Wcoll : mapGen->WallActorList) {
-
-		if (Wcoll->Intersect(player->pObserver->GetData())) {
-			float ForwardAngle = Wcoll->GetForward().Dot(pDir);
-			float RightAngle = Wcoll->GetRight().Dot(pDir);
-			if (fabs(ForwardAngle) < fabs(RightAngle)) {
-				player->pObserver->GetData()->MoveWorldPos(Wcoll->GetForward() * DELTA * 2);
+		//카메라 벽 충돌
+		Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
+		for (Actor* it : mapGen->WallActorList) {
+			if (it->Intersect(playerCam)) {
+				it->visible = false;
 			}
 			else {
-				player->pObserver->GetData()->MoveWorldPos(Wcoll->GetRight() * DELTA * 2);
+				it->visible = true;;
 			}
 		}
+
 	}
 
-
-	for (MonsterData* Mvector : Monster) {
-		Vector3 monsterPos = Mvector->Mon->GetWorldPos();
-		Vector3 mDir = Mvector->Mon->GetForward();
-		for (auto Wcoll : mapGen->WallActorList) {
-			float ForwardAngle = Wcoll->GetForward().Dot(mDir);
-			float RightAngle = Wcoll->GetRight().Dot(mDir);
-			if (fabs(ForwardAngle) < fabs(RightAngle)) {
-
-				Mvector->Mon->MoveWorldPos(Wcoll->GetForward() * DELTA * 3);
-			}
-			else {
-				Mvector->Mon->MoveWorldPos(Wcoll->GetRight() * DELTA * 3);
-			}
-		}
-	}*/
 
 
 
@@ -257,19 +315,9 @@ void Scene2::LateUpdate()
 		}
 	}
 
-	//카메라 벽 충돌
-	Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
-	for (Actor* it : mapGen->WallActorList) {
-		if (it->Intersect(playerCam)) {
-			it->visible = false;
-		}
-		else {
-			it->visible = true;;
-		}
-	}
-
 	MonMGR->LateUpdate();
-	DAMAGEFONT->Update();
+
+
 }
 
 void Scene2::PreRender()
