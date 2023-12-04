@@ -262,6 +262,7 @@ void Player::Control()
 	bool keyS = INPUT->KeyPress('S');
 	bool keyA = INPUT->KeyPress('A');
 	bool keyD = INPUT->KeyPress('D');
+	bool keyShift = INPUT->KeyPress(VK_LSHIFT);
 	MoveDir = Vector3(0, 0, 0);
 
 	if (keyW)
@@ -272,6 +273,11 @@ void Player::Control()
 		MoveDir -= GetRight();
 	else if (keyD)
 		MoveDir += GetRight();
+
+	//if (keyShift) {
+	//	MoveSpeed += 10;
+	//}
+
 
 	MoveDir.Normalize();
 	MoveWorldPos(MoveDir * DELTA * MoveSpeed);

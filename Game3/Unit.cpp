@@ -54,7 +54,7 @@ void Unit::Damage(int damage)
 		DAMAGEFONT->AddDamageText(damage, GetWorldPos() +Vector3(0,3,0));
 
 		Hp -= damage;
-		hitCooltime = 0.1f;
+		hitCooltime = 0.4f;
 		//cout << this->GetWorldPos().x<< this->GetWorldPos().y << endl;
 		//DAMAGE->AddText(this->GetWorldPos() + Vector2(50, 50), damage, color);
 		hit = true;

@@ -1,22 +1,15 @@
 #pragma once
-class Scene1 : public Scene
+
+class Scene4 : public Scene
 {
 private:
-	Camera* cam1;
-	Terrain* map;
-	Terrain* water;
-
-	Sky* skybox;
-
-	float timer;
 
 	Deferred* deferred;
 
-	Actor* Build;
 
 public:
-	Scene1();
-	~Scene1();
+	Scene4();
+	~Scene4();
 
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶
@@ -26,3 +19,4 @@ public:
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
 };
+

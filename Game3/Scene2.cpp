@@ -12,8 +12,8 @@
 
 #include "MapGenerator.h"
 
+#include "Scene1.h"
 #include "Scene2.h"
-#include "Scene3.h"
 
 extern bool DEBUG_MODE;
 extern bool NONE_SCENE;
@@ -68,6 +68,11 @@ void Scene2::Init()
 
 	Vector3 pos = mapGen->TileRandomPos();
 	PLAYER->actor->SetWorldPos(pos);
+
+	for (int i = 0; i < 5; i++) {
+		Vector3 pos = mapGen->TileRandomPos();
+		MONSTER->CreateMonster(pos);
+	}
 }
 
 void Scene2::Release()
@@ -77,45 +82,34 @@ void Scene2::Release()
 void Scene2::Update()
 {
 	// # DEBUG #
-	LIGHT->RenderDetail();
-	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
-	if (DEBUG_MODE) {
-		deferred->RenderDetail();
-	}
-	// # DEBUG #
+	//LIGHT->RenderDetail();
+	//ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
+	//if (DEBUG_MODE) {
+	//	deferred->RenderDetail();
+	//}
+	//// # DEBUG #
+	//
+	//ImGui::Begin("Hierarchy", nullptr);
+	//cam1->RenderHierarchy();
+	//Tile->RenderHierarchy();
+	//PLAYER->Hierarchy();
+	//MONSTER->Hierarchy();
+	//act->RenderHierarchy();
+	//
+	//ImGui::End();
 
-	ImGui::Begin("Hierarchy", nullptr);
-	cam1->RenderHierarchy();
-	Tile->RenderHierarchy();
-	PLAYER->Hierarchy();
-	MONSTER->Hierarchy();
-	act->RenderHierarchy();
-
-	ImGui::End();
-
-	if (FREE_CAM) {
-		Camera::main->ControlMainCam();
-		Camera::main = cam1;
-		ResizeScreen();
-		for (auto it : mapGen->WallActorList) {
-			it->visible = true;
-		}
-	}
-	else {
-		PLAYER->MainCamSet();
-		ResizeScreen();
-	}
-
-	// map reset;
-
-
-	if (INPUT->KeyDown('T')) {
-		Vector3 pos = mapGen->TileRandomPos();
-		MONSTER->CreateMonster(pos);
-	}
-	if (INPUT->KeyDown('G')) {
-		PLAYER->inventory->OpenList();
-	}
+	//if (FREE_CAM) {
+	//	Camera::main->ControlMainCam();
+	//	Camera::main = cam1;
+	//	ResizeScreen();
+	//	for (auto it : mapGen->WallActorList) {
+	//		it->visible = true;
+	//	}
+	//}
+	//else {
+	//	PLAYER->MainCamSet();
+	//	ResizeScreen();
+	//}
 
 	Camera::main->Update();
 
@@ -133,21 +127,10 @@ void Scene2::Update()
 
 void Scene2::LateUpdate()
 {
-	//static bool isOnece = false;
-	//if (INPUT->KeyDown(VK_F5)) {
-	//	Tile->ReleaseMember();
-
-	//	isOnece = false;
-	//}
-	//if (INPUT->KeyDown(VK_F4)) {
-	//	Init();
-	//}
 	{
 		const float SLIDING_SPEED = DELTA * 10;
 		Vector3 pDir = PLAYER->actor->MoveDir;
 		for (auto Wcoll : mapGen->WallActorList) {
-			if (INPUT->KeyPress('S')) {
-			}
 			if (Wcoll->Intersect(PLAYER->actor)) {
 				float ForwardAngle = Wcoll->GetForward().Dot(pDir);
 				float RightAngle = Wcoll->GetRight().Dot(pDir);
@@ -227,9 +210,10 @@ void Scene2::LateUpdate()
 
 	// Æ÷Å» Ãæµ¹
 	auto potal = Tile->Find("IcospherePotal");
-	if (PLAYER->actor->Intersect(potal) or INPUT->KeyDown('0')) {
+	if (PLAYER->actor->Intersect(potal)) {
 		PLAYER->actor->SetWorldPos(Vector3());
-		SCENE->ChangeScene("SC3");
+		SCENE->AddScene("SC1", new Scene1());
+		SCENE->ChangeScene("SC1");
 		SCENE->DeleteScene("SC2");
 		return;
 	}
@@ -242,10 +226,10 @@ void Scene2::LateUpdate()
 
 		auto Mon = Mvector->Mon;
 		if (Mon->Intersect(PLAYERSword) && PLAYER->actor->isAttack) {
-			Mon->Damage(PLAYER->actor->Attack);
+			Mon->Damage(PLAYER->actor->Attack * 2.5);
 		}
 		else if (PLAYER->actor->Intersect(MonsterSword) && Mon->isAttack) {
-			PLAYER->actor->Damage(Mon->Attack);
+			PLAYER->actor->Damage(Mon->Attack/2);
 		}
 	};
 

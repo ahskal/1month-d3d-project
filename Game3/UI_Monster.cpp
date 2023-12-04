@@ -9,7 +9,7 @@ UI_Monster* UI_Monster::Create(string name)
 	temp->name = name;	
 	temp->type = ObType::Billboard;
 	temp->mesh = make_shared<Mesh>();
-	temp->mesh->LoadFile("7.Billboard.mesh");
+	//temp->mesh->LoadFile("7.Billboard.mesh");
 	temp->shader = RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl");
 	temp->shader->LoadGeometry();
 	return temp;
@@ -25,7 +25,7 @@ UI_Monster::~UI_Monster(){}
 void UI_Monster::Update()
 {
 	Billboard::Update();
-	if (monster != nullptr) {
+	if (monster) {
 		auto hpCurrent = Find("HpCurrent");
 		hpCurrent->scale.x = (monster->Hp / monster->MaxHp) * scale.x;
 	}

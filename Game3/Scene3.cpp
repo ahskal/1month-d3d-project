@@ -17,8 +17,6 @@ extern bool FREE_CAM;
 Scene3::Scene3()
 {
 	deferred = new Deferred;
-	post = UI::Create();
-	post->LoadFile("Deferred.xml");
 }
 
 Scene3::~Scene3()
@@ -45,7 +43,6 @@ void Scene3::Update()
 
 	ImGui::End();
 
-	post->Update();
 
 
 	PLAYER->Update();

@@ -4,7 +4,7 @@
 Inventory::Inventory()
 {
 	items.resize(0);
-	Gold = 0;
+	Gold = 100;
 }
 
 Inventory::~Inventory()
@@ -27,7 +27,7 @@ void Inventory::AddItem(Item* newItem)
 		MoneyItem* moneyItemPtr = dynamic_cast<MoneyItem*>(newItem);
 		if (moneyItemPtr) {
 			Gold += moneyItemPtr->Cost;
-			cout << " ++ " << endl;
+			//cout << " ++ " << endl;
 		}
 		else {
 			// newItem이 moneyItem의 파생 클래스가 아닌 경우의 처리
@@ -53,7 +53,10 @@ void Inventory::OpenList()
 
 void Inventory::Update()
 {
-	ImGui::Text("Gold : %.2f", Gold);
+	
+
+
+	//ImGui::Text("Gold : %.2f", Gold);
 	for (auto inven : items) {
 		inven->Update();
 		//inven->actor->RenderHierarchy();
@@ -69,6 +72,8 @@ void Inventory::Hierarchy()
 
 void Inventory::Render(shared_ptr<Shader> pShader)
 {
+	wstring N = L"Gold : " + to_wstring((int)Gold);
+	DWRITE->RenderText(N, RECT{ 0,0,1000,300 }, 20, L"바탕체", Color(1, 1, 1, 1));
 	for (auto inven : items) {
 		inven->Render(pShader);
 	}

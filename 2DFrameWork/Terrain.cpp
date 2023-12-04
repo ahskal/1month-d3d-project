@@ -525,9 +525,13 @@ void Terrain::TreeCreateIntersect()
 	if (not this->children.empty()) {
 		this->ReleaseMember();
 	}
+	if (not Trees.empty()) {
+		for (auto tree : Trees) {
+			tree->Release();
+		}
+		Trees.clear();
+	}
 
-	Actor* Node = Actor::Create("Node");
-	AddChild(Node);
 
 	siv::PerlinNoise pn;
 	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
@@ -535,9 +539,10 @@ void Terrain::TreeCreateIntersect()
 	// 조절할 주파수와 진폭
 	double frequency = 0.1;  // 주파수
 	double tree = 0;
-	double treeNoise = RANDOM->Float(0.055, 0.06);
+	double treeNoise = RANDOM->Float(0.050, 0.055);
 	int Count = 0;
-
+	
+	int num = garo * 1.5;
 	for (int i = 0; i < garo; i++)
 	{
 		for (int j = 0; j < garo; j++)
@@ -546,9 +551,12 @@ void Terrain::TreeCreateIntersect()
 			double y = frequency * (double)j;
 			tree = pn.noise2D(x * treeNoise, y * treeNoise);
 
-			bool hasTree = tree > 0.5;
+			bool hasTree = tree > 0.4;
 
-			Vector3 Pos = Vector3(RANDOM->Int(-garo, garo), 0, RANDOM->Int(-garo, garo));
+			Vector3 Pos = Vector3(RANDOM->Int(-num, num), 100, RANDOM->Int(-num, num));
+			if ((Pos.x > -130 - 25 && Pos.x < -130 + 25) or (Pos.z > 170 - 25 && Pos.z < 170 + 25)) {
+				continue;
+			}
 			Ray heightChecker;
 			heightChecker.position = Pos;
 			heightChecker.direction = Vector3(0, -1, 0);
@@ -556,14 +564,15 @@ void Terrain::TreeCreateIntersect()
 			Vector3 hit;
 
 			if (Utility::RayIntersectMap(heightChecker, this, hit)) {
-				if (hasTree) {
+				if (hasTree && hit.y > -15.0f) {
 					Actor* Tree = Actor::Create();
 					Tree->LoadFile("Beech.xml");
 					Tree->name = "Tree" + to_string(Count++);
 					Tree->SetWorldPosX(Pos.x);
 					Tree->SetWorldPosY(hit.y);
 					Tree->SetWorldPosZ(Pos.z);
-					Find("Node")->AddChild(Tree);
+					Tree->parent = this;
+					Trees.emplace_back(Tree);
 				}
 			}
 		}

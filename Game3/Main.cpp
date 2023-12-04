@@ -37,12 +37,12 @@ void Main::Init()
 	Inventory inventory;
 
 	ITEM->AddItemInfo("Gold", 100.0f);
-	ITEM->AddItemInfo("Stone", 10.0f);
-
-	ITEM->AddItemInfo("Bone", 10.0f);
-	ITEM->AddItemInfo("Trash", 1.0f);
-	ITEM->AddItemInfo("Leather", 30.0f);
-	ITEM->AddItemInfo("Scrap", 100.0f);
+	//ITEM->AddItemInfo("Stone", 10.0f);
+	//
+	//ITEM->AddItemInfo("Bone", 10.0f);
+	//ITEM->AddItemInfo("Trash", 1.0f);
+	//ITEM->AddItemInfo("Leather", 30.0f);
+	//ITEM->AddItemInfo("Scrap", 100.0f);
 
 	//ITEM->OpenList();
 	//
@@ -81,7 +81,7 @@ void Main::Update()
 			SCENE->ChangeScene("SC3");
 	}*/
 
-	if (INPUT->KeyDown(VK_F6)) {
+	/*if (INPUT->KeyDown(VK_F6)) {
 		DEBUG_MODE = !DEBUG_MODE;
 	}
 	if (INPUT->KeyDown(VK_F7)) {
@@ -94,7 +94,7 @@ void Main::Update()
 		DEBUG_MODE = !DEBUG_MODE;
 		FREE_CAM = !FREE_CAM;
 	}
-
+	*/
 	if (INPUT->KeyDown(VK_MBUTTON)) {
 		PostQuitMessage(0);
 	}

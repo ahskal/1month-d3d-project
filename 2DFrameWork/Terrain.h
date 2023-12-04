@@ -42,6 +42,9 @@ private:
     RayDesc                     ray;
     ID3D11Buffer* rayBuffer;
 public:
+
+    vector<Actor*> Trees;
+
 	int				size;
 	float			uvScale;
 	int				garo;

@@ -65,7 +65,7 @@ void Monster::Init()
 	Attack = 10;
 	Defense = 5;
 
-	anim->aniScale = 0.6f;
+	anim->aniScale = 0.5f;
 	MoveSpeed = 3;
 	
 }
