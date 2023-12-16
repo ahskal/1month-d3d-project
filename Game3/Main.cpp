@@ -28,10 +28,10 @@ void Main::Init()
 {
 	if (not NONE_SCENE) {
 		LIGHT->dirLight.color = Color(0, 0, 0);
-		SCENE->AddScene("SC1", new Scene1);
-		//eSCENE->AddScene("SC2", new Scene2);
+		//SCENE->AddScene("SC1", new Scene1);
+		SCENE->AddScene("SC2", new Scene2);
 		//eSCENE->AddScene("SC3", new Scene3);
-		SCENE->ChangeScene("SC1");
+		SCENE->ChangeScene("SC2");
 	}
 
 	Inventory inventory;
@@ -81,7 +81,7 @@ void Main::Update()
 			SCENE->ChangeScene("SC3");
 	}*/
 
-	/*if (INPUT->KeyDown(VK_F6)) {
+	if (INPUT->KeyDown(VK_F6)) {
 		DEBUG_MODE = !DEBUG_MODE;
 	}
 	if (INPUT->KeyDown(VK_F7)) {
@@ -94,7 +94,7 @@ void Main::Update()
 		DEBUG_MODE = !DEBUG_MODE;
 		FREE_CAM = !FREE_CAM;
 	}
-	*/
+	
 	if (INPUT->KeyDown(VK_MBUTTON)) {
 		PostQuitMessage(0);
 	}

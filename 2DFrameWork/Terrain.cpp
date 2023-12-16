@@ -531,17 +531,12 @@ void Terrain::TreeCreateIntersect()
 		}
 		Trees.clear();
 	}
-
-
 	siv::PerlinNoise pn;
-	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
-
 	// 조절할 주파수와 진폭
 	double frequency = 0.1;  // 주파수
 	double tree = 0;
 	double treeNoise = RANDOM->Float(0.050, 0.055);
 	int Count = 0;
-	
 	int num = garo * 1.5;
 	for (int i = 0; i < garo; i++)
 	{
@@ -550,19 +545,15 @@ void Terrain::TreeCreateIntersect()
 			double x = frequency * (double)i;
 			double y = frequency * (double)j;
 			tree = pn.noise2D(x * treeNoise, y * treeNoise);
-
 			bool hasTree = tree > 0.4;
-
 			Vector3 Pos = Vector3(RANDOM->Int(-num, num), 100, RANDOM->Int(-num, num));
-			if ((Pos.x > -130 - 25 && Pos.x < -130 + 25) or (Pos.z > 170 - 25 && Pos.z < 170 + 25)) {
+			if ((Pos.x > -155.0f / 2 and Pos.x < -105.0f / 2) and (Pos.z > 145.0f / 2 and Pos.z < 195.0f / 2)) {
 				continue;
 			}
 			Ray heightChecker;
 			heightChecker.position = Pos;
 			heightChecker.direction = Vector3(0, -1, 0);
-
 			Vector3 hit;
-
 			if (Utility::RayIntersectMap(heightChecker, this, hit)) {
 				if (hasTree && hit.y > -15.0f) {
 					Actor* Tree = Actor::Create();

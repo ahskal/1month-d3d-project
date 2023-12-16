@@ -50,7 +50,7 @@ void Scene1::Init()
 	PLAYER->MainCamSet();
 	ResizeScreen();
 
-	PLAYER->actor->SetSpawn(Vector3(-125,10,170));
+	PLAYER->actor->SetSpawn(Vector3(-125, 10, 170));
 }
 
 void Scene1::Release()
@@ -95,15 +95,15 @@ void Scene1::Update()
 		water->UpdateNormal();
 	}
 
-	//if (FREE_CAM) {
-	//	Camera::main->ControlMainCam();
-	//	Camera::main = cam1;
-	//	ResizeScreen();
-	//}
-	//else {
-	//	PLAYER->MainCamSet();
-	//	ResizeScreen();
-	//}
+	if (FREE_CAM) {
+		Camera::main->ControlMainCam();
+		Camera::main = cam1;
+		ResizeScreen();
+	}
+	else {
+		PLAYER->MainCamSet();
+		ResizeScreen();
+	}
 
 	////
 	////deferred->RenderDetail();
@@ -119,19 +119,21 @@ void Scene1::Update()
 	//	num++;
 	//}
 	//
-	//ImGui::Begin("Hierarchy");
-	//cam1->RenderHierarchy();
-	//
-	//skybox->RenderHierarchy();
-	//Build->RenderHierarchy();
-	//
-	//map->RenderHierarchy();
-	//
-	//PLAYER->actor->RenderHierarchy();
-	//water->RenderHierarchy();
-	//
-	//
-	//ImGui::End();
+	ImGui::Begin("Hierarchy");
+	cam1->RenderHierarchy();
+
+	skybox->RenderHierarchy();
+	Build->RenderHierarchy();
+
+	map->RenderHierarchy();
+
+	PLAYER->actor->RenderHierarchy();
+	water->RenderHierarchy();
+	for (auto tree : map->Trees) {
+		tree->RenderHierarchy();
+	}
+
+	ImGui::End();
 
 
 	Build->Update();
@@ -180,7 +182,7 @@ void Scene1::PreRender()
 	map->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
 	for (auto tree : map->Trees) {
 		tree->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
-	}	
+	}
 	PLAYER->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	Build->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 

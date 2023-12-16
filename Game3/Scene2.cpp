@@ -68,11 +68,11 @@ void Scene2::Init()
 
 	Vector3 pos = mapGen->TileRandomPos();
 	PLAYER->actor->SetWorldPos(pos);
+	PLAYER->MainCamSet();
 
-	for (int i = 0; i < 5; i++) {
-		Vector3 pos = mapGen->TileRandomPos();
-		MONSTER->CreateMonster(pos);
-	}
+	pos = mapGen->TileRandomPos();
+
+	MONSTER->CreateMonster(pos);
 }
 
 void Scene2::Release()
@@ -98,18 +98,18 @@ void Scene2::Update()
 	//
 	//ImGui::End();
 
-	//if (FREE_CAM) {
-	//	Camera::main->ControlMainCam();
-	//	Camera::main = cam1;
-	//	ResizeScreen();
-	//	for (auto it : mapGen->WallActorList) {
-	//		it->visible = true;
-	//	}
-	//}
-	//else {
-	//	PLAYER->MainCamSet();
-	//	ResizeScreen();
-	//}
+	if (FREE_CAM) {
+		Camera::main->ControlMainCam();
+		Camera::main = cam1;
+		ResizeScreen();
+		for (auto it : mapGen->WallActorList) {
+			it->visible = true;
+		}
+	}
+	else {
+		PLAYER->MainCamSet();
+		ResizeScreen();
+	}
 
 	Camera::main->Update();
 
@@ -229,7 +229,7 @@ void Scene2::LateUpdate()
 			Mon->Damage(PLAYER->actor->Attack * 2.5);
 		}
 		else if (PLAYER->actor->Intersect(MonsterSword) && Mon->isAttack) {
-			PLAYER->actor->Damage(Mon->Attack/2);
+			PLAYER->actor->Damage(Mon->Attack / 2);
 		}
 	};
 
