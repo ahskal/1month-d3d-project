@@ -2,20 +2,24 @@
 #include "Scene1.h"
 #include "Scene2.h"
 #include "Scene3.h"
+#include "Scene4.h"
 #include "ItemTable.h"
 #include "Inventory.h"
 
 #include "Main.h"
 
 bool DEBUG_MODE = false;
-bool NONE_SCENE = false;
-bool TEXT_LOG   = false;
-bool FREE_CAM   = false;
+bool TEXT_LOG = false;
+bool FREE_CAM = false;
+
+bool IS_PLAY = false;
+bool SHOWCURSOR = true;
+
+bool WIREFRAME = false;
+
 
 Main::Main()
 {
-
-
 
 }
 
@@ -26,13 +30,12 @@ Main::~Main()
 
 void Main::Init()
 {
-	if (not NONE_SCENE) {
-		LIGHT->dirLight.color = Color(0, 0, 0);
-		//SCENE->AddScene("SC1", new Scene1);
-		SCENE->AddScene("SC2", new Scene2);
-		//eSCENE->AddScene("SC3", new Scene3);
-		SCENE->ChangeScene("SC2");
-	}
+
+	LIGHT->dirLight.color = Color(0, 0, 0);
+	SCENE->AddScene("SC1", new Scene1);
+	//SCENE->AddScene("SC3", new Scene3);
+	//SCENE->AddScene("SC4", new Scene4);
+	SCENE->ChangeScene("SC1");
 
 	Inventory inventory;
 
@@ -66,35 +69,24 @@ void Main::Release()
 void Main::Update()
 {
 
+	ShowCursor(SHOWCURSOR);
 
-	if (not NONE_SCENE)
-		SCENE->Update();
-	/*if (INPUT->KeyDown(VK_F1)) {
-		SCENE->ChangeScene("SC1");
-	}*/
-	/*if (INPUT->KeyDown(VK_F2)) {
-		if (not None_Scene)
-			SCENE->ChangeScene("SC2");
-	}
-	if (INPUT->KeyDown(VK_F3)) {
-		if (not None_Scene)
-			SCENE->ChangeScene("SC3");
-	}*/
+	SCENE->Update();
 
 	if (INPUT->KeyDown(VK_F6)) {
-		DEBUG_MODE = !DEBUG_MODE;
+
 	}
 	if (INPUT->KeyDown(VK_F7)) {
-		FREE_CAM = !FREE_CAM;
+
 	}
 	if (INPUT->KeyDown(VK_F8)) {
-		TEXT_LOG = !TEXT_LOG;
+		WIREFRAME = !WIREFRAME;
 	}
 	if (INPUT->KeyDown(VK_XBUTTON1)) {
 		DEBUG_MODE = !DEBUG_MODE;
 		FREE_CAM = !FREE_CAM;
 	}
-	
+
 	if (INPUT->KeyDown(VK_MBUTTON)) {
 		PostQuitMessage(0);
 	}
@@ -102,26 +94,24 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-	if (not NONE_SCENE)
-		SCENE->LateUpdate();
+	SCENE->LateUpdate();
 
 }
 void Main::PreRender()
 {
-	if (not NONE_SCENE)
-		SCENE->PreRender();
+	if (WIREFRAME)
+		RASTER->Set(D3D11_CULL_FRONT, D3D11_FILL_WIREFRAME);
+	SCENE->PreRender();
 }
 
 void Main::Render()
 {
-	if (not NONE_SCENE)
-		SCENE->Render();
+	SCENE->Render();
 }
 
 void Main::ResizeScreen()
 {
-	if (not NONE_SCENE)
-		SCENE->ResizeScreen();
+	SCENE->ResizeScreen();
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)

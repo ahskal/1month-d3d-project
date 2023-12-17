@@ -14,8 +14,8 @@ private:
     ID3D11ShaderResourceView* srvs[6];
 
     ID3D11Buffer*       buffer;
-    shared_ptr<Shader>  shader;
 public:
+    shared_ptr<Shader>  shader;
     Deferred(UINT width = App.GetWidth(),
         UINT height = App.GetHeight());
     ~Deferred();

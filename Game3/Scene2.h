@@ -9,7 +9,7 @@ private:
 	Camera* cam1;
 	Actor* act;
 
-
+	Light* DarkLight;
 	
 
 public:

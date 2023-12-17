@@ -1,77 +1,89 @@
 #include "stdafx.h"
-
-#include "PlayerData.h"
-#include "Player.h"
-#include "UI_Player.h"
-#include "PlayerObserver.h"
-
-#include "Item.h"
-
 #include "Scene3.h"
+#include "Scene1.h"
 
 extern bool DEBUG_MODE;
-extern bool NONE_SCENE;
 extern bool TEXT_LOG;
 extern bool FREE_CAM;
+extern bool IS_PLAY;
+extern bool SHOWCURSOR;
+
+
+int ThreadCount = 0;
+
+void CreateScene1() {
+	SCENE->AddScene("SC1", new Scene1);
+}
 
 Scene3::Scene3()
 {
 	deferred = new Deferred;
+
+		BG = UI::Create();
+
+	cam = Camera::Create();
+
+	Camera::main = cam;
+	Thread = new thread(CreateScene1);
 }
 
 Scene3::~Scene3()
 {
+	Thread->join();
+	delete Thread;
 }
 
 void Scene3::Init()
 {
+	SCENE->DeleteScene("SC2");
 
 }
 
-void Scene3::Release() {}
+void Scene3::Release() {
+
+}
 
 void Scene3::Update()
 {
-
 	LIGHT->RenderDetail();
-
 	ImGui::Begin("Hierarchy", nullptr);
-
-	PLAYER->Hierarchy();
-
-
+	BG->RenderHierarchy();
 
 	ImGui::End();
-
-
-
-	PLAYER->Update();
 	Camera::main->Update();
+	BG->Update();
+
+	if (ThreadCount == 6)
+	{
+		SCENE->ChangeScene("SC1");
+		SCENE->DeleteScene("SC3");
+	}
+
 }
 
 void Scene3::LateUpdate()
 {
-	ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
 
-	PLAYER->LateUpdate();
 }
 
 void Scene3::PreRender()
 {
 	LIGHT->Set();
 	Camera::main->Set();
-
 	deferred->SetTarget();
-
-	PLAYER->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
+	BG->Render();
 
 }
 
 void Scene3::Render()
 {
 	deferred->Render();
-
-	PLAYER->Render();
+	wstring N = L" Loading...";
+	int l = App.GetHalfWidth() - (N.length() * 8);
+	int t = App.GetHalfHeight() + 76;
+	int r = App.GetHalfWidth() + (N.length() * 8);
+	int b = App.GetHalfHeight() + 100;
+	DWRITE->RenderText(N, RECT{ l, t, r, b }, 32, L"πŸ≈¡√º", Color(1, 1, 1, 1));
 }
 
 void Scene3::ResizeScreen()

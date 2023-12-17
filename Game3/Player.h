@@ -132,8 +132,8 @@ public:
 	// Defense는 부모클레스에서 정의
 	// SP는 스테미나
 	float Sp, MaxSp;
+	bool canNotControl = false;
 
-	bool isHit = true;
 
 	Player();
 	~Player();

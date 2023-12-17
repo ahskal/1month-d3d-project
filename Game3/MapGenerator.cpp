@@ -321,7 +321,7 @@ bool MapGenerator::GetTileState(Int2 TileIdx)
 void MapGenerator::createLighting(Actor* act)
 {
 	int count = 0;
-	const int Range = 5;
+	const int Range = 4;
 
 	for (int i = 0; i < Range; i++) {
 		for (int j = 0; j < Range; j++) {
@@ -330,13 +330,8 @@ void MapGenerator::createLighting(Actor* act)
 			light->light->radius = 15;
 			light->light->outer = 90;
 			light->light->inner = 0;
-			// Calculate world position based on tile coordinates
-			float posX = ((i * 4) - (rows - 4) / 2) * tileSize;
-			float posY = 5;  // Assuming a fixed Y position
-			float posZ = ((j * 4) - (rows - 4) / 2) * tileSize;
-			Vector3 pos = Vector3(posX, posY, posZ);
-
-			light->SetWorldPos(pos);
+			// Calculate world position based on tile coordinates			
+			light->SetWorldPos(TileRandomPos() + Vector3(0,5,0));
 			act->AddChild(light);
 			count++;
 		}

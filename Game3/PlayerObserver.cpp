@@ -4,7 +4,6 @@
 #include "PlayerObserver.h"
 
 extern bool DEBUG_MODE;
-extern bool NONE_SCENE;
 extern bool TEXT_LOG  ;
 extern bool FREE_CAM  ;
 

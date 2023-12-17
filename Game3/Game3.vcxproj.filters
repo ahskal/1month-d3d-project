@@ -15,9 +15,6 @@
     <ClInclude Include="Monster.h">
       <Filter>Object\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="Scene3.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Player.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
@@ -69,6 +66,9 @@
     <ClInclude Include="DamageFontManager.h">
       <Filter>Object\DamageFont</Filter>
     </ClInclude>
+    <ClInclude Include="Scene3.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Scene4.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -89,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="UI_Player.cpp">
       <Filter>Object\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene3.cpp">
-      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="PlayerObserver.cpp">
       <Filter>Object\Player</Filter>
@@ -140,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="DamageFontManager.cpp">
       <Filter>Object\DamageFont</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene3.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene4.cpp">
       <Filter>Scene</Filter>

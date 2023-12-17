@@ -9,7 +9,7 @@
     <Transform>
         <Position X="1.6061875" Y="0" Z="4.4763713"/>
         <Scale X="1" Y="1" Z="1"/>
-        <Rotation X="0" Y="7.5240216" Z="0"/>
+        <Rotation X="0" Y="0" Z="0"/>
     </Transform>
     <Children Size="2"/>
     <Child0 Name="Camera" Visible="true" ObType="2" BoneIndex="-1">
@@ -19,11 +19,12 @@
             <Rotation X="0" Y="0" Z="0"/>
         </Collider>
         <Transform>
-            <Position X="0.013824" Y="3.9979446" Z="-2.9883428"/>
+            <Position X="0" Y="3" Z="-5"/>
             <Scale X="1" Y="1" Z="1"/>
-            <Rotation X="0.174532" Y="0" Z="0"/>
+            <Rotation X="0" Y="0" Z="0"/>
         </Transform>
         <Camera Ortho="false" Fov="1.047192" Width="1404" Height="755" NearZ="0.1" FarZ="500" viewportX="0" viewportY="0" viewportW="1404" viewportH="755"/>
+		
         <Children Size="1"/>
         <Child0 Name="None" Visible="true" ObType="2" BoneIndex="0">
             <Transform>

@@ -4,7 +4,10 @@ class Scene4 : public Scene
 {
 private:
 
-	Deferred* deferred;
+	Deferred* deferred;   //4°³ÀÇ ·»´õÅ¸°Ù  
+	thread* Thread;
+	Camera* cam;
+	UI* BG;
 
 
 public:

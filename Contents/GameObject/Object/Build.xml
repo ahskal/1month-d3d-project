@@ -379,18 +379,8 @@
             <Scale X="3" Y="3" Z="3"/>
             <Rotation X="-0.10733718" Y="0" Z="-0.026179796"/>
         </Transform>
-        <Children Size="2"/>
-        <Child0 Name="Light0" Visible="true" ObType="6">
-            <Shader File="1.Collider.hlsl"/>
-            <Transform>
-                <Position X="0" Y="0.25" Z="0"/>
-                <Scale X="12.556" Y="12.556" Z="12.556"/>
-                <Rotation X="0" Y="0" Z="0"/>
-            </Transform>
-            <Light colorR="1" colorG="0.058823526" colorB="0" directionX="0.10563435" directionY="8.0230122" directionZ="36.803509" inner="84" outer="44" isActive="1" lightType="0" positionX="-125.98037" positionY="0.44542813" positionZ="168.86967" radius="12.556" num="1"/>
-            <Children Size="0"/>
-        </Child0>
-        <Child1 Name="RootNode" Visible="true" ObType="0">
+        <Children Size="1"/>       
+        <Child0 Name="RootNode" Visible="true" ObType="0">
             <Transform>
                 <Position X="0" Y="0" Z="0"/>
                 <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
@@ -448,6 +438,6 @@
                     </Child0>
                 </Child0>
             </Child0>
-        </Child1>
+        </Child0>
     </Child5>
 </Root>

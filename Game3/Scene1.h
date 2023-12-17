@@ -13,6 +13,9 @@ private:
 	Deferred* deferred;
 
 	Actor* Build;
+	Light* light;
+
+	bool isStart = true;
 
 public:
 	Scene1();

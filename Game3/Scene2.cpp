@@ -1,8 +1,6 @@
 #include "stdafx.h"
 
-#include "PlayerData.h"
-#include "Player.h"
-#include "UI_Player.h"
+#include "PlayerObserver.h"
 #include "PlayerObserver.h"
 #include "Inventory.h"
 
@@ -12,35 +10,57 @@
 
 #include "MapGenerator.h"
 
-#include "Scene1.h"
 #include "Scene2.h"
+#include "Scene3.h"
 
 extern bool DEBUG_MODE;
-extern bool NONE_SCENE;
 extern bool TEXT_LOG;
 extern bool FREE_CAM;
+extern bool IS_PLAY;
+extern bool SHOWCURSOR;
 
-int CreateCount = 0;
-bool updateNot;
+extern int ThreadCount2;
 
 Scene2::Scene2()
 {
 	cam1 = Camera::Create();
 	cam1->LoadFile("Cam2.xml");
+	ThreadCount2++;
 
 	Tile = Actor::Create();
-
 	Tile->name = "Tile";
+	ThreadCount2++;
+
 	int rows = 20;
 	int cols = 20;
 	int floors = 1;
+	ThreadCount2++;
 
 	// Create an instance of MapGenerator
 	mapGen = new MapGenerator(rows, cols, floors);
 	deferred = new Deferred;
+	ThreadCount2++;
 
 	act = Actor::Create();
+	ThreadCount2++;
 
+	//맵 초기값 설정 및 생성
+	mapGen->initializeMap();
+	ThreadCount2++;
+	//mapGen->updateMapTiles();
+	mapGen->validateMapConnectivity();
+	ThreadCount2++;
+	//mapGen->printTileInfo();
+	mapGen->instantiateTile(Tile);
+	ThreadCount2++;
+	mapGen->finalizeMapConfiguration(Tile);
+	ThreadCount2++;
+	mapGen->createWallMap(Tile);
+	ThreadCount2++;
+	mapGen->createLighting(Tile);
+	ThreadCount2++;
+	mapGen->createPotal(Tile);
+	ThreadCount2++;
 }
 
 Scene2::~Scene2()
@@ -55,16 +75,7 @@ Scene2::~Scene2()
 
 void Scene2::Init()
 {
-	//맵 초기값 설정 및 생성
-	mapGen->initializeMap();
-	//mapGen->updateMapTiles();
-	mapGen->validateMapConnectivity();
-	//mapGen->printTileInfo();
-	mapGen->instantiateTile(Tile);
-	mapGen->finalizeMapConfiguration(Tile);
-	mapGen->createWallMap(Tile);
-	mapGen->createLighting(Tile);
-	mapGen->createPotal(Tile);
+	ThreadCount2 = 0;
 
 	Vector3 pos = mapGen->TileRandomPos();
 	PLAYER->actor->SetWorldPos(pos);
@@ -89,14 +100,15 @@ void Scene2::Update()
 	//}
 	//// # DEBUG #
 	//
-	//ImGui::Begin("Hierarchy", nullptr);
-	//cam1->RenderHierarchy();
-	//Tile->RenderHierarchy();
-	//PLAYER->Hierarchy();
-	//MONSTER->Hierarchy();
-	//act->RenderHierarchy();
-	//
-	//ImGui::End();
+	ImGui::Begin("Hierarchy", nullptr);
+	cam1->RenderHierarchy();
+	Tile->RenderHierarchy();
+	PLAYER->Hierarchy();
+	MONSTER->Hierarchy();
+	act->RenderHierarchy();
+
+
+	ImGui::End();
 
 	if (FREE_CAM) {
 		Camera::main->ControlMainCam();
@@ -116,6 +128,8 @@ void Scene2::Update()
 	Tile->Update();
 
 	PLAYER->Update();
+	if (IS_PLAY)
+		PLAYER->UIUpdate();
 
 	MONSTER->Update();
 
@@ -123,6 +137,7 @@ void Scene2::Update()
 	DAMAGEFONT->Update();
 
 	act->Update();
+
 }
 
 void Scene2::LateUpdate()
@@ -212,9 +227,8 @@ void Scene2::LateUpdate()
 	auto potal = Tile->Find("IcospherePotal");
 	if (PLAYER->actor->Intersect(potal)) {
 		PLAYER->actor->SetWorldPos(Vector3());
-		SCENE->AddScene("SC1", new Scene1());
-		SCENE->ChangeScene("SC1");
-		SCENE->DeleteScene("SC2");
+		SCENE->AddScene("SC3", new Scene3());
+		SCENE->ChangeScene("SC3");
 		return;
 	}
 
@@ -255,7 +269,6 @@ void Scene2::PreRender()
 
 	deferred->SetTarget();
 	Tile->Render();
-
 	vector<MonsterData*> Monster = MONSTER->GetMonsterVector();
 	for (MonsterData* Mvector : Monster) {
 		Mvector->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
@@ -273,7 +286,9 @@ void Scene2::Render()
 	//skybox2->Render();
 
 	deferred->Render();
-	PLAYER->Render();
+
+	if (IS_PLAY)
+		PLAYER->Render();
 }
 
 void Scene2::ResizeScreen()

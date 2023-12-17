@@ -16,6 +16,7 @@ public:
 	void MainCamSet();
 
 	void Update();
+	void UIUpdate();
 	void LateUpdate();
 
 	void Hierarchy();
