@@ -1,7 +1,18 @@
 #pragma once
+
+enum class ScreenType
+{
+    None,
+    Diffuse,
+    Specular,
+    Normal,
+    Emissive,
+    Ambient,
+    Depth
+};
+
 class Deferred
 {
-
 private:
     RenderTarget* diffuseTarget;
     RenderTarget* specularTarget;
@@ -25,5 +36,6 @@ public:
     void ResizeScreen(float width, float height);
     void RenderDetail();
     void Render();
+    void RenderToScreen(ScreenType screenToShow);
 };
 

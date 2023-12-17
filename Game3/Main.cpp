@@ -100,7 +100,7 @@ void Main::LateUpdate()
 void Main::PreRender()
 {
 	if (WIREFRAME)
-		RASTER->Set(D3D11_CULL_FRONT, D3D11_FILL_WIREFRAME);
+		RASTER->Set(D3D11_CULL_BACK, D3D11_FILL_WIREFRAME);
 	SCENE->PreRender();
 }
 

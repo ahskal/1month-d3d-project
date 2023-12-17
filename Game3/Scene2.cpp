@@ -18,6 +18,7 @@ extern bool TEXT_LOG;
 extern bool FREE_CAM;
 extern bool IS_PLAY;
 extern bool SHOWCURSOR;
+extern bool WIREFRAME;
 
 extern int ThreadCount2;
 
@@ -93,14 +94,16 @@ void Scene2::Release()
 void Scene2::Update()
 {
 	// # DEBUG #
+	deferred->RenderDetail();
+	// # DEBUG #
 	//LIGHT->RenderDetail();
 	//ImGui::Text("FPS: %d", TIMER->GetFramePerSecond());
 	//if (DEBUG_MODE) {
 	//	deferred->RenderDetail();
 	//}
-	//// # DEBUG #
 	//
-	ImGui::Begin("Hierarchy", nullptr);
+	//
+	/*ImGui::Begin("Hierarchy", nullptr);
 	cam1->RenderHierarchy();
 	Tile->RenderHierarchy();
 	PLAYER->Hierarchy();
@@ -108,7 +111,7 @@ void Scene2::Update()
 	act->RenderHierarchy();
 
 
-	ImGui::End();
+	ImGui::End();*/
 
 	if (FREE_CAM) {
 		Camera::main->ControlMainCam();

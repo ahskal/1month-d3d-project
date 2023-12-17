@@ -80,12 +80,26 @@ void Deferred::ResizeScreen(float width, float height)
 
 void Deferred::RenderDetail()
 {
-    ImVec2 size(300, 300);
+    ImVec2 size(350, 300);
+    ImGui::Text("diffuse\t\t\t\t\t\t\t\t\t\t\t");
+    ImGui::SameLine();
+    ImGui::Text("specular");
     ImGui::Image((void*)diffuseTarget->rgbResource, size);
+    ImGui::SameLine();
     ImGui::Image((void*)specularTarget->rgbResource, size);
+
+    ImGui::Text("normal \t\t\t\t\t\t\t\t\t\t\t");
+    ImGui::SameLine();
+    ImGui::Text("emissive");
     ImGui::Image((void*)normalTarget->rgbResource, size);
+    ImGui::SameLine();
     ImGui::Image((void*)emissiveTarget->rgbResource, size);
+
+    ImGui::Text("ambient\t\t\t\t\t\t\t\t\t\t\t");
+    ImGui::SameLine();
+    ImGui::Text("depth");
     ImGui::Image((void*)ambientTarget->rgbResource, size);
+    ImGui::SameLine();
     ImGui::Image((void*)diffuseTarget->depthResource, size);
 }
 

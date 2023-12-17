@@ -69,7 +69,7 @@ Scene1::~Scene1()
 	map->Trees.clear();
 	map->Release();
 	water->Release();
-	light->Release();
+	SafeRelease(light);	
 	Build->Release();
 	skybox->Release();
 	cam1->Release();
@@ -85,6 +85,9 @@ void Scene1::Release() {}
 
 void Scene1::Update()
 {
+	// # DEBUG #
+	deferred->RenderDetail();
+	// # DEBUG #
 	VertexTerrain* vertices = (VertexTerrain*)water->mesh->vertices;
 	float currentTime = TIMER->GetWorldTime(); // 현재 시간
 	for (int i = 0; i < water->garo; i++)
@@ -110,7 +113,7 @@ void Scene1::Update()
 		ResizeScreen();
 	}
 
-	ImGui::Begin("Hierarchy");
+	/*ImGui::Begin("Hierarchy");
 	cam1->RenderHierarchy();
 
 	skybox->RenderHierarchy();
@@ -122,7 +125,7 @@ void Scene1::Update()
 	water->RenderHierarchy();
 	light->RenderHierarchy();
 
-	ImGui::End();
+	ImGui::End();*/
 
 	Build->Update();
 

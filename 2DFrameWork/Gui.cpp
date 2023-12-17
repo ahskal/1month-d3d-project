@@ -65,10 +65,10 @@ void Gui::Update()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Detail");
-	if (target)
-		target->RenderDetail();
-	ImGui::End();
+	//ImGui::Begin("Detail");
+	//if (target)
+	//	target->RenderDetail();
+	//ImGui::End();
 }
 
 void Gui::Render()

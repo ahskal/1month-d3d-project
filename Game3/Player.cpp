@@ -121,7 +121,6 @@ void Player::FSM()
 
 	// IDLE
 	if (state == State::IDLE) {
-		MoveSpeed = 7;
 		if (INPUT->KeyPress('W') or INPUT->KeyPress('A')
 			or INPUT->KeyPress('S') or INPUT->KeyPress('D')) {
 			state = State::WALK;
@@ -140,7 +139,6 @@ void Player::FSM()
 
 	// WALK
 	else if (state == State::WALK) {
-		MoveSpeed = 5;
 		if (INPUT->KeyDown(VK_LBUTTON) && Sp > 0 && isEqip) {
 			Attacker();
 		}
@@ -150,9 +148,12 @@ void Player::FSM()
 			state = State::IDLE;
 			if (isEqip) {
 				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
+				MoveSpeed = 5;
+
 			}
 			if (!isEqip) {
 				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEqip, 0.1f);
+				MoveSpeed = 10;
 			}
 
 		}
@@ -168,9 +169,12 @@ void Player::FSM()
 			state = State::IDLE;
 			if (isEqip) {
 				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_Eqip, 0.1f);
+				MoveSpeed = 5;
+
 			}
 			if (!isEqip) {
 				anim->ChangeAnimation(AnimationState::LOOP, Ani_Idle_UnEqip, 0.1f);
+				MoveSpeed = 10;
 			}
 		}
 		if (isEqip) {
