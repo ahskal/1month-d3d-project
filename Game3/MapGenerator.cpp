@@ -320,8 +320,6 @@ bool MapGenerator::GetTileState(Int2 TileIdx)
 
 void MapGenerator::createLighting(Actor* act)
 {
-	
-
 	int count = 0;
 	const int Range = 4;
 

@@ -49,12 +49,12 @@ Scene1::Scene1() {
 	ThreadCount++;
 
 	//PLAYER->MainCamSet();
-	PLAYER->actor->SetSpawn(Vector3(-125, 20, 160));
+	
 
+	
 	if (!IS_PLAY) {
 		FREE_CAM = true;
 		DEBUG_MODE = true;
-		ShowCursor(true);
 		isStart = false;
 	}
 	ThreadCount++;
@@ -78,6 +78,7 @@ Scene1::~Scene1()
 void Scene1::Init()
 {
 	ThreadCount = 0;
+	PLAYER->actor->SetSpawn(Vector3(-125, 20, 160));
 }
 
 void Scene1::Release() {}
@@ -107,11 +108,15 @@ void Scene1::Update()
 		Camera::main->ControlMainCam();
 		Camera::main = cam1;
 		ResizeScreen();
+		SHOWCURSOR = true;
+
 	}
 	else {
 		PLAYER->MainCamSet();
 		ResizeScreen();
+		SHOWCURSOR = false;
 	}
+
 
 	/*ImGui::Begin("Hierarchy");
 	cam1->RenderHierarchy();

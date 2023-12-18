@@ -45,11 +45,11 @@ void Scene4::Release()
 
 void Scene4::Update()
 {
-	LIGHT->RenderDetail();
+	/*LIGHT->RenderDetail();
 	ImGui::Begin("Hierarchy", nullptr);
 	BG->RenderHierarchy();
 
-	ImGui::End();
+	ImGui::End();*/
 	Camera::main->Update();
 	BG->Update();
 }

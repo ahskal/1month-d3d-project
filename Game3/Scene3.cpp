@@ -45,13 +45,13 @@ void Scene3::Release() {
 
 void Scene3::Update()
 {
-	LIGHT->RenderDetail();
-	ImGui::Begin("Hierarchy", nullptr);
-	BG->RenderHierarchy();
+	////LIGHT->RenderDetail();
+	//ImGui::Begin("Hierarchy", nullptr);
+	//BG->RenderHierarchy();
 
-	ImGui::End();
-	Camera::main->Update();
-	BG->Update();
+	//ImGui::End();
+	//Camera::main->Update();
+	//BG->Update();
 
 	if (ThreadCount == 6)
 	{

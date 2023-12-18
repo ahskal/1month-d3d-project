@@ -78,13 +78,12 @@ void Scene2::Init()
 {
 	ThreadCount2 = 0;
 
-	Vector3 pos = mapGen->TileRandomPos();
-	PLAYER->actor->SetWorldPos(pos);
+	PLAYER->actor->SetWorldPos(mapGen->TileRandomPos());
 	PLAYER->MainCamSet();
 
-	pos = mapGen->TileRandomPos();
-
-	MONSTER->CreateMonster(pos);
+	for (int i = 0; i < 3; i++) {
+		MONSTER->CreateMonster(mapGen->TileRandomPos());
+	}
 }
 
 void Scene2::Release()
@@ -120,10 +119,12 @@ void Scene2::Update()
 		for (auto it : mapGen->WallActorList) {
 			it->visible = true;
 		}
+		SHOWCURSOR = true;
 	}
 	else {
 		PLAYER->MainCamSet();
 		ResizeScreen();
+		SHOWCURSOR = false;
 	}
 
 	Camera::main->Update();
@@ -140,6 +141,12 @@ void Scene2::Update()
 	DAMAGEFONT->Update();
 
 	act->Update();
+
+	if(MONSTER->GetMonsterVector().empty()) {
+		for (int i = 0; i < 3; i++) {
+			MONSTER->CreateMonster(mapGen->TileRandomPos());
+		}
+	}
 
 }
 

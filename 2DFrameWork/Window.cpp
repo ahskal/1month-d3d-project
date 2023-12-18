@@ -166,8 +166,8 @@ void Window::Create()
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 	SetForegroundWindow(App.handle);
 	SetFocus(App.handle);
+	ShowCursor(false);
 
-	ShowCursor(true);
 	WIN->Load();
 }
 

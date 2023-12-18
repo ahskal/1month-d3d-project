@@ -69,7 +69,7 @@ void Main::Release()
 void Main::Update()
 {
 
-	ShowCursor(SHOWCURSOR);
+	//ShowCursor(SHOWCURSOR);
 
 	SCENE->Update();
 
