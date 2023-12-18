@@ -185,7 +185,7 @@ void MapGenerator::instantiateTile(GameObject* act)
 	temp->name = "Floor_Instance";
 	temp->shader = RESOURCE->shaders.Load("4.Instance_Deferred.hlsl");
 	int count2 = 0;
-	for (int k = 0; k < 2; k++) {
+	for (int k = 0; k < 1; k++) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				Matrix temp = Matrix::CreateTranslation(Vector3(centerX + i * 5, k * 5, centerZ + j * 5 + 5));
@@ -330,13 +330,9 @@ void MapGenerator::createLighting(Actor* act)
 			light->light->radius = 15;
 			light->light->outer = 90;
 			light->light->inner = 0;
-			// Calculate world position based on tile coordinates
-			float posX = ((i * 4) - (rows - 4) / 2) * tileSize;
-			float posY = 5;  // Assuming a fixed Y position
-			float posZ = ((j * 4) - (rows - 4) / 2) * tileSize;
-			Vector3 pos = Vector3(posX, posY, posZ);
+			
 
-			light->SetWorldPos(pos);
+			light->SetWorldPos(TileRandomPos() + Vector3(0,5,0));
 			act->AddChild(light);
 			count++;
 		}

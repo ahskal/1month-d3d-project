@@ -38,6 +38,7 @@ Scene2::Scene2()
 	skybox->LoadFile("Sky1.xml");
 	skybox2 = Sky::Create();
 	skybox2->LoadFile("Sky2.xml");
+	Camera::main = cam1;
 
 	Tile = Actor::Create();
 	
@@ -49,9 +50,9 @@ Scene2::Scene2()
 	// Create an instance of MapGenerator
 	mapGen = new MapGenerator(rows, cols, floors);
 
-	player = PlayerData::Create();
-	player->MainCamSet();
-	ResizeScreen();
+	//player = PlayerData::Create();
+	//player->MainCamSet();
+	//ResizeScreen();
 
 	deferred = new Deferred;
 
@@ -104,8 +105,8 @@ void Scene2::Init()
 
 	
 
-	Vector3 pos = mapGen->TileRandomPos();
-	player->actor->SetWorldPos(pos);
+	//Vector3 pos = mapGen->TileRandomPos();
+	//player->actor->SetWorldPos(pos);
 
 
 }
@@ -127,27 +128,33 @@ void Scene2::Update()
 	ImGui::Begin("Hierarchy", nullptr);
 	cam1->RenderHierarchy();
 	Tile->RenderHierarchy();
-	player->Hierarchy();
+	//player->Hierarchy();
 	act->RenderHierarchy();
 	//MonMGR->Hierarchy();
 	//FIELD->Hierarchy();
 
 	ImGui::End();
 
-	if (FREE_CAM) {
 		Camera::main->ControlMainCam();
+		//for (auto it : mapGen->WallActorList) {
+		//	it->visible = true;
+		//}
+	if (FREE_CAM) {
 		Camera::main = cam1;
 		ResizeScreen();
-		for (auto it : mapGen->WallActorList) {
-			it->visible = true;
-		}
+		
 	}
-	else {
+	/*else {
 		player->MainCamSet();
 		ResizeScreen();
-	}
+	}*/
 
 	// map reset;
+	if (INPUT->KeyDown(VK_F5)) {
+		Tile->ReleaseMember();
+		Init();
+	}
+
 
 
 	if (INPUT->KeyDown('T')) {
@@ -164,12 +171,12 @@ void Scene2::Update()
 	skybox2->Update();
 	Tile->Update();
 
-	player->Update();
+	////player->Update();
 
-	MonMGR->Update();
-	MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
-	FIELD->Update();
-	DAMAGEFONT->Update();
+	//MonMGR->Update();
+	//MonMGR->GetTargetPos(player->pObserver->GetData()->GetWorldPos());
+	//FIELD->Update();
+	//DAMAGEFONT->Update();
 	act->Update();
 }
 
@@ -179,142 +186,142 @@ void Scene2::LateUpdate()
 	//if (INPUT->KeyDown(VK_F5)) {
 	//	Tile->ReleaseMember();
 
-	//	isOnece = false;
+	////	isOnece = false;
+	////}
+	////if (INPUT->KeyDown(VK_F4)) {
+	////	Init();
+	////}
+	//{
+	//	const float SLIDING_SPEED = DELTA * 10;
+	//	Vector3 pDir = player->actor->GetForward();
+	//	for (auto Wcoll : mapGen->WallActorList) {
+	//		if (INPUT->KeyPress('S')) {
+	//			Vector3 pDir = -player->actor->GetForward();
+	//		}
+	//		if (Wcoll->Intersect(player->pObserver->GetData())) {
+	//			float ForwardAngle = Wcoll->GetForward().Dot(pDir);
+	//			float RightAngle = Wcoll->GetRight().Dot(pDir);
+	//			Vector3 slideDirection;
+	//			if (ForwardAngle > 0 && RightAngle > 0)
+	//			{
+	//				slideDirection -= Wcoll->GetForward();
+	//				slideDirection -= Wcoll->GetRight();
+	//			}
+	//			else if (ForwardAngle > 0 && RightAngle < 0)
+	//			{
+	//				slideDirection -= Wcoll->GetForward();
+	//				slideDirection += Wcoll->GetRight();
+	//			}
+	//			else if (ForwardAngle < 0 && RightAngle > 0)
+	//			{
+	//				slideDirection += Wcoll->GetForward();
+	//				slideDirection -= Wcoll->GetRight();
+	//			}
+	//			else if (ForwardAngle < 0 && RightAngle < 0)
+	//			{
+	//				slideDirection += Wcoll->GetForward();
+	//				slideDirection += Wcoll->GetRight();
+	//			}
+	//			// Normalize the slide direction
+	//			slideDirection.Normalize();
+	//			player->pObserver->GetData()->MoveWorldPos(slideDirection * SLIDING_SPEED);
+	//		}
+	//	}
+	//	//vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	//	//for (MonsterData* Mvector : Monster) {
+	//	//	Vector3 monsterPos = Mvector->Mon->GetWorldPos();
+	//	//	Vector3 mDir = Mvector->Mon->GetForward();
+	//	//	for (auto Wcoll : mapGen->WallActorList) {
+	//	//		float ForwardAngle = Wcoll->GetForward().Dot(mDir);
+	//	//		float RightAngle = Wcoll->GetRight().Dot(mDir);
+	//	//		Vector3 slideDirection;
+	//	//		if (ForwardAngle > 0 && RightAngle > 0)
+	//	//		{
+	//	//			slideDirection -= Wcoll->GetForward();
+	//	//			slideDirection -= Wcoll->GetRight();
+	//	//		}
+	//	//		else if (ForwardAngle > 0 && RightAngle < 0)
+	//	//		{
+	//	//			slideDirection -= Wcoll->GetForward();
+	//	//			slideDirection += Wcoll->GetRight();
+	//	//		}
+	//	//		else if (ForwardAngle < 0 && RightAngle > 0)
+	//	//		{
+	//	//			slideDirection += Wcoll->GetForward();
+	//	//			slideDirection -= Wcoll->GetRight();
+	//	//		}
+	//	//		else if (ForwardAngle < 0 && RightAngle < 0)
+	//	//		{
+	//	//			slideDirection += Wcoll->GetForward();
+	//	//			slideDirection += Wcoll->GetRight();
+	//	//		}
+	//	//		slideDirection.Normalize();
+	//	//		Mvector->Mon->MoveWorldPos(slideDirection * 1);
+	//	//	}
+	//	//}
+
+	//	//카메라 벽 충돌
+	//	Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
+	//	for (Actor* it : mapGen->WallActorList) {
+	//		if (it->Intersect(playerCam)) {
+	//			it->visible = false;
+	//		}
+	//		else {
+	//			it->visible = true;;
+	//		}
+	//	}
+
 	//}
-	//if (INPUT->KeyDown(VK_F4)) {
-	//	Init();
+
+	//// 포탈 충돌
+	//auto potal = Tile->Find("IcospherePotal");
+	//if (player->actor->Intersect(potal) or INPUT->KeyDown('0')) {
+
+	//	t1 = new thread(Func1);
+
+	//	
 	//}
-	{
-		const float SLIDING_SPEED = DELTA * 10;
-		Vector3 pDir = player->actor->GetForward();
-		for (auto Wcoll : mapGen->WallActorList) {
-			if (INPUT->KeyPress('S')) {
-				Vector3 pDir = -player->actor->GetForward();
-			}
-			if (Wcoll->Intersect(player->pObserver->GetData())) {
-				float ForwardAngle = Wcoll->GetForward().Dot(pDir);
-				float RightAngle = Wcoll->GetRight().Dot(pDir);
-				Vector3 slideDirection;
-				if (ForwardAngle > 0 && RightAngle > 0)
-				{
-					slideDirection -= Wcoll->GetForward();
-					slideDirection -= Wcoll->GetRight();
-				}
-				else if (ForwardAngle > 0 && RightAngle < 0)
-				{
-					slideDirection -= Wcoll->GetForward();
-					slideDirection += Wcoll->GetRight();
-				}
-				else if (ForwardAngle < 0 && RightAngle > 0)
-				{
-					slideDirection += Wcoll->GetForward();
-					slideDirection -= Wcoll->GetRight();
-				}
-				else if (ForwardAngle < 0 && RightAngle < 0)
-				{
-					slideDirection += Wcoll->GetForward();
-					slideDirection += Wcoll->GetRight();
-				}
-				// Normalize the slide direction
-				slideDirection.Normalize();
-				player->pObserver->GetData()->MoveWorldPos(slideDirection * SLIDING_SPEED);
-			}
-		}
-		//vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
-		//for (MonsterData* Mvector : Monster) {
-		//	Vector3 monsterPos = Mvector->Mon->GetWorldPos();
-		//	Vector3 mDir = Mvector->Mon->GetForward();
-		//	for (auto Wcoll : mapGen->WallActorList) {
-		//		float ForwardAngle = Wcoll->GetForward().Dot(mDir);
-		//		float RightAngle = Wcoll->GetRight().Dot(mDir);
-		//		Vector3 slideDirection;
-		//		if (ForwardAngle > 0 && RightAngle > 0)
-		//		{
-		//			slideDirection -= Wcoll->GetForward();
-		//			slideDirection -= Wcoll->GetRight();
-		//		}
-		//		else if (ForwardAngle > 0 && RightAngle < 0)
-		//		{
-		//			slideDirection -= Wcoll->GetForward();
-		//			slideDirection += Wcoll->GetRight();
-		//		}
-		//		else if (ForwardAngle < 0 && RightAngle > 0)
-		//		{
-		//			slideDirection += Wcoll->GetForward();
-		//			slideDirection -= Wcoll->GetRight();
-		//		}
-		//		else if (ForwardAngle < 0 && RightAngle < 0)
-		//		{
-		//			slideDirection += Wcoll->GetForward();
-		//			slideDirection += Wcoll->GetRight();
-		//		}
-		//		slideDirection.Normalize();
-		//		Mvector->Mon->MoveWorldPos(slideDirection * 1);
-		//	}
-		//}
 
-		//카메라 벽 충돌
-		Camera* playerCam = static_cast<Camera*>(player->pObserver->GetData()->Find("Camera"));
-		for (Actor* it : mapGen->WallActorList) {
-			if (it->Intersect(playerCam)) {
-				it->visible = false;
-			}
-			else {
-				it->visible = true;;
-			}
-		}
-
-	}
-
-	// 포탈 충돌
-	auto potal = Tile->Find("IcospherePotal");
-	if (player->actor->Intersect(potal) or INPUT->KeyDown('0')) {
-
-		t1 = new thread(Func1);
-
-		
-	}
-
-	if (CreateCount == 3) {
-		player->actor->SetWorldPos(Vector3());
-		reinterpret_cast<Scene2*>(SCENE->GetScene("SC3"))->player = player;
-		t1->join();
-		delete t1;
-		SCENE->ChangeScene("SC3");
-		return;
-	}
-	if (CreateCount == 4){
-		player->MainCamSet();
-	}
+	//if (CreateCount == 3) {
+	//	player->actor->SetWorldPos(Vector3());
+	//	reinterpret_cast<Scene2*>(SCENE->GetScene("SC3"))->player = player;
+	//	t1->join();
+	//	delete t1;
+	//	SCENE->ChangeScene("SC3");
+	//	return;
+	//}
+	//if (CreateCount == 4){
+	//	player->MainCamSet();
+	//}
 
 
 
-	Vector3 pPos = player->actor->GetWorldPos();
-	GameObject* PlayerSword = player->actor->Find("sword");
-	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
-	for (MonsterData* Mvector : Monster) {
-		GameObject* MonsterSword = Mvector->Mon->Find("sword");
+	//Vector3 pPos = player->actor->GetWorldPos();
+	//GameObject* PlayerSword = player->actor->Find("sword");
+	//vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	//for (MonsterData* Mvector : Monster) {
+	//	GameObject* MonsterSword = Mvector->Mon->Find("sword");
 
-		auto Mon = Mvector->Mon;
-		if (Mon->Intersect(PlayerSword) && player->actor->isAttack) {
-			Mon->Damage(200);
-		}
-		else if (player->actor->Intersect(MonsterSword) && Mon->isAttack) {
-			player->actor->Damage(5);
-		}
-	};
+	//	auto Mon = Mvector->Mon;
+	//	if (Mon->Intersect(PlayerSword) && player->actor->isAttack) {
+	//		Mon->Damage(200);
+	//	}
+	//	else if (player->actor->Intersect(MonsterSword) && Mon->isAttack) {
+	//		player->actor->Damage(5);
+	//	}
+	//};
 
-	for (auto it = FIELD->items.begin(); it != FIELD->items.end();) {
-		if (player->actor->Intersect((*it)->actor)) {
-			player->inventory->AddItem((*it));
-			it = FIELD->ItemList().erase(it); // 현재 아이템 삭제 후 다음 아이템을 가리키도록 반복자를 업데이트
-		}
-		else {
-			++it; // 아이템이 삭제되지 않았으면 다음 아이템으로 이동
-		}
-	}
+	//for (auto it = FIELD->items.begin(); it != FIELD->items.end();) {
+	//	if (player->actor->Intersect((*it)->actor)) {
+	//		player->inventory->AddItem((*it));
+	//		it = FIELD->ItemList().erase(it); // 현재 아이템 삭제 후 다음 아이템을 가리키도록 반복자를 업데이트
+	//	}
+	//	else {
+	//		++it; // 아이템이 삭제되지 않았으면 다음 아이템으로 이동
+	//	}
+	//}
 
-	MonMGR->LateUpdate();
+	//MonMGR->LateUpdate();
 
 
 }
@@ -327,13 +334,13 @@ void Scene2::PreRender()
 	deferred->SetTarget();
 	Tile->Render();
 
-	vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
+	/*vector<MonsterData*> Monster = MonMGR->GetMonsterVector();
 	for (MonsterData* Mvector : Monster) {
 		Mvector->Render(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	}
 	player->DeferredRender(RESOURCE->shaders.Load("4.Cube_Deferred.hlsl"));
 	FIELD->Render();
-	DAMAGEFONT->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));
+	DAMAGEFONT->Render(RESOURCE->shaders.Load("7.Billboard_Deferred.hlsl"));*/
 	act->Render();
 
 }
@@ -344,7 +351,7 @@ void Scene2::Render()
 	//skybox2->Render();
 
 	deferred->Render();
-	player->Render();
+	//player->Render();
 }
 
 void Scene2::ResizeScreen()

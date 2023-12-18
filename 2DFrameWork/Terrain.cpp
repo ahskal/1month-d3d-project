@@ -457,9 +457,9 @@ void Terrain::GroundPerlinNoise()
 	double frequencyScale = 0.50 / garo * 2;    // 맵 크기에 따른 주파수 스케일 조정
 	double centerX = garo / 2.0;
 	double centerY = garo / 2.0;
-	double defHeight = 5;
+	double defHeight = 10;
 
-	double desiredHeight = 30;
+	double desiredHeight = 100;
 
 	VertexTerrain* vertices = (VertexTerrain*)mesh->vertices;
 	for (int i = 0; i < garo; i++)

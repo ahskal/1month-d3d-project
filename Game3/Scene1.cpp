@@ -89,7 +89,7 @@ void Scene1::Update()
 		}
 	}
 
-	water->UpdateNormal();
+	//water->UpdateNormal();
 	//water->mesh->UpdateBuffer();
 	
 
@@ -119,7 +119,7 @@ void Scene1::Update()
 	skybox2->RenderHierarchy();
 
 	map->RenderHierarchy();
-	water->RenderHierarchy();
+	//water->RenderHierarchy();
 	ImGui::End();
 
 	cam1->ControlMainCam();
@@ -132,7 +132,7 @@ void Scene1::Update()
 	cam1->Update();
 
 	map->Update();
-	water->Update();
+	//water->Update();
 
 	skybox->Update();
 	skybox2->Update();
@@ -171,7 +171,7 @@ void Scene1::PreRender()
 	Camera::main->Set();
 	deferred->SetTarget();	
 	map->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
-	water->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
+	//water->Render(RESOURCE->shaders.Load("5.Cube_Deferred.hlsl"));
 
 
 }
