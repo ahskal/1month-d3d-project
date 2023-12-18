@@ -548,7 +548,7 @@ void Terrain::TreeCreateIntersect()
 
 			bool hasTree = tree > 0.5;
 
-			Vector3 Pos = Vector3(RANDOM->Int(-garo, garo), 0, RANDOM->Int(-garo, garo));
+			Vector3 Pos = Vector3(RANDOM->Int(-garo, garo), 100, RANDOM->Int(-garo, garo));
 			Ray heightChecker;
 			heightChecker.position = Pos;
 			heightChecker.direction = Vector3(0, -1, 0);

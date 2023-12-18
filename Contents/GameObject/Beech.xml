@@ -1,7 +1,7 @@
 <Root Name="Root" Visible="true" ObType="1">
     <Transform>
         <Position X="0" Y="0" Z="0"/>
-        <Scale X="0.0099999998" Y="0.0099999998" Z="0.0099999998"/>
+		<Scale X="1" Y="1" Z="1"/>
         <Rotation X="0" Y="0" Z="0"/>
     </Transform>
     <Children Size="1"/>
@@ -14,17 +14,17 @@
         <Children Size="3"/>
         <Child0 Name="Lod0" Visible="true" ObType="0">
             <Mesh File="Beech/Lod0.mesh"/>
-            <Shader File="4.Cube.hlsl"/>
+            <Shader File="4.Cube_Deferred.hlsl"/>
             <Material File="Beech/beech_leaf.mtl"/>
             <Transform>
                 <Position X="0" Y="0" Z="0"/>
-                <Scale X="100" Y="100" Z="100"/>
+				<Scale X="1" Y="1" Z="1"/>
                 <Rotation X="0" Y="0" Z="-0"/>
             </Transform>
             <Children Size="1"/>
             <Child0 Name="Lod0MeshObject1" Visible="true" ObType="0">
                 <Mesh File="Beech/Lod0MeshObject1.mesh"/>
-                <Shader File="4.Cube.hlsl"/>
+                <Shader File="4.Cube_Deferred.hlsl"/>
                 <Material File="Beech/beech_bark.mtl"/>
                 <Transform>
                     <Position X="0" Y="0" Z="0"/>
@@ -36,7 +36,7 @@
         </Child0>
         <Child1 Name="Lod1" Visible="false" ObType="0">
             <Mesh File="Beech/Lod1.mesh"/>
-            <Shader File="4.Cube.hlsl"/>
+            <Shader File="4.Cube_Deferred.hlsl"/>
             <Material File="Beech/beech_leaf.mtl"/>
             <Transform>
                 <Position X="0" Y="0" Z="0"/>
@@ -46,7 +46,7 @@
             <Children Size="1"/>
             <Child0 Name="Lod1MeshObject1" Visible="true" ObType="0">
                 <Mesh File="Beech/Lod1MeshObject1.mesh"/>
-                <Shader File="4.Cube.hlsl"/>
+                <Shader File="4.Cube_Deferred.hlsl"/>
                 <Material File="Beech/beech_bark.mtl"/>
                 <Transform>
                     <Position X="0" Y="0" Z="0"/>
@@ -58,7 +58,7 @@
         </Child1>
         <Child2 Name="Lod3" Visible="false" ObType="0">
             <Mesh File="Beech/Lod3.mesh"/>
-            <Shader File="4.Cube.hlsl"/>
+            <Shader File="4.Cube_Deferred.hlsl"/>
             <Material File="Beech/beech_leaf.mtl"/>
             <Transform>
                 <Position X="0" Y="0" Z="0"/>
@@ -68,7 +68,7 @@
             <Children Size="1"/>
             <Child0 Name="Lod3MeshObject1" Visible="true" ObType="0">
                 <Mesh File="Beech/Lod3MeshObject1.mesh"/>
-                <Shader File="4.Cube.hlsl"/>
+                <Shader File="4.Cube_Deferred.hlsl"/>
                 <Material File="Beech/beech_bark.mtl"/>
                 <Transform>
                     <Position X="0" Y="0" Z="0"/>
