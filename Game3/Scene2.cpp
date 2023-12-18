@@ -76,40 +76,12 @@ void Scene2::Init()
 	mapGen->createWallMap(Tile);
 	mapGen->createLighting(Tile);
 	mapGen->createPotal(Tile);
-
-	//int count;
-	//for (int k = 0; k < mapGen->floors; ++k) {
-	//	int x;
-	//	int y;
-	//	do
-	//	{
-	//		x = RANDOM->Int(0, mapGen->rows - 1);
-	//		y = RANDOM->Int(0, mapGen->cols - 1);
-	//		count = 0;
-	//		for (int i = max(0, x - 1); i <= min(mapGen->rows - 1, x); ++i) {
-	//			for (int j = max(0, y - 1); j <= min(mapGen->cols - 1, y); ++j) {
-	//				// 현재 좌표 (i, j, k)의 타일을 검사
-	//				// 수정된 부분: 중심 타일을 기준으로 주변 2x2 영역만 검사
-	//				if (mapGen->Tiles[i][j][k] == 1) {
-	//					count++;
-	//				}
-	//			}
-	//		}
-	//	} while (count != 4);
-	//	Actor* temp = Actor::Create();
-	//	temp->LoadFile("box.xml");
-	//	temp->name = "box" + to_string(k);
-	//	temp->SetLocalPosY(0);
-	//	Tile->Find(to_string(x) + "x" + to_string(y) + "x" + to_string(k))->AddChild(temp);
-	//}
-
 	
-
-	//Vector3 pos = mapGen->TileRandomPos();
-	//player->actor->SetWorldPos(pos);
-
-
 }
+
+
+
+
 
 void Scene2::Release()
 {
@@ -154,6 +126,39 @@ void Scene2::Update()
 		Tile->ReleaseMember();
 		Init();
 	}
+
+	if (INPUT->KeyDown('1')) {
+		Tile->ReleaseMember();
+	}
+	if (INPUT->KeyDown('2')) {
+		mapGen->initializeMap();
+
+	}
+	if (INPUT->KeyDown('3')) {
+		mapGen->validateMapConnectivity();
+
+	}
+	if (INPUT->KeyDown('4')) {
+		mapGen->instantiateTile(Tile);
+
+	}
+	if (INPUT->KeyDown('5')) {
+		mapGen->finalizeMapConfiguration(Tile);
+
+	}
+	if (INPUT->KeyDown('6')) {
+		mapGen->createWallMap(Tile);
+
+	}
+	if (INPUT->KeyDown('7')) {
+		mapGen->createLighting(Tile);
+
+	}
+	if (INPUT->KeyDown('8')) {
+		mapGen->createPotal(Tile);
+
+	}
+
 
 
 
